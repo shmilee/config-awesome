@@ -82,6 +82,38 @@ sed -i '/-- Menubar$/ i \
 ## 7. lain-wibox
 # 1) wibox height = 20
 sed -i '/awful.wibox({ position/s|screen = s|screen = s, height = 20|' rc.lua
+# 2) mywidgets
+sed -i 's/^.*Create.*textclock.*widget.*$/require("mywidgets")/' rc.lua
+sed -i '/mytextclock.*=.*widget/d' rc.lua
+sed -i '/left_layout:add(mypromptbox\[s\])/i \
+    left_layout:add(arrr)' rc.lua
+sed -i '/left_layout:add(mypromptbox\[s\])/a \
+    left_layout:add(arrr)' rc.lua
+sed -i '/right_layout:add(mytextclock)/d' rc.lua
+sed -i '/right_layout:add(wibox.widget.systray())/d' rc.lua
+sed -i '/right_layout:add(mylayoutbox\[s\])/i \
+\
+    local function right_layout_add (arg)\
+        for i, n in pairs(arg) do\
+            right_layout:add(n)\
+        end\
+        right_layout:add(arrl)\
+    end\
+\
+    if s == 1 then\
+        Systray_widgets = {wibox.widget.systray(),yawn.icon}\
+    else\
+        Systray_widgets = {yawn.icon}\
+    end\
+    right_layout:add(spr)\
+    right_layout:add(arrl)\
+    right_layout_add({netdownicon,netdowninfo, netupicon,netupinfo})\
+    right_layout_add({memicon,memwidget})\
+    right_layout_add({cpuicon,cpuwidget, tempicon,tempwidget})\
+    right_layout_add(BAT_Widgets)\
+    right_layout_add({volicon,volumewidget})\
+    right_layout_add(Systray_widgets)\
+    right_layout_add({lunar,mytextclock})' rc.lua
 
 ## 8. window transparency
 w_T=N
