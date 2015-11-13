@@ -13,6 +13,8 @@ Update:
 
 ```
 cd ~/.config/awesome
+git stash
 git pull
+git stash pop
 sh ./init.sh
 ```
