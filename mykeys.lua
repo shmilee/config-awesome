@@ -34,7 +34,8 @@ mykeys = awful.util.table.join(
     end),
     -- keycode 225 = XF86Search
     awful.key({ }, "XF86Search", function ()
-        naughty.notify({ title = "Oops, Key XF86Search not set" })
+        --naughty.notify({ title = "Oops, Key XF86Search not set" })
+        awful.util.spawn("synapse")
     end),
     -- keycode 128 = XF86LaunchA
     awful.key({ }, "XF86LaunchA", function() menubar.show() end),
