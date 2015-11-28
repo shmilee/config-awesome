@@ -28,9 +28,16 @@ mykeys = awful.util.table.join(
         --naughty.notify({ title = "Oops, Key XF86Display not set" })
         awful.util.spawn("arandr")
     end),
-    -- keycode 179 = XF86Tools, --> Hide / show wibox
+    -- keycode 179 = XF86Tools, --> toggle the Synaptics Touchpad
     awful.key({ }, "XF86Tools", function ()
-        mywibox[mouse.screen].visible = not mywibox[mouse.screen].visible
+        os.execute("synclient TouchpadOff=$(synclient -l | grep -c 'TouchpadOff.*=.*0')")
+        local str = os.getenv("HOME") .. '/.config/awesome/icons'
+        if os.execute("synclient -l | grep 'TouchpadOff.*=.*0' >/dev/null") then
+            str =str .. '/touchpad_on.png'
+        else
+            str = str .. '/touchpad_off.png'
+        end
+        os.execute(string.format("volnoti-show -n 0 -s %s",str))
     end),
     -- keycode 225 = XF86Search
     awful.key({ }, "XF86Search", function ()
