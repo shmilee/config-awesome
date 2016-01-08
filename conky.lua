@@ -54,7 +54,7 @@ conky.text = [[
 ${font openlogos:size=20}${color #0090FF}B${color}${font} ${font Blod:size=20}$alignc$uptime${font}${alignr}
 ]]
 
-disk_devices = {'sda', 'sdb', 'sdc'}
+disk_devices = {'sda', 'sdb', 'sdc', 'sdd'}
 disk_text = [[${if_existing /dev/%s}
 ${color green}@Disk: %s ${hr 1}${color}
 ${color blue}${diskiograph_write %s 15,90} ${alignr}${diskiograph_read %s 15,90}${color}
@@ -64,7 +64,7 @@ for i,n in pairs(disk_devices) do
     conky.text = conky.text .. string.format(disk_text, n,n,n,n,n,n)
 end
 
-net_devices = {'eth0', 'wlan0', 'docker0', 'ap0'}
+net_devices = {'eth0', 'eth1', 'wlan0', 'wlan1', 'docker0', 'ap0'}
 net_text = [[${if_existing /sys/class/net/%s/operstate up}
 ${color green}@%s: ${addr %s} ${hr 1}${color}
 ${color green}${downspeedgraph %s 15,90} ${alignr}${upspeedgraph %s 15,90}${color}
@@ -78,8 +78,6 @@ end
 conky.text = conky.text .. [[${color green}${hr 1}${color}
 ]]
 the_Date = {
-    {y = 2015, m = 10, d =  1, name = '国庆'},
-    {y = 2015, m = 11, d = 12, name = '(秋)考试周'},
     {y = 2016, m =  1, d =  1, name = '元旦'},
     {y = 2016, m =  1, d = 14, name = '(冬)考试周'},
     {y = 2016, m =  1, d = 24, name = '寒假'},
@@ -88,7 +86,9 @@ the_Date = {
     {y = 2016, m =  4, d = 23, name = '(春)考试周'},
     {y = 2016, m =  6, d =  9, name = '端午'},
     {y = 2016, m =  6, d = 24, name = '(夏)考试周'},
-    {y = 2016, m =  7, d =  4, name = '暑假'}
+    {y = 2016, m =  7, d =  4, name = '暑假'},
+    {y = 2016, m = 10, d =  1, name = '国庆'},
+    {y = 2015, m = 11, d = 12, name = '(秋)考试周'}
 }
 n     = 1
 space = '    '
