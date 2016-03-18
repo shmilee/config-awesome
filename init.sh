@@ -81,8 +81,8 @@ sed -i '/-- Menubar$/ i \
     mykeys,' rc.lua
 
 ## 7. lain-wibox
-# 1) wibox height = 20
-sed -i '/awful.wibox({ position/s|screen = s|screen = s, height = 20|' rc.lua
+# 1) wibox height = 20, opacity = 0.88
+sed -i '/awful.wibox({ position/s|screen = s|screen = s, height = 20, opacity = 0.88|' rc.lua
 # 2) mywidgets
 sed -i 's/^.*Create.*textclock.*widget.*$/require("mywidgets")/' rc.lua
 sed -i '/mytextclock.*=.*widget/d' rc.lua
