@@ -110,38 +110,36 @@ tempwidget  = lain.widgets.temp({
 })
 
 -- Battery
-baticon     = {}
-batwidget   = {}
-BAT_Widgets = {}
 BAT_table   = get_device('/sys/class/power_supply','BAT')
-if #BAT_table == 0 then BAT_table = {'BAT0'} end
-for i,BAT in ipairs(BAT_table) do
-    baticon[i] = wibox.widget.imagebox(beautiful.bat)
-    batwidget[i] = lain.widgets.bat({
-        battery  = BAT,
-        settings = function()
-        if bat_now.perc == "N/A" or bat_now.perc == "100" then
+baticon = wibox.widget.imagebox(beautiful.bat)
+batwidget = widgets.dualbat({
+    batterys     = BAT_table,
+    followmouse  = true,
+    settings = function()
+        if bat_now.perc == "N/A" then
+            bat_now.icon = beautiful.ac
             widget:set_markup(" AC ")
-            baticon[i]:set_image(beautiful.ac)
-            return
         else
             bat_perc = tonumber(bat_now.perc)
             if bat_perc > 50 then
                 widget:set_markup(" " .. bat_now.perc .. "% ")
-                baticon[i]:set_image(beautiful.bat)
+                bat_now.icon = beautiful.bat
             elseif bat_perc > 15 then
                 widget:set_markup(markup("#EB8F8F", bat_now.perc .. "% "))
-                baticon[i]:set_image(beautiful.bat_low)
+                bat_now.icon = beautiful.bat_low
             else
                 widget:set_markup(markup("#D91E1E", bat_now.perc .. "% "))
-                baticon[i]:set_image(beautiful.bat_no)
+                bat_now.icon = beautiful.bat_no
             end
         end
+        if bat_now.ac_status == "1" or bat_now.status == "Charging" then
+            bat_now.icon = beautiful.ac
+        end
+        baticon:set_image(bat_now.icon)
     end
-    })
-    BAT_Widgets[2*i-1] = baticon[i]
-    BAT_Widgets[2*i]   = batwidget[i]
-end
+})
+batwidget.attach(baticon)
+batwidget.attach(batwidget)
 
 -- ALSA volume bar
 volicon = wibox.widget.imagebox(beautiful.vol)

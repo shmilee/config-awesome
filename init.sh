@@ -111,7 +111,7 @@ sed -i '/right_layout:add(mylayoutbox\[s\])/i \
     right_layout_add({netdownicon,netdowninfo, netupicon,netupinfo})\
     right_layout_add({memicon,memwidget})\
     right_layout_add({cpuicon,cpuwidget, tempicon,tempwidget})\
-    right_layout_add(BAT_Widgets)\
+    right_layout_add({baticon,batwidget})\
     right_layout_add({volicon,volumewidget})\
     right_layout_add(Systray_widgets)\
     right_layout_add({lunar,mytextclock})' rc.lua
