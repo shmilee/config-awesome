@@ -104,7 +104,7 @@ tempwidget  = lain.widgets.temp({
         elseif core_temp >50 then
             widget:set_markup(markup("#f1af5f", core_temp .. "°C "))
         else
-            widget:set_markup(" " .. core_temp .. "°C ")
+            widget:set_markup(core_temp .. "°C ")
         end
     end
 })
