@@ -43,26 +43,26 @@ lunar = widgets.lunar({
 lain.widgets.calendar:attach(mytextclock, {font = 'Ubuntu Mono', followmouse = true})
 
 -- Net
-netdownicon = wibox.widget.imagebox(beautiful.netdown)
-netdowninfo = wibox.widget.textbox()
-netupicon = wibox.widget.imagebox(beautiful.netup)
-netupinfo = lain.widgets.net({
-    notify   = "off",
-    settings = function()
-        net_sent = tonumber(net_now.sent) / 1024
-        net_rece = tonumber(net_now.received) / 1024
-        if net_sent > 1 then
-            widget:set_markup(markup("#e54c62", string.format("%.1f",net_sent) .. "M "))
-        else
-            widget:set_markup(markup("#e54c62", net_now.sent .. "K "))
-        end
-        if net_rece > 1 then
-            netdowninfo:set_markup(markup("#87af5f", string.format("%.1f",net_rece) .. "M "))
-        else
-            netdowninfo:set_markup(markup("#87af5f", net_now.received .. "K "))
-        end
-    end
-})
+--netdownicon = wibox.widget.imagebox(beautiful.netdown)
+--netdowninfo = wibox.widget.textbox()
+--netupicon = wibox.widget.imagebox(beautiful.netup)
+--netupinfo = lain.widgets.net({
+--    notify   = "off",
+--    settings = function()
+--        net_sent = tonumber(net_now.sent) / 1024
+--        net_rece = tonumber(net_now.received) / 1024
+--        if net_sent > 1 then
+--            widget:set_markup(markup("#e54c62", string.format("%.1f",net_sent) .. "M "))
+--        else
+--            widget:set_markup(markup("#e54c62", net_now.sent .. "K "))
+--        end
+--        if net_rece > 1 then
+--            netdowninfo:set_markup(markup("#87af5f", string.format("%.1f",net_rece) .. "M "))
+--        else
+--            netdowninfo:set_markup(markup("#87af5f", net_now.received .. "K "))
+--        end
+--    end
+--})
 
 -- MEM
 memicon   = wibox.widget.imagebox(beautiful.mem)

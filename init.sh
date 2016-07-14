@@ -108,7 +108,7 @@ sed -i '/right_layout:add(mylayoutbox\[s\])/i \
     end\
     right_layout:add(spr)\
     right_layout:add(arrl)\
-    right_layout_add({netdownicon,netdowninfo, netupicon,netupinfo})\
+    --right_layout_add({netdownicon,netdowninfo, netupicon,netupinfo})\
     right_layout_add({memicon,memwidget})\
     right_layout_add({cpuicon,cpuwidget, tempicon,tempwidget})\
     right_layout_add({baticon,batwidget})\
