@@ -54,14 +54,14 @@ conky.text = [[
 ${font openlogos:size=20}${color #0090FF}B${color}${font} ${font Blod:size=20}$alignc$uptime${font}${alignr}
 ]]
 
-disk_devices = {'sda', 'sdb', 'sdc', 'sdd'}
+disk_devices = {'sda', 'sdb', 'sdc', 'sdd', 'sr0'}
 disk_text = [[${if_existing /dev/%s}
-${color green}@Disk: %s ${hr 1}${color}
+${color green}@%s: ${combine ${head /sys/block/%s/device/model 1 10} ${hr 1}}${color}
 ${color blue}${diskiograph_write %s 15,90} ${alignr}${diskiograph_read %s 15,90}${color}
 ${font Arrows}i${font}${diskio_write %s} ${alignr}${diskio_read %s}${font Arrows}a${font}
 ${endif}]]
 for i,n in pairs(disk_devices) do
-    conky.text = conky.text .. string.format(disk_text, n,n,n,n,n,n)
+    conky.text = conky.text .. string.format(disk_text, n,n,n,n,n,n,n)
 end
 
 net_devices = {'eth0', 'eth1', 'wlan0', 'wlan1', 'docker0', 'ap0'}
@@ -78,20 +78,31 @@ end
 conky.text = conky.text .. [[${color green}${hr 1}${color}
 ]]
 the_Date = {
-    {y = 2016, m =  1, d =  1, name = '元旦'},
-    {y = 2016, m =  1, d = 14, name = '(冬)考试周'},
-    {y = 2016, m =  1, d = 24, name = '寒假'},
-    {y = 2016, m =  4, d =  4, name = '清明'},
-    {y = 2016, m =  5, d =  1, name = '劳动节'},
-    {y = 2016, m =  4, d = 23, name = '(春)考试周'},
-    {y = 2016, m =  6, d =  9, name = '端午'},
-    {y = 2016, m =  6, d = 24, name = '(夏)考试周'},
-    {y = 2016, m =  7, d =  4, name = '暑假'},
+    {y = 2017, m =  1, d =  1, name = '元旦'},
+    {y = 2017, m =  1, d = 11, name = '(冬)考试周'},
+    {y = 2017, m =  1, d = 20, name = '寒假'},
+    {y = 2017, m =  2, d = 24, name = '(春)开学'},
+    {y = 2017, m =  4, d =  4, name = '清明'},
+    {y = 2017, m =  4, d = 22, name = '(春)考试周'},
+    {y = 2017, m =  5, d =  1, name = '劳动节'},
+    {y = 2017, m =  5, d = 13, name = '(春)校运会'},
+    {y = 2017, m =  5, d = 21, name = '校庆'},
+    {y = 2017, m =  5, d = 30, name = '端午'},
+    {y = 2017, m =  6, d = 24, name = '(夏)考试周'},
+    {y = 2017, m =  7, d =  4, name = '暑假'},
+    {y = 2016, m =  9, d = 11, name = '(秋)开学'},
+    {y = 2016, m =  9, d = 15, name = '中秋'},
     {y = 2016, m = 10, d =  1, name = '国庆'},
-    {y = 2015, m = 11, d = 12, name = '(秋)考试周'}
+    {y = 2016, m = 10, d = 21, name = '(秋)校运会'},
+    {y = 2016, m = 11, d = 10, name = '(秋)考试周'}
 }
-n     = 1
-space = '    '
+table.sort(the_Date, function (a,b)
+    return os.time({year = a.y, month = a.m, day = a.d, hour = 12})
+        < os.time({year = b.y, month = b.m, day = b.d, hour = 12})
+end)
+n     = 2 -- 2,1,0
+space = '      '
+space = space .. space -- 2
 from  = os.date('*t')
 from  = os.time({year = from.year, month = from.month, day = from.day, hour = 12})
 for i = 1,#the_Date,1 do
@@ -99,15 +110,16 @@ for i = 1,#the_Date,1 do
     spr = to - from
     if spr > 0 then
         spr = (string.format("%.0f", spr / 86400))
-        conky.text = conky.text .. string.format([[${font Bold:size=16}%s${font}天 ${alignr}${font Bold:size=12}%s${font}
-%s]], spr, the_Date[i].name, space)
-        if n == 2 then break; end
-        n = n + 1
-        space = space .. '    '
+        conky.text = conky.text .. 
+            string.format([[%s${font Bold:size=16}%s${font}天${alignr}${font Bold:size=12}%s${font}
+]], space, spr, the_Date[i].name)
+        n = n - 1
+        if n == -1 then break; end 
+        space = string.gsub(space,'      ','',1)
     end
 end
 
-for i = 1,#space/4,1 do
+for i = 1,2,1 do -- 2
     conky.text = conky.text .. [[
 
 ]]
