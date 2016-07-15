@@ -7,12 +7,12 @@ Preview:
 * laptop with 2 batterys
 * desktop without battery
 
-![bat](https://raw.githubusercontent.com/shmilee/config-awesome/master/preview/bat.jpg)
+![bat](preview/bat.jpg)
 
-* calendar
 * weather
+* calendar
 
-![cal-weather](https://raw.githubusercontent.com/shmilee/config-awesome/master/preview/cal-weather.jpg)
+![cal-weather](preview/cal-weather.jpg)
 
 Usage:
 ------
