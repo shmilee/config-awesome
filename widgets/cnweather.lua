@@ -199,6 +199,9 @@ local function xiaomi_now(city)
     weather_now, pos, err = json.decode(read_pipe(cmd), 1, nil)
 
     if not err and weather_now.realtime ~= nil then
+        if weather_now.realtime.weather:match("转(.*)") ~= nil then
+            weather_now.realtime.weather=weather_now.realtime.weather:match("转(.*)")
+        end
         weather_now_icon = icon_table[weather_now.realtime.weather] .. ".png"
         aql = '温度: ' .. weather_now.realtime.temp .. '℃\n' .. aqi2apl(weather_now.aqi.aqi)
     end
