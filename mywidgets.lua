@@ -140,42 +140,74 @@ batwidget = widgets.dualbat({
 batwidget.attach(baticon)
 batwidget.attach(batwidget)
 
--- ALSA volume bar
+-- ALSA volume
 volicon = wibox.widget.imagebox(beautiful.vol)
-volume  = lain.widgets.alsabar({
-    width = 30, ticks = true, ticks_size = 4,
-    followmouse = true,
+volumewidget = lain.widgets.alsa({
     settings = function()
         if volume_now.status == "off" then
             volicon:set_image(beautiful.vol_mute)
-        elseif volume_now.level == 0 then
+            widget:set_markup(markup("#EB8F8F", volume_now.level .. "% "))
+        elseif tonumber(volume_now.level) == 0 then
             volicon:set_image(beautiful.vol_no)
-        elseif volume_now.level <= 50 then
+            widget:set_markup(markup("#EB8F8F", volume_now.level .. "% "))
+        elseif tonumber(volume_now.level) <= 50 then
             volicon:set_image(beautiful.vol_low)
+            widget:set_markup(markup("#7493D2", volume_now.level .. "% "))
         else
             volicon:set_image(beautiful.vol)
+            widget:set_markup(markup(beautiful.fg_normal, volume_now.level .. "% "))
         end
-    end,
-    colors =
-    {
-        background = beautiful.bg_focus,
-        mute       = "#EB8F8F",
-        unmute     = beautiful.fg_normal
-    }
-})
-volmargin = wibox.layout.margin(volume.bar, 2, 7)
-volmargin:set_top(6)
-volmargin:set_bottom(6)
-volumewidget = wibox.widget.background(volmargin)
-volumewidget:set_bgimage(beautiful.widget_bg)
-function volume.mynotify()
-    volume.notify()
-    if volume._muted then
-        os.execute(string.format("volnoti-show -m"))
-    else
-        os.execute(string.format("volnoti-show %s", volume_now.level))
     end
-end
+})
+volume = {
+    channel = volumewidget.channel,
+    step = "2%",
+    mynotify = function()
+        volumewidget.update()
+        if volume_now.status == "off" then
+            os.execute(string.format("volnoti-show -m"))
+        else
+            os.execute(string.format("volnoti-show %s", volume_now.level))
+        end
+    end
+}
+
+-- ALSA volume bar
+--volicon = wibox.widget.imagebox(beautiful.vol)
+--volume  = lain.widgets.alsabar({
+--    width = 30, ticks = true, ticks_size = 3, step = "2%",
+--    followmouse = true,
+--    settings = function()
+--        if volume_now.status == "off" then
+--            volicon:set_image(beautiful.vol_mute)
+--        elseif volume_now.level == 0 then
+--            volicon:set_image(beautiful.vol_no)
+--        elseif volume_now.level <= 50 then
+--            volicon:set_image(beautiful.vol_low)
+--        else
+--            volicon:set_image(beautiful.vol)
+--        end
+--    end,
+--    colors =
+--    {
+--        background = beautiful.bg_focus,
+--        mute       = "#EB8F8F",
+--        unmute     = beautiful.fg_normal
+--    }
+--})
+--volmargin = wibox.layout.margin(volume.bar, 1, 1)
+--volmargin:set_top(6)
+--volmargin:set_bottom(6)
+--volumewidget = wibox.widget.background(volmargin)
+--volumewidget:set_bgimage(beautiful.widget_bg)
+--function volume.mynotify()
+--    volume.notify()
+--    if volume._muted then
+--        os.execute(string.format("volnoti-show -m"))
+--    else
+--        os.execute(string.format("volnoti-show %s", volume_now.level))
+--    end
+--end
 
 -- Weather
 weather = 'cn'
