@@ -73,8 +73,6 @@ theme.cpu         = theme.dir .. "/icons/cpu.png"
 theme.mem         = theme.dir .. "/icons/mem.png"
 theme.netdown     = theme.dir .. "/icons/net_down.png"
 theme.netup       = theme.dir .. "/icons/net_up.png"
-theme.arrl        = theme.dir .. "/icons/arrl.png"
-theme.arrr        = theme.dir .. "/icons/arrr.png"
 -- }}}
 
 -- {{{ Mouse finder

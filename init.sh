@@ -39,7 +39,7 @@ sed -i '/^terminal =/s/xterm/xfce4-terminal/' rc.lua
 # xfce4-terminal -e 'cmd arg'
 sed -i "/^editor_cmd =/ s/-e /-e '/" rc.lua
 sed -i "s/man awesome/'man awesome'/" rc.lua
-sed -i "s/awesome.conffile/awesome.conffile .. \"'\"/" rc.lua
+sed -i "s/awesome.conffile/awesome.conffile .. \"\'\"/" rc.lua
 sed -i '/^editor =/s/nano/vim/' rc.lua
 sed -i '/keys = clientkeys,/s/,/,size_hints_honor = false,/' rc.lua
 
@@ -88,33 +88,42 @@ sed -i 's/^.*Create.*textclock.*widget.*$/require("mywidgets")/' rc.lua
 sed -i '/mytextclock.*=.*widget/d' rc.lua
 sed -i '/left_layout:add(mypromptbox\[s\])/i \
     left_layout:add(arrr)' rc.lua
-sed -i '/left_layout:add(mypromptbox\[s\])/a \
-    left_layout:add(arrr)' rc.lua
 sed -i '/right_layout:add(mytextclock)/d' rc.lua
 sed -i '/right_layout:add(wibox.widget.systray())/d' rc.lua
 sed -i '/right_layout:add(mylayoutbox\[s\])/i \
 \
-    local function right_layout_add (arg)\
-        for i, n in pairs(arg) do\
-            right_layout:add(n)\
+    local right_layout_toggle = true\
+    local function right_layout_add (...)\
+        local arg = {...}\
+        if right_layout_toggle then\
+            right_layout:add(arrl_ld)\
+            for i, n in pairs(arg) do\
+                right_layout:add(wibox.widget.background(n ,beautiful.bg_focus))\
+            end\
+        else\
+            right_layout:add(arrl_dl)\
+            for i, n in pairs(arg) do\
+                right_layout:add(n)\
+            end\
         end\
-        right_layout:add(arrl)\
+        right_layout_toggle = not right_layout_toggle\
     end\
 \
-    if s == 1 then\
-        Systray_widgets = {wibox.widget.systray(),yawn.icon}\
-    else\
-        Systray_widgets = {yawn.icon}\
-    end\
     right_layout:add(spr)\
-    right_layout:add(arrl)\
-    --right_layout_add({netdownicon,netdowninfo, netupicon,netupinfo})\
-    right_layout_add({memicon,memwidget})\
-    right_layout_add({cpuicon,cpuwidget, tempicon,tempwidget})\
-    right_layout_add({baticon,batwidget})\
-    right_layout_add({volicon,volumewidget})\
-    right_layout_add(Systray_widgets)\
-    right_layout_add({lunar,mytextclock})' rc.lua
+    --right_layout_add(netdownicon,netdowninfo, netupicon,netupinfo)\
+    right_layout_add(memicon,memwidget)\
+    right_layout_add(cpuicon,cpuwidget)\
+    right_layout_add(tempicon,tempwidget)\
+    right_layout_add(volicon,volumewidget)\
+    right_layout_add(baticon,batwidget)\
+    if s == 1 then\
+        right_layout_add(wibox.widget.systray(),yawn.icon)\
+    else\
+        right_layout_add(yawn.icon)\
+    end\
+    right_layout_add(lunar,mytextclock)\
+    right_layout_add(mylayoutbox\[s\])' rc.lua
+sed -i '/right_layout:add(mylayoutbox\[s\])/d' rc.lua
 
 ## 8. window transparency
 w_T=N

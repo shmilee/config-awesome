@@ -23,10 +23,9 @@ separators = lain.util.separators
 
 -- Separators
 spr  = wibox.widget.textbox(' ')
-arrl = wibox.widget.imagebox()
-arrl:set_image(beautiful.arrl)
-arrr = wibox.widget.imagebox()
-arrr:set_image(beautiful.arrr)
+arrl_dl = separators.arrow_left(beautiful.bg_focus, "alpha")
+arrl_ld = separators.arrow_left("alpha", beautiful.bg_focus)
+arrr = separators.arrow_right(beautiful.bg_focus, "alpha")
 
 -- Create a textclock widget
 mytextclock = awful.widget.textclock(" %H:%M:%S ",1)
