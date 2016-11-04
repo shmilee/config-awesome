@@ -71,13 +71,8 @@ xdgmenu2 = awful.menu({ items = xdgmenu })\n' rc.lua
 sed -i 's|"w", function () mymainmenu:show() end),|"a", function () xdgmenu2:show() end),\n    awful.key({ modkey,           }, "c", function () myfavorite2:show() end),|' rc.lua
 
 ## 6. mykeys & revelation
-sed -i '/menubar.*=.*menubar/a local revelation=require("revelation")' rc.lua
-sed -i '/beautiful.init/a revelation.init()' rc.lua
 sed -i '/--.*Key bindings$/ i mykeys = require("mykeys")' rc.lua
 sed -i '/-- Menubar$/ i \
-    awful.key({ modkey,           }, "e", revelation),\
-    -- keycode 152 = XF86Explorer\
-    awful.key({ }, "XF86Explorer", revelation),\
     mykeys,' rc.lua
 
 ## 7. lain-wibox
