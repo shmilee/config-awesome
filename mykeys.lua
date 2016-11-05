@@ -5,6 +5,12 @@ local beautiful = require("beautiful")
 local revelation = require("revelation")
 revelation.init({tag_name = 'Expose'})
 
+-- setting tools
+local xrandr = "arandr"
+local searchtool = "synapse"
+local screenlock = "slimlock"
+local screenshot = "deepin-scrot"
+
 local altkey = "Mod1"
 
 local laptopkeys = awful.util.table.join(
@@ -37,7 +43,7 @@ local laptopkeys = awful.util.table.join(
     awful.key({ }, "XF86Display",
         function ()
             --naughty.notify({ title = "Oops, Key XF86Display not set" })
-            awful.util.spawn("arandr")
+            awful.util.spawn(xrandr)
         end),
 
     -- keycode 179 = XF86Tools, --> toggle the Synaptics Touchpad
@@ -57,7 +63,7 @@ local laptopkeys = awful.util.table.join(
     awful.key({ }, "XF86Search",
         function ()
             --naughty.notify({ title = "Oops, Key XF86Search not set" })
-            awful.util.spawn("synapse")
+            awful.util.spawn(searchtool)
         end),
 
     -- keycode 128 = XF86LaunchA
@@ -121,16 +127,18 @@ local otherkeys = awful.util.table.join(
             os.execute(string.format("volnoti-show -n 0 -s %s",str))
         end),
     -- Display
-    awful.key({ modkey, "Control" }, "p", function () awful.util.spawn("arandr") end),
+    awful.key({ modkey, "Control" }, "p", function () awful.util.spawn(xrandr) end),
+    -- Search
+    awful.key({ modkey, }, "s", function () awful.util.spawn(searchtool) end),
     --休眠
     awful.key({ modkey, "Control" }, "s",
         function ()
             awful.util.spawn("systemctl suspend")
         end),
     --锁屏
-    awful.key({ modkey, "Control" }, "l", function () awful.util.spawn("slock") end),
+    awful.key({ modkey, "Control" }, "l", function () awful.util.spawn(screenlock) end),
     -- 截屏
-    awful.key({ }, "Print", function() awful.util.spawn("deepin-scrot") end),
+    awful.key({ }, "Print", function() awful.util.spawn(screenshot) end),
     -- Hide / show wibox
     awful.key({ modkey }, "b",
         function ()
@@ -148,7 +156,7 @@ if package.loaded["revelation"] then
             function()
                 revelation({
                     rule = {class = {"Xfce4-terminal", "Gnome-terminal", "Konsole",
-                            "Yakuake", "XTerm", "URxvt", "Vte", "Vte-app"},
+                            "Yakuake", "Termite", "XTerm", "URxvt", "Vte", "Vte-app"},
                             any = true}
                 })
              end)
