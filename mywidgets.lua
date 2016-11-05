@@ -111,23 +111,62 @@ tempwidget  = lain.widgets.temp({
 -- Battery
 BAT_table   = get_device('/sys/class/power_supply','BAT')
 baticon = wibox.widget.imagebox(beautiful.bat)
-batwidget = widgets.dualbat({
+--batwidget = widgets.dualbat({
+--    batterys     = BAT_table,
+--    followmouse  = true,
+--    settings = function()
+--        if bat_now.perc == "N/A" then
+--            bat_now.icon = beautiful.ac
+--            widget:set_markup(" AC ")
+--        else
+--            bat_perc = tonumber(bat_now.perc)
+--            if bat_perc > 50 then
+--                widget:set_markup(" " .. bat_now.perc .. "% ")
+--                bat_now.icon = beautiful.bat
+--            elseif bat_perc > 15 then
+--                widget:set_markup(markup("#EB8F8F", bat_now.perc .. "% "))
+--                bat_now.icon = beautiful.bat_low
+--            else
+--                widget:set_markup(markup("#D91E1E", bat_now.perc .. "% "))
+--                bat_now.icon = beautiful.bat_no
+--            end
+--        end
+--        if bat_now.ac_status == "1" or bat_now.status == "Charging" then
+--            bat_now.icon = beautiful.ac
+--        end
+--        baticon:set_image(bat_now.icon)
+--    end
+--})
+--batwidget.attach(baticon)
+--batwidget.attach(batwidget)
+
+-- Battery bar
+batbar = awful.widget.progressbar()
+batbar:set_color(beautiful.fg_normal)
+batbar:set_width(55)
+batbar:set_ticks(true)
+batbar:set_ticks_size(6)
+batbar:set_background_color(beautiful.bg_normal)
+batmargin = wibox.layout.margin(batbar, 2, 7)
+batmargin:set_top(6)
+batmargin:set_bottom(6)
+batupd = widgets.dualbat({
     batterys     = BAT_table,
     followmouse  = true,
     settings = function()
         if bat_now.perc == "N/A" then
             bat_now.icon = beautiful.ac
-            widget:set_markup(" AC ")
         else
             bat_perc = tonumber(bat_now.perc)
+            batbar:set_value(bat_perc / 100)
             if bat_perc > 50 then
-                widget:set_markup(" " .. bat_now.perc .. "% ")
+                batbar:set_color(beautiful.fg_normal)
                 bat_now.icon = beautiful.bat
             elseif bat_perc > 15 then
-                widget:set_markup(markup("#EB8F8F", bat_now.perc .. "% "))
+                batbar:set_color("#EB8F8F")
                 bat_now.icon = beautiful.bat_low
             else
-                widget:set_markup(markup("#D91E1E", bat_now.perc .. "% "))
+                batbar:set_color("#D91E1E")
                 bat_now.icon = beautiful.bat_no
             end
         end
@@ -137,8 +176,10 @@ batwidget = widgets.dualbat({
         baticon:set_image(bat_now.icon)
     end
 })
-batwidget.attach(baticon)
-batwidget.attach(batwidget)
+batwidget = wibox.widget.background(batmargin)
+batwidget:set_bgimage(beautiful.widget_bg)
+batupd.attach(baticon)
+batupd.attach(batwidget)
 
 -- ALSA volume
 volicon = wibox.widget.imagebox(beautiful.vol)
