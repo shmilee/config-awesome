@@ -3,7 +3,6 @@ local naughty = require("naughty")
 local menubar = require("menubar")
 local beautiful = require("beautiful")
 local revelation = require("revelation")
-beautiful.init(os.getenv("HOME") .. "/.config/awesome/theme.lua")
 revelation.init({tag_name = 'Expose'})
 
 local altkey = "Mod1"

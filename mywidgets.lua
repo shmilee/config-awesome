@@ -4,7 +4,6 @@ local beautiful = require("beautiful")
 local lain = require("lain")
 local widgets = require("widgets")
 local helpers = require("lain.helpers")
-beautiful.init(os.getenv("HOME") .. "/.config/awesome/theme.lua")
 
 -- get device table in path/prefix*
 local function get_device(path,prefix)

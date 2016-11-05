@@ -8,13 +8,7 @@ need_pkg=('awesome'
           'slock'
           'synapse'
           'deepin-scrot'
-          'conky'
-          'compton'
-          'fcitx'
-          'parcellite'
-          'fcitx-sogoupinyin'
-          'wicd-gtk')
-
+          )
 ## theme.lua : copy from /usr/share/awesome/themes/zenburn/
 # theme.dir = os.getenv("HOME") .. "/.config/awesome"
 # theme.awesome_icon = theme.dir .. "/arch-icon.png"
@@ -32,7 +26,7 @@ fi
 cp /etc/xdg/awesome/rc.lua rc.lua
 
 ## 1. add theme
-sed -i 's|"/usr/share/awesome/themes/default/theme.lua"|os.getenv("HOME") .. "/.config/awesome/theme.lua"|' rc.lua
+sed -i 's|"/usr/share/awesome/themes/default/theme.lua"|os.getenv("HOME") .. "/.config/awesome/themes/think/theme.lua"|' rc.lua
 
 ## 2. terminal : xterm & editor : nano --> vim &窗口缝隙
 sed -i '/^terminal =/s/xterm/xfce4-terminal/' rc.lua
@@ -46,7 +40,7 @@ sed -i '/keys = clientkeys,/s/,/,size_hints_honor = false,/' rc.lua
 ## 3. wallpaper
 sed -i '/gears.wallpaper.maximized/a \
         if s == 2 then\
-            gears.wallpaper.maximized(beautiful.wallpaper2, s, true)\
+            gears.wallpaper.maximized(beautiful.wallpaper, s, true)\
         end' rc.lua
 
 ## 4. tags
@@ -128,4 +122,6 @@ if [[ $w_T == Y ]]; then
 fi
 
 ## 9. autostart programs
+auto_start=($(grep ^run_once run_once.lua|cut -d\" -f2))
+echo -e "==> add autostart programs in run_once.lua:\n  ${auto_start[@]}"
 echo 'require("run_once")' >>rc.lua

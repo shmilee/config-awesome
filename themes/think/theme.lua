@@ -8,9 +8,8 @@
 
 -- {{{ Main
 theme = {}
-theme.dir       = os.getenv("HOME") .. "/.config/awesome"
-theme.wallpaper = "/usr/share/wallpapers-shmilee/1200/think-1920x1200.jpg"
-theme.wallpaper2 = "/usr/share/wallpapers-shmilee/1080/violin-1920x1080.jpg"
+theme.dir       = os.getenv("HOME") .. "/.config/awesome/themes/think"
+theme.wallpaper = theme.dir .. "/think-1920x1200.jpg"
 -- }}}
 
 -- {{{ Styles
@@ -89,7 +88,7 @@ theme.menu_width  = 100
 -- }}}
 
 -- {{{ Icons
--- {{{ Taglist
+-- {{{ Taglis
 theme.taglist_squares_sel   = "/usr/share/awesome/themes/zenburn/taglist/squarefz.png"
 theme.taglist_squares_unsel = "/usr/share/awesome/themes/zenburn/taglist/squarez.png"
 --theme.taglist_squares_resize = "false"
