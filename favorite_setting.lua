@@ -2,7 +2,6 @@ local gears = require("gears")
 local awful = require("awful")
 local beautiful = require("beautiful")
 local menubar = require("menubar")
-local read_pipe = require("lain.helpers").read_pipe
 
 ----- favorite_setting, autostart programs -----
 local function run_once(prg,arg_string,pname,screen)
@@ -71,7 +70,7 @@ local morewallpapers = {
   "/usr/share/wallpapers-shmilee/1600/Castilla_Sky-2560x1600.jpg"
 }
 for s = 2, screen.count() do
-  if s-1 <= #morewallpapers then
+  if s-1 <= #morewallpapers and awful.util.file_readable(morewallpapers[s-1]) then
     gears.wallpaper.maximized(morewallpapers[s-1], s, true)
   else
     gears.wallpaper.maximized(beautiful.wallpaper, s, true)
