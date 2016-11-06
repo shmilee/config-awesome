@@ -96,9 +96,13 @@ theme.taglist_squares_unsel = "/usr/share/awesome/themes/zenburn/taglist/squarez
 -- }}}
 
 -- {{{ Misc
--- theme.awesome_icon           = "/usr/share/awesome/themes/zenburn/awesome-icon.png"
-theme.awesome_icon           = theme.dir .. "/icons/arch-icon.png"
-theme.menu_submenu_icon      = "/usr/share/awesome/themes/default/submenu.png"
+-- theme.awesome_icon      = "/usr/share/awesome/themes/zenburn/awesome-icon.png"
+theme.awesome_icon      = theme.dir .. "/icons/arch-icon.png"
+theme.menu_submenu_icon = "/usr/share/awesome/themes/default/submenu.png"
+theme.capslock_on       = theme.dir .. "/icons/capslock_on.png"
+theme.capslock_off      = theme.dir .. "/icons/capslock_off.png"
+theme.touchpad_on       = theme.dir .. "/icons/touchpad_on.png"
+theme.touchpad_off      = theme.dir .. "/icons/touchpad_off.png"
 -- }}}
 
 -- {{{ Layout

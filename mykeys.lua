@@ -50,11 +50,10 @@ local laptopkeys = awful.util.table.join(
     awful.key({ }, "XF86Tools",
         function ()
             os.execute("synclient TouchpadOff=$(synclient -l | grep -c 'TouchpadOff.*=.*0')")
-            local str = os.getenv("HOME") .. '/.config/awesome/icons'
             if os.execute("synclient -l | grep 'TouchpadOff.*=.*0' >/dev/null") then
-                str =str .. '/touchpad_on.png'
+                str = beautiful.touchpad_on
             else
-                str = str .. '/touchpad_off.png'
+                str = beautiful.touchpad_off
             end
             os.execute(string.format("volnoti-show -n 0 -s %s",str))
         end),
@@ -117,12 +116,10 @@ local otherkeys = awful.util.table.join(
     awful.key({ }, "Caps_Lock",
         function()
             local str = "sleep 0.2; xset q|grep 'Caps Lock:[ ]*on' >/dev/null"
-            local check_on = os.execute(str)
-            str = os.getenv("HOME") .. '/.config/awesome/icons'
-            if check_on then
-                str = str .. '/capslock_on.png'
+            if os.execute(str) then
+                str = beautiful.capslock_on
             else
-                str = str .. '/capslock_off.png'
+                str = beautiful.capslock_off
             end
             os.execute(string.format("volnoti-show -n 0 -s %s",str))
         end),
