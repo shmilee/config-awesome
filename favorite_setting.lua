@@ -105,6 +105,7 @@ end
 -- 4)
 -- Create a laucher widget and a main menu
 local rootmenufile = '/etc/xdg/menus/arch-applications.menu'
+
 local myawesomemenu = {
   { "manual", terminal .. " -e 'man awesome'" },
   { "edit config", string.format(editor_cmd, awesome.conffile) },
@@ -115,20 +116,25 @@ local myawesomemenu = {
   { "restart", awesome.restart },
   { "quit", awesome.quit }
 }
+
 local common_menu = {
-  { "文件管理 (&F)", "thunar", menubar.utils.lookup_icon('Thunar.png') },
-  { "记事本 (&V)", "gvim", menubar.utils.lookup_icon('gvim.png') },
-  { "终端 (&T)", terminal, menubar.utils.lookup_icon('utilities-terminal.png') },
-  {"监视器 (&M)", terminal .. " -e htop", menubar.utils.lookup_icon('htop.png') },
-  { "火狐 (&B)", "firefox", menubar.utils.lookup_icon('firefox.png') },
-  { "JabRef (&R)", "jabref", "/usr/share/pixmaps/jabref.png" },
-  { "BT下载 (&D)", "transmission-gtk", menubar.utils.lookup_icon('transmission.png') },
-  { "Pidgin (&I)", "pidgin", menubar.utils.lookup_icon('pidgin.png') },
-  { "Audacious (&A)", "audacious", menubar.utils.lookup_icon('audacious.png')  },
-  { "wps文字 (&W)", "wps", menubar.utils.lookup_icon('wps-office-etmain.png') },
-  { "辞典 (&G)", "goldendict", menubar.utils.lookup_icon('goldendict.png') }
+  { "文件管理 (&F)", "thunar", 'Thunar.png' },
+  { "记事本 (&V)", "gvim", 'gvim.png' },
+  { "终端 (&T)", terminal, 'utilities-terminal.png' },
+  {"监视器 (&M)", terminal .. " -e htop", 'htop.png' },
+  { "火狐 (&B)", "firefox", 'firefox.png' },
+  { "JabRef (&R)", "jabref", 'jabref.png' },
+  { "BT下载 (&D)", "transmission-gtk", 'transmission.png' },
+  { "Pidgin (&I)", "pidgin", 'pidgin.png' },
+  { "Audacious (&A)", "audacious", 'audacious.png' },
+  { "wps文字 (&W)", "wps", 'wps-office-wpsmain.png' },
+  { "辞典 (&G)", "goldendict", 'goldendict.png' }
 }
+for k, v in pairs(common_menu) do
+  common_menu[k][3] = menubar.utils.lookup_icon(common_menu[k][3])
+end
 mycommonmenu = awful.menu({ items = common_menu })
+
 if not awful.util.file_readable(awful.util.getdir("config") .. "/archmenu.lua") then
   os.execute('bash ~/.config/awesome/gen_archmenu.sh ' .. rootmenufile)
 end
