@@ -109,7 +109,7 @@ local myawesomemenu = {
   { "manual", terminal .. " -e 'man awesome'" },
   { "edit config", string.format(editor_cmd, awesome.conffile) },
   { "refresh menu", function ()
-    awful.util.spawn_with_shell('bash ~/.config/awesome/gen_archmenu.sh ' .. rootmenufile )
+    os.execute('bash ~/.config/awesome/gen_archmenu.sh ' .. rootmenufile)
     awesome.restart()
     end },
   { "restart", awesome.restart },
