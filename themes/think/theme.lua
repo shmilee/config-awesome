@@ -88,7 +88,8 @@ theme.menu_width  = 100
 -- }}}
 
 -- {{{ Icons
-theme.icon_theme = "Adwaita"
+--theme.icon_theme = "Adwaita"
+theme.icon_theme = "Faenza"
 -- {{{ Taglis
 theme.taglist_squares_sel   = "/usr/share/awesome/themes/zenburn/taglist/squarefz.png"
 theme.taglist_squares_unsel = "/usr/share/awesome/themes/zenburn/taglist/squarez.png"
