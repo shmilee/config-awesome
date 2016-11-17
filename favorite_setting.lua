@@ -213,6 +213,9 @@ favoriterules = {
   -- Pidgin
   { rule = { class = "Pidgin" },
     properties = { floating = true } },
+  -- Wine
+  { rule = { class = "Wine" },
+    properties = { floating = true } },
   -- location
   { rule = { class = "Firefox" },
     properties = { tag = tags[1][2] } },
