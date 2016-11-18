@@ -4,13 +4,15 @@ My Awesome WM Config Files
 Preview:
 --------
 
-* laptop with 2 batterys
-* desktop without battery
+* archmenu
+
+![archmenu](preview/archmenu.jpg)
+
+* laptop with 2 batterys, desktop without battery
 
 ![bat](preview/bat.jpg)
 
-* weather
-* calendar
+* weather, calendar
 
 ![cal-weather](preview/cal-weather.jpg)
 
