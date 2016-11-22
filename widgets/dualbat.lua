@@ -55,7 +55,7 @@ local function worker(args)
         bg      = "#FFFFFF"
     }
 
-    function update()
+    function bat.update()
         bat_now = {
             ac_status   = "N/A",
             status      = "Unknown",
@@ -201,7 +201,7 @@ local function worker(args)
         end)
     end
 
-    newtimer(batterys, timeout, update)
+    newtimer(batterys, timeout, bat.update)
 
     return setmetatable(bat, { __index = bat.widget })
 end
