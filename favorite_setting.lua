@@ -213,9 +213,10 @@ favoriterules = {
   -- Pidgin
   { rule = { class = "Pidgin" },
     properties = { floating = true } },
-  -- Wine
-  { rule = { class = "Wine" },
-    properties = { floating = true } },
+  -- WineQQ
+  { rule_any = { instance = {'TM.exe', 'QQ.exe'} },
+    properties = { floating = true,
+                   border_width = 0, } }, 
   -- location
   { rule = { class = "Firefox" },
     properties = { tag = tags[1][2] } },
