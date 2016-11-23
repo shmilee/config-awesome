@@ -253,6 +253,23 @@ else
             end
         end
     }
+    volumewidget:buttons (awful.util.table.join (
+        awful.button ({}, 1, function()
+          awful.util.spawn(terminal .. " -e alsamixer")
+        end),
+        awful.button ({}, 3, function()
+          os.execute(string.format("amixer -q set %s playback toggle", volume.channel))
+          volume.mynotify()
+        end),
+        awful.button ({}, 4, function()
+          os.execute(string.format("amixer -q set %s %s+", volume.channel, volume.step))
+          volume.mynotify()
+        end),
+        awful.button ({}, 5, function()
+          os.execute(string.format("amixer set %s %s-", volume.channel, volume.step))
+          volume.mynotify()
+        end)
+    ))
 end
 
 -- Weather
