@@ -43,7 +43,7 @@ lunar = widgets.lunar({
 })
 
 -- Calendar
-lain.widgets.calendar:attach(mytextclock, {font = 'Ubuntu Mono', followmouse = true})
+lain.widgets.calendar.attach(mytextclock, {font = 'Ubuntu Mono', followmouse = true})
 
 -- Net
 --netdownicon = wibox.widget.imagebox(beautiful.netdown)
