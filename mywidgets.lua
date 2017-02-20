@@ -295,7 +295,7 @@ end
 yawn.attach(yawn.icon)
 
 function createmywibox(s)
-    s.mywibox = awful.wibar({ position = "top", screen = s, height =20 })
+    s.mywibox = awful.wibar({ position = "top", screen = s, height =20, opacity = 0.88 })
 
     -- Add widgets to the wibox
     s.mywibox:setup {
