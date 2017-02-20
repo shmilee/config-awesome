@@ -93,22 +93,26 @@ local volumekeys = awful.util.table.join(
         function ()
             os.execute(string.format("amixer -q set %s %s+", volume.channel, volume.step))
             volume.mynotify()
-        end),
+        end,
+        { description = "raise volume", group = "audio" }),
     awful.key({ altkey }, "Down",
         function ()
             os.execute(string.format("amixer -q set %s %s-", volume.channel, volume.step))
             volume.mynotify()
-        end),
+        end,
+        { description = "lower volume", group = "audio" }),
     awful.key({ altkey }, "m",
         function ()
             os.execute(string.format("amixer -q set %s playback toggle", volume.channel))
             volume.mynotify()
-        end),
+        end,
+        { description = "mute volume", group = "audio" }),
     awful.key({ altkey, "Control" }, "m",
         function ()
             os.execute(string.format("amixer -q set %s 100%%", volume.channel))
             volume.mynotify()
-        end)
+        end,
+        { description = "maximize volume", group = "audio" })
 )
 
 local otherkeys = awful.util.table.join(
@@ -124,23 +128,26 @@ local otherkeys = awful.util.table.join(
             os.execute(string.format("volnoti-show -n 0 -s %s",str))
         end),
     -- Display
-    awful.key({ modkey, "Control" }, "p", function () awful.util.spawn(xrandr) end),
-    -- Search
-    awful.key({ modkey, }, "s", function () awful.util.spawn(searchtool) end),
+    awful.key({ modkey, "Control" }, "p", function () awful.util.spawn(xrandr) end,
+        { description = "xrandr", group = "system" }),
     --休眠
     awful.key({ modkey, "Control" }, "s",
         function ()
             awful.util.spawn("systemctl suspend")
-        end),
+        end,
+        { description = "system suspend", group = "system" }),
     --锁屏
-    awful.key({ modkey, "Control" }, "l", function () awful.util.spawn(screenlock) end),
+    awful.key({ modkey, "Control" }, "l", function () awful.util.spawn(screenlock) end,
+        { description = "lock screen", group = "system" }),
     -- 截屏
-    awful.key({ }, "Print", function() awful.util.spawn(screenshot) end),
+    awful.key({ }, "Print", function() awful.util.spawn(screenshot) end,
+        { description = "print screen", group = "system" }),
     -- Hide / show wibox
     awful.key({ modkey }, "b",
         function ()
             mywibox[mouse.screen].visible = not mywibox[mouse.screen].visible
-        end)
+        end,
+        { description = "hide / show wibox", group = "awesome" })
 )
 
 local revelationkeys = nil
@@ -148,7 +155,8 @@ if package.loaded["revelation"] then
     revelationkeys = awful.util.table.join(
         -- keycode 152 = XF86Explorer
         awful.key({ }, "XF86Explorer", revelation),
-        awful.key({ modkey, }, "e", revelation),
+        awful.key({ modkey, }, "e", revelation,
+            { description = "'expose' view of all clients", group = "revelation" }),
         awful.key({ modkey, "Control" }, "e",
             function()
                 revelation({
@@ -156,7 +164,8 @@ if package.loaded["revelation"] then
                             "Yakuake", "Termite", "XTerm", "URxvt", "Vte", "Vte-app"},
                             any = true}
                 })
-             end)
+             end,
+             { description = "'expose' view of terminal clients", group = "revelation" })
     )
 end
 
