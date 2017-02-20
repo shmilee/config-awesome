@@ -63,9 +63,9 @@ local function client_menu_toggle_fn()
 end
 -- }}}
 
+-- {{{ Menu
 require("mymenu")
 
--- {{{ Men
 mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
                                      menu = mymainmenu })
 
@@ -161,6 +161,8 @@ root.buttons(awful.util.table.join(
     awful.button({ }, 5, awful.tag.viewprev)
 ))
 -- }}}
+
+mykeys = require("mykeys")
 
 -- {{{ Key bindings
 globalkeys = awful.util.table.join(
@@ -258,6 +260,8 @@ globalkeys = awful.util.table.join(
                   }
               end,
               {description = "lua execute prompt", group = "awesome"}),
+    -- add mykeys
+    mykeys,
     -- Menubar
     awful.key({ modkey }, "p", function() menubar.show() end,
               {description = "show the menubar", group = "launcher"})
