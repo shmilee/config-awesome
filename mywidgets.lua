@@ -6,7 +6,7 @@ local widgets = require("widgets")
 local helpers = require("lain.helpers")
 
 -- setting
-local use_battery_bar = false
+local use_battery_bar = true
 local use_volume_bar  = false
 local weather_widget  = 'cn'
 
@@ -253,7 +253,7 @@ else
             end
         end
     }
-    volumewidget:buttons (awful.util.table.join (
+    volumewidget.widget:buttons (awful.util.table.join (
         awful.button ({}, 1, function()
           awful.util.spawn(terminal .. " -e alsamixer")
         end),
@@ -293,3 +293,33 @@ else
     })
 end
 yawn.attach(yawn.icon)
+
+function createmywibox(s)
+    s.mywibox = awful.wibar({ position = "top", screen = s, height =20 })
+
+    -- Add widgets to the wibox
+    s.mywibox:setup {
+        layout = wibox.layout.align.horizontal,
+        { -- Left widgets
+            layout = wibox.layout.fixed.horizontal,
+            mylauncher,
+            s.mytaglist,
+            arrr,
+            s.mypromptbox,
+        },
+        s.mytasklist, -- Middle widget
+        { -- Right widgets
+            layout = wibox.layout.fixed.horizontal,
+            mykeyboardlayout,
+            memicon,memwidget,
+            cpuicon,cpuwidget,
+            tempicon,tempwidget,
+            volicon,volumewidget,
+            baticon,batwidget,
+            wibox.widget.systray(),
+            yawn.icon,lunar,
+            mytextclock,
+            s.mylayoutbox,
+        },
+    }
+end
