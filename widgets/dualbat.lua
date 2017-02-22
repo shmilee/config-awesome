@@ -2,7 +2,7 @@
 --[[
 												                        
 	 Licensed under GNU General Public License v2 
-      * (c) 2016,      shmilee                    
+	  * (c) 2016,      shmilee                    
 	  * (c) 2013,      Luke Bonham                
 	  * (c) 2010-2012, Peter Hofmann              
 												                        
@@ -14,12 +14,10 @@ local first_line   = require("lain.helpers").first_line
 local naughty      = require("naughty")
 local wibox        = require("wibox")
 local beautiful    = require("beautiful")
+local focused      = require("awful.screen").focused
 
 local math         = { floor  = math.floor }
 local string       = { format = string.format }
-local tonumber     = tonumber
-
-local setmetatable = setmetatable
 
 -- Battery infos
 -- widgets.dualbat
@@ -34,7 +32,7 @@ local function worker(args)
     local font         = args.font or beautiful.font:gsub(" %d.*", "")
     local font_size    = tonumber(args.font_size) or 10
     local notify       = args.notify or "on"
-    local followmouse  = args.followmouse or false
+    local followscreen  = args.followscreen or true
     local settings     = args.settings or function() end
 
     bat.widget = wibox.widget.textbox('')
@@ -173,8 +171,8 @@ local function worker(args)
     function bat.show(t_out)
         bat.hide()
 
-        if followmouse then
-            notification_screen = mouse.screen
+        if followscreen then
+            notification_screen = focused()
         end
 
         bat.notification = naughty.notify({

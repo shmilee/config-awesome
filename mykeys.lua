@@ -18,20 +18,20 @@ local laptopkeys = awful.util.table.join(
     awful.key({}, "XF86AudioRaiseVolume",
         function ()
             os.execute(string.format("amixer -q set %s %s+", volume.channel, volume.step))
-            volume.mynotify()
+            volume.update()
         end),
     -- keycode 122 = XF86AudioLowerVolume
     awful.key({}, "XF86AudioLowerVolume",
         function ()
             os.execute(string.format("amixer -q set %s %s-", volume.channel, volume.step))
-            volume.mynotify()
+            volume.update()
         end),
     -- keycode 121 = XF86AudioMute
     awful.key({}, "XF86AudioMute",
         function ()
             --awful.util.spawn("ponymix toggle")
             os.execute(string.format("amixer -q set %s playback toggle", volume.channel))
-            volume.mynotify()
+            volume.update()
         end),
     -- keycode 198 = XF86AudioMicMute
     awful.key({}, "XF86AudioMicMute",
@@ -92,25 +92,25 @@ local volumekeys = awful.util.table.join(
     awful.key({ altkey }, "Up",
         function ()
             os.execute(string.format("amixer -q set %s %s+", volume.channel, volume.step))
-            volume.mynotify()
+            volume.update()
         end,
         { description = "raise volume", group = "audio" }),
     awful.key({ altkey }, "Down",
         function ()
             os.execute(string.format("amixer -q set %s %s-", volume.channel, volume.step))
-            volume.mynotify()
+            volume.update()
         end,
         { description = "lower volume", group = "audio" }),
     awful.key({ altkey }, "m",
         function ()
             os.execute(string.format("amixer -q set %s playback toggle", volume.channel))
-            volume.mynotify()
+            volume.update()
         end,
         { description = "mute volume", group = "audio" }),
     awful.key({ altkey, "Control" }, "m",
         function ()
             os.execute(string.format("amixer -q set %s 100%%", volume.channel))
-            volume.mynotify()
+            volume.update()
         end,
         { description = "maximize volume", group = "audio" })
 )
@@ -145,7 +145,7 @@ local otherkeys = awful.util.table.join(
     -- Hide / show wibox
     awful.key({ modkey }, "b",
         function ()
-            mywibox[mouse.screen].visible = not mywibox[mouse.screen].visible
+            awful.screen.focused().mywibox.visible = not awful.screen.focused().mywibox.visible
         end,
         { description = "hide / show wibox", group = "awesome" })
 )

@@ -4,10 +4,9 @@
 --]]
 
 local newtimer  = require("lain.helpers").newtimer
-local read_pipe = require("lain.helpers").read_pipe
+local async_pipe = require("lain.helpers").async
 local curdir    = require("widgets.curdir")
 local wibox     = require("wibox")
-local setmetatable = setmetatable
 
 -- Lunar widget
 local lunar = {}
@@ -19,13 +18,15 @@ local function worker(args)
 
     lunar.widget = wibox.widget.textbox('')
     function update()
-        lunar_now = loadstring("return " .. read_pipe(curdir .. 'lunar'))()
-        widget = lunar.widget
-        settings()
+        async_pipe(curdir .. 'lunar', function(f)
+            lunar_now = loadstring("return " .. f)()
+            widget = lunar.widget
+            settings()
+        end)
     end
 
     newtimer("lunar", timeout, update)
     return lunar.widget
 end
 
-return setmetatable(lunar, { __call = function(_, ...) return worker(...) end })
+return worker
