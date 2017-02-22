@@ -21,7 +21,7 @@ Usage:
 
 ```
 mv ~/.config/awesome ~/.config/awesome.old
-git clone https://github.com/shmilee/config-awesome.git ~/.config/awesome
+git clone --recursive https://github.com/shmilee/config-awesome.git ~/.config/awesome
 cd ~/.config/awesome
 ln -s rc-default.lua rc.lua
 ```
@@ -33,5 +33,6 @@ Update:
 cd ~/.config/awesome
 git stash
 git pull
+git submodule update --init --recursive
 git stash pop
 ```
