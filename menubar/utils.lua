@@ -1,7 +1,9 @@
 ---------------------------------------------------------------------------
+--- Utility module for menubar
+--
 -- @author Antonio Terceiro
 -- @copyright 2009, 2011-2012 Antonio Terceiro, Alexander Yakushev
--- @release v3.5.9
+-- @module menubar.utils
 ---------------------------------------------------------------------------
 
 -- Grab environment
@@ -9,11 +11,16 @@ local io = io
 local table = table
 local ipairs = ipairs
 local string = string
+local screen = screen
 local awful_util = require("awful.util")
 local theme = require("beautiful")
+local lgi = require("lgi")
+local gio = lgi.Gio
+local glib = lgi.GLib
+local wibox = require("wibox")
+local debug = require("gears.debug")
+local protected_call = require("gears.protected_call")
 
--- Utility module for menubar
--- menubar.utils
 local utils = {}
 
 -- NOTE: This icons/desktop files module was written according to the
@@ -26,7 +33,9 @@ local utils = {}
 --- Terminal which applications that need terminal would open in.
 utils.terminal = 'xterm'
 
--- The default icon for applications that don't provide any icon in
+utils.lang='zh_CN'
+
+--- The default icon for applications that don't provide any icon in
 -- their .desktop files.
 local default_icon = nil
 
@@ -48,21 +57,10 @@ local all_icon_sizes = {
     '16x16'
 }
 
-local other_icon_sizes = {
-    '96',
-    '64',
-    '48',
-    '32',
-    '24',
-    '22',
-    '16'
-}
+--- List of supported icon formats.
+local icon_formats = { "png", "xpm", "svg" }
 
--- List of supported icon formats. Ignore SVG because Awesome doesn't
--- support it.
-local icon_formats = { "png", "xpm" }
-
--- Check whether the icon format is supported.
+--- Check whether the icon format is supported.
 -- @param icon_file Filename of the icon.
 -- @return true if format is supported, false otherwise.
 local function is_format_supported(icon_file)
@@ -74,80 +72,112 @@ local function is_format_supported(icon_file)
     return false
 end
 
+local icon_lookup_path = nil
+--- Get a list of icon lookup paths.
+-- @treturn table A list of directories, without trailing slash.
+local function get_icon_lookup_path()
+    if not icon_lookup_path then
+        local add_if_readable = function(t, path)
+            if awful_util.dir_readable(path) then
+                table.insert(t, path)
+            end
+        end
+        icon_lookup_path = {}
+        local icon_theme_paths = {}
+        local icon_theme = theme.icon_theme
+        local paths = glib.get_system_data_dirs()
+        table.insert(paths, 1, glib.get_user_data_dir())
+        table.insert(paths, 1, glib.build_filenamev({glib.get_home_dir(),
+                                                     '.icons'}))
+        for _,dir in ipairs(paths) do
+            local icons_dir = glib.build_filenamev({dir, 'icons'})
+            if awful_util.dir_readable(icons_dir) then
+                if icon_theme then
+                    add_if_readable(icon_theme_paths,
+                                    glib.build_filenamev({icons_dir,
+                                                         icon_theme}))
+                end
+                -- Fallback theme.
+                add_if_readable(icon_theme_paths,
+                                glib.build_filenamev({icons_dir, 'hicolor'}))
+            end
+        end
+        for _, icon_theme_directory in ipairs(icon_theme_paths) do
+            for _, size in ipairs(all_icon_sizes) do
+                add_if_readable(icon_lookup_path,
+                                glib.build_filenamev({icon_theme_directory,
+                                                      size, 'apps'}))
+            end
+        end
+        for _,dir in ipairs(paths)do
+            -- lowest priority fallbacks
+            add_if_readable(icon_lookup_path,
+                            glib.build_filenamev({dir, 'pixmaps'}))
+            add_if_readable(icon_lookup_path,
+                            glib.build_filenamev({dir, 'icons'}))
+        end
+    end
+    return icon_lookup_path
+end
+
 --- Lookup an icon in different folders of the filesystem.
--- @param icon_file Short or full name of the icon.
--- @return full name of the icon.
-function utils.lookup_icon(icon_file)
+-- @tparam string icon_file Short or full name of the icon.
+-- @treturn string|boolean Full name of the icon, or false on failure.
+function utils.lookup_icon_uncached(icon_file)
     if not icon_file or icon_file == "" then
-        return default_icon
+        return false
     end
 
     if icon_file:sub(1, 1) == '/' and is_format_supported(icon_file) then
         -- If the path to the icon is absolute and its format is
         -- supported, do not perform a lookup.
-        return icon_file
+        return awful_util.file_readable(icon_file) and icon_file or nil
     else
-        local icon_path = {}
-        local icon_theme_paths = {}
-        local icon_theme = theme.icon_theme
-        if icon_theme then
-            table.insert(icon_theme_paths, '/usr/share/icons/' .. icon_theme .. '/')
-            -- TODO also look in parent icon themes, as in freedesktop.org specification
-        end
-        table.insert(icon_theme_paths, '/usr/share/icons/hicolor/') -- fallback theme
-
-        for i, icon_theme_directory in ipairs(icon_theme_paths) do
-            for j, size in ipairs(all_icon_sizes) do
-                table.insert(icon_path, icon_theme_directory .. size .. '/apps/')
-                table.insert(icon_path, icon_theme_directory .. size .. '/actions/')
-                table.insert(icon_path, icon_theme_directory .. size .. '/devices/')
-                table.insert(icon_path, icon_theme_directory .. size .. '/places/')
-                table.insert(icon_path, icon_theme_directory .. size .. '/categories/')
-                table.insert(icon_path, icon_theme_directory .. size .. '/status/')
-            end
-            for j, size in ipairs(other_icon_sizes) do
-                table.insert(icon_path, icon_theme_directory .. 'apps/' .. size .. '/')
-                table.insert(icon_path, icon_theme_directory .. 'actions/' .. size .. '/')
-                table.insert(icon_path, icon_theme_directory .. 'devices/' .. size .. '/')
-                table.insert(icon_path, icon_theme_directory .. 'places/' .. size .. '/')
-                table.insert(icon_path, icon_theme_directory .. 'categories/' ..size .. '/')
-                table.insert(icon_path, icon_theme_directory .. 'status/' .. size .. '/')
-            end
-        end
-        -- lowest priority fallbacks
-        table.insert(icon_path, '/usr/share/pixmaps/')
-        table.insert(icon_path, '/usr/share/icons/')
-
-        for i, directory in ipairs(icon_path) do
-            if is_format_supported(icon_file) and awful_util.file_readable(directory .. icon_file) then
-                return directory .. icon_file
+        for _, directory in ipairs(get_icon_lookup_path()) do
+            if is_format_supported(icon_file) and
+                    awful_util.file_readable(directory .. "/" .. icon_file) then
+                return directory .. "/" .. icon_file
             else
                 -- Icon is probably specified without path and format,
                 -- like 'firefox'. Try to add supported extensions to
                 -- it and see if such file exists.
                 for _, format in ipairs(icon_formats) do
-                    local possible_file = directory .. icon_file .. "." .. format
+                    local possible_file = directory .. "/" .. icon_file .. "." .. format
                     if awful_util.file_readable(possible_file) then
                         return possible_file
                     end
                 end
             end
         end
-        return default_icon
+        return false
     end
+end
+
+local lookup_icon_cache = {}
+--- Lookup an icon in different folders of the filesystem (cached).
+-- @param icon Short or full name of the icon.
+-- @return full name of the icon.
+function utils.lookup_icon(icon)
+    if not lookup_icon_cache[icon] and lookup_icon_cache[icon] ~= false then
+        lookup_icon_cache[icon] = utils.lookup_icon_uncached(icon)
+    end
+    return lookup_icon_cache[icon] or default_icon
 end
 
 --- Parse a .desktop file.
 -- @param file The .desktop file.
 -- @return A table with file entries.
-function utils.parse(file)
+function utils.parse_desktop_file(file)
     local program = { show = true, file = file }
     local desktop_entry = false
 
     -- Parse the .desktop file.
     -- We are interested in [Desktop Entry] group only.
     for line in io.lines(file) do
-        if not desktop_entry and line == "[Desktop Entry]" then
+        if line:find("^%s*#") then
+            -- Skip comments.
+            (function() end)() -- I haven't found a nice way to silence luacheck here
+        elseif not desktop_entry and line == "[Desktop Entry]" then
             desktop_entry = true
         else
             if line:sub(1, 1) == "[" and line:sub(-1) == "]" then
@@ -159,11 +189,20 @@ function utils.parse(file)
             for key, value in line:gmatch("(%w+)%s*=%s*(.+)") do
                 program[key] = value
             end
+            for key, value in line:gmatch("(.*Name%[" .. utils.lang .."%])%s*=%s*(.+)") do
+                program[key] = value
+            end
+            if program['Name[' .. utils.lang .. ']'] then
+                program.Name = program['Name[' .. utils.lang .. ']']
+            end
         end
     end
 
     -- In case [Desktop Entry] was not found
     if not desktop_entry then return nil end
+
+    -- In case the (required) 'Name' entry was not found
+    if not program.Name or program.Name == '' then return nil end
 
     -- Don't show program if NoDisplay attribute is false
     if program.NoDisplay and string.lower(program.NoDisplay) == "true" then
@@ -213,20 +252,71 @@ function utils.parse(file)
     return program
 end
 
---- Parse a directory with .desktop files
--- @param dir The directory.
--- @param icons_size, The icons sizes, optional.
--- @return A table with all .desktop entries.
-function utils.parse_dir(dir)
-    local programs = {}
-    local files = io.popen('find '.. dir ..' -maxdepth 1 -name "*.desktop" 2>/dev/null')
-    for file in files:lines() do
-        local program = utils.parse(file)
-        if program then
-            table.insert(programs, program)
+--- Parse a directory with .desktop files recursively.
+-- @tparam string dir_path The directory path.
+-- @tparam function callback Will be fired when all the files were parsed
+-- with the resulting list of menu entries as argument.
+-- @tparam table callback.programs Paths of found .desktop files.
+function utils.parse_dir(dir_path, callback)
+
+    local function parser(dir, programs)
+        local f = gio.File.new_for_path(dir)
+        -- Except for "NONE" there is also NOFOLLOW_SYMLINKS
+        local query = gio.FILE_ATTRIBUTE_STANDARD_NAME .. "," .. gio.FILE_ATTRIBUTE_STANDARD_TYPE
+        local enum, err = f:async_enumerate_children(query, gio.FileQueryInfoFlags.NONE)
+        if not enum then
+            debug.print_error(err)
+            return
         end
+        local files_per_call = 100 -- Actual value is not that important
+        while true do
+            local list, enum_err = enum:async_next_files(files_per_call)
+            if enum_err then
+                debug.print_error(enum_err)
+                return
+            end
+            for _, info in ipairs(list) do
+                local file_type = info:get_file_type()
+                local file_path = enum:get_child(info):get_path()
+                if file_type == 'REGULAR' then
+                    local program = utils.parse_desktop_file(file_path)
+                    if program then
+                        table.insert(programs, program)
+                    end
+                elseif file_type == 'DIRECTORY' then
+                    parser(file_path, programs)
+                end
+            end
+            if #list == 0 then
+                break
+            end
+        end
+        enum:async_close()
     end
-    return programs
+
+    gio.Async.start(function()
+        local result = {}
+        parser(dir_path, result)
+        protected_call.call(callback, result)
+    end)()
+end
+
+--- Compute textbox width.
+-- @tparam wibox.widget.textbox textbox Textbox instance.
+-- @tparam number|screen s Screen
+-- @treturn int Text width.
+function utils.compute_textbox_width(textbox, s)
+    s = screen[s or mouse.screen]
+    local w, _ = textbox:get_preferred_size(s)
+    return w
+end
+
+--- Compute text width.
+-- @tparam str text Text.
+-- @tparam number|screen s Screen
+-- @treturn int Text width.
+function utils.compute_text_width(text, s)
+    return utils.compute_textbox_width(wibox.widget.textbox(awful_util.escape(text)), s)
 end
 
 return utils

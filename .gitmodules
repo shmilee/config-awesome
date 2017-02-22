@@ -1,0 +1,9 @@
+[submodule "freedesktop"]
+	path = freedesktop
+	url = https://github.com/copycat-killer/awesome-freedesktop.git
+[submodule "lain"]
+	path = lain
+	url = https://github.com/copycat-killer/lain.git
+[submodule "revelation"]
+	path = revelation
+	url = https://github.com/guotsuan/awesome-revelation.git

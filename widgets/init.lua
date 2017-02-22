@@ -3,7 +3,6 @@
 return
 {
     cnweather = require("widgets.cnweather");
-    yhweather = require("widgets.yhweather");
-    lunar     = require("widgets.lunar");
     dualbat   = require("widgets.dualbat");
+    lunar     = require("widgets.lunar");
 }
