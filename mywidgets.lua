@@ -196,7 +196,7 @@ end
 
 -- ALSA volume
 local volicon = wibox.widget.imagebox(beautiful.vol)
-local volume = lain.widget.alsa({
+volume = lain.widget.alsa({
     settings = function()
         if volume_now.status == "off" then
             volicon:set_image(beautiful.vol_mute)
