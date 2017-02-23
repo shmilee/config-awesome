@@ -278,7 +278,9 @@ function createmywibox(s)
         mykeyboardlayout,
     }
     local i, wg, w
-    table.insert(enablewidgets, {s.mylayoutbox})
+    if s.index == 1 then
+        table.insert(enablewidgets, {s.mylayoutbox})
+    end
     for i, wg in ipairs(enablewidgets) do
         if right_layout_toggle then
             table.insert(s.mywibox.rightwidgets, arrl_ld)
