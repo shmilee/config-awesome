@@ -121,6 +121,9 @@ local temp  = lain.widget.temp({
 
 -- Battery, Battery bar
 local BAT_table   = get_device('/sys/class/power_supply','BAT')
+if next(BAT_table) == nil then
+    use_battery_bar = false
+end
 local baticon = wibox.widget.imagebox(beautiful.bat)
 if use_battery_bar then
     local batbar = awful.widget.progressbar()
