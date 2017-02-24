@@ -160,7 +160,7 @@ local function cnweather_now(api, city, cityid, callback)
     elseif api == 'xiaomi' then
         cmd = string.format("%s 'https://weatherapi.market.xiaomi.com/wtr-v2/weather?cityId=%s'", curl, cityid)
         function get_data(weather_now)
-            if not err and type(weather_now.realtime) == "table" then
+            if not err and type(weather_now) == "table" and weather_now.realtime ~= nil then
                 weathertype = weather_now.realtime.weather
                 if weathertype:match("转(.*)") ~= nil then
                     weathertype=weathertype:match("转(.*)")
