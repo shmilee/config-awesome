@@ -261,18 +261,6 @@ else
 end
 yawn.attach(yawn.icon)
 
--- setting
-local enablewidgets={
-    {memicon, mem.widget},
-    {cpuicon, cpu.widget},
-    {tempicon, temp.widget},
-    {volicon, volume.widget},
-    {baticon, batwidget},
-    {wibox.widget.systray(), yawn.icon},
-    {lunar, mytextclock},
-}
-local right_layout_toggle = true
-
 function createmywibox(s)
     s.mywibox = awful.wibar({ position = "top", screen = s, height =20, opacity = 0.88 })
 
@@ -280,11 +268,20 @@ function createmywibox(s)
         layout = wibox.layout.fixed.horizontal,
         mykeyboardlayout,
     }
-    local i, wg, w
-    if s.index == 1 then
-        table.insert(enablewidgets, {s.mylayoutbox})
-    end
-    for i, wg in ipairs(enablewidgets) do
+    -- setting
+    s.mywibox.enablewidgets = {
+        {memicon, mem.widget},
+        {cpuicon, cpu.widget},
+        {tempicon, temp.widget},
+        {volicon, volume.widget},
+        {baticon, batwidget},
+        {wibox.widget.systray(), yawn.icon},
+        {lunar, mytextclock},
+        {s.mylayoutbox},
+    }
+    local right_layout_toggle = true
+    local wg, w
+    for _, wg in ipairs(s.mywibox.enablewidgets) do
         if right_layout_toggle then
             table.insert(s.mywibox.rightwidgets, arrl_ld)
             for _, w in ipairs(wg) do
