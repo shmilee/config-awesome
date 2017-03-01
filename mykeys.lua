@@ -116,6 +116,8 @@ local volumekeys = awful.util.table.join(
 )
 
 local otherkeys = awful.util.table.join(
+    awful.key({ modkey,           }, "a", function () mymainmenu:show() end,
+        {description = "show main menu", group = "awesome"}),
     -- OSD Caps_Lock notify
     awful.key({ }, "Caps_Lock",
         function()
