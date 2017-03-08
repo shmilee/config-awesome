@@ -36,3 +36,50 @@ git pull
 git submodule update --init --recursive
 git stash pop
 ```
+
+Default applications
+--------------------
+
+* autostart.lua
+
+```
+[$] grep ^run_once autostart.lua|awk -F\" '{print $2}'
+compton
+conky
+fcitx
+parcellite
+sogou-autostart
+volnoti
+wicd-gtk
+redshift-gtk
+```
+
+* mykeys.lua
+
+```
+[$] grep ^local mykeys.lua |grep -v -E "=.*require|key.*=" |awk -F\" '{print $2}'
+arandr
+synapse
+slimlock
+deepin-scrot
+```
+
+* mymenu.lua
+
+```lua
+terminal = "xfce4-terminal"
+editor = os.getenv("EDITOR") or "vim"
+editor_cmd = terminal .. " -e '" .. editor .. " %s '"
+```
+
+```lua
+    after = {
+        { "终端 (&T)", terminal, icon_theme():find_icon_path('terminal') },
+        { "文件管理 (&F)", "thunar", lookup_icon('Thunar.png') },
+        {"监视器 (&M)", terminal .. " -e htop", lookup_icon('htop.png') },
+        { "火狐 (&B)", "firefox", lookup_icon('firefox.png') },
+        { "JabRef (&R)", "jabref", lookup_icon('jabref.png') },
+        { "BT下载 (&D)", "transmission-gtk", lookup_icon('transmission.png') },
+        { "辞典 (&G)", "goldendict", lookup_icon('goldendict.png') },
+    }
+```
