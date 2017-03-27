@@ -139,7 +139,7 @@ local otherkeys = awful.util.table.join(
         end,
         { description = "system suspend", group = "system" }),
     --锁屏
-    awful.key({ modkey, "Control" }, "l", function () awful.util.spawn(screenlock) end,
+    awful.key({ modkey, "Control" }, "x", function () awful.util.spawn(screenlock) end,
         { description = "lock screen", group = "system" }),
     -- 截屏
     awful.key({ }, "Print", function() awful.util.spawn(screenshot) end,
