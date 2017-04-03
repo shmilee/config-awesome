@@ -90,8 +90,8 @@ local function cnweather_forecast(api, city, cityid, callback)
 
     if api == 'etouch' then
         cmd = { 'bash', '-c',
-            string.format("%s 'http://wthrcdn.etouch.cn/weather_mini?city=%s' | gzip -d",
-            curl, encodeURI(city)) }
+            string.format("%s 'http://wthrcdn.etouch.cn/weather_mini?citykey=%s' | gzip -d",
+            curl, cityid) }
         function get_data(weather_now)
             if not err and type(weather_now) == "table" and weather_now["desc"] == 'OK' then
                 for i = 1, #weather_now.data.forecast do
@@ -147,8 +147,8 @@ local function cnweather_now(api, city, cityid, callback)
 
     if api == 'etouch' then
         cmd = { 'bash', '-c',
-            string.format("%s 'http://wthrcdn.etouch.cn/weather_mini?city=%s' | gzip -d",
-            curl, encodeURI(city)) }
+            string.format("%s 'http://wthrcdn.etouch.cn/weather_mini?citykey=%s' | gzip -d",
+            curl, cityid) }
         function get_data(weather_now)
             if not err and type(weather_now) == "table" and weather_now["desc"] == 'OK' then
                 weathertype = weather_now.data.forecast[1].type
@@ -187,8 +187,8 @@ local function worker(args)
     local timeout              = args.timeout or 600            -- 10 min
     local timeout_forecast     = args.timeout_forecast or 18000 -- 5 hrs
     local api                  = args.api or 'etouch'           -- etouch, xiaomi
-    local city                 = args.city or '杭州'            -- for etouch
-    local cityid               = args.cityid or 101210101       -- for xiaomi
+    local city                 = args.city or '杭州'            -- for ?
+    local cityid               = args.cityid or 101210101       -- for etouch, xiaomi
     local city_desc            = args.city_desc or city         -- desc for the city
     local icons_path           = args.icons_path or curdir .. "cnweather/"
     local notification_preset  = args.notification_preset or {}

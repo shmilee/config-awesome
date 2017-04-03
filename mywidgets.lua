@@ -247,8 +247,8 @@ if weather_widget == 'cn' then
         --timeout = 600,            -- 10 min
         --timeout_forecast = 18000, -- 5 hrs
         api          = 'etouch',     -- etouch, xiaomi
-        city         = '杭州',       -- for etouch
-        cityid       = 101210101,    -- for xiaomi
+        city         = '杭州',       -- for ?
+        cityid       = 101210101,    -- for etouch, xiaomi
         city_desc    = '杭州市',     -- desc for the city
         followscreen = true
     })
