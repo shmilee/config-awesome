@@ -1,0 +1,24 @@
+--- /usr/share/awesome/lib/menubar/utils.lua	2017-03-30 04:32:58.000000000 +0800
++++ utils.lua	2017-04-19 11:24:06.000000000 +0800
+@@ -34,6 +34,8 @@
+ --- Terminal which applications that need terminal would open in.
+ utils.terminal = 'xterm'
+ 
++utils.lang='zh_CN'
++
+ --- The default icon for applications that don't provide any icon in
+ -- their .desktop files.
+ local default_icon = nil
+@@ -188,6 +190,12 @@
+             for key, value in line:gmatch("(%w+)%s*=%s*(.+)") do
+                 program[key] = value
+             end
++            for key, value in line:gmatch("(.*Name%[" .. utils.lang .."%])%s*=%s*(.+)") do
++                program[key] = value
++            end
++            if program['Name[' .. utils.lang .. ']'] then
++                program.Name = program['Name[' .. utils.lang .. ']']
++            end
+         end
+     end
+ 

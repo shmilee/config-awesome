@@ -1,3 +1,4 @@
+local gears = require("gears")
 local awful = require("awful")
 local wibox = require("wibox")
 local beautiful = require("beautiful")
@@ -223,9 +224,9 @@ volume = lain.widget.alsa({
     end
 })
 volume.step = "2%"
-volume.widget:buttons (awful.util.table.join (
+volume.widget:buttons (gears.table.join (
     awful.button ({}, 1, function()
-      awful.util.spawn(terminal .. " -e alsamixer")
+      awful.spawn(terminal .. " -e alsamixer")
     end),
     awful.button ({}, 3, function()
       os.execute(string.format("amixer -q set %s playback toggle", volume.channel))

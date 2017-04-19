@@ -1,6 +1,6 @@
---- /etc/xdg/awesome/rc.lua	2017-01-20 08:17:03.000000000 +0800
-+++ ./rc-default.lua	2017-02-22 21:35:01.000000000 +0800
-@@ -38,12 +38,7 @@
+--- /etc/xdg/awesome/rc.lua	2017-03-30 04:32:59.000000000 +0800
++++ ./rc-default.lua	2017-04-19 10:39:46.000000000 +0800
+@@ -40,12 +40,7 @@
  
  -- {{{ Variable definitions
  -- Themes define colours, icons, font and wallpapers.
@@ -14,7 +14,7 @@
  
  -- Default modkey.
  -- Usually, Mod4 is the key with a logo between Control and Alt.
-@@ -51,26 +46,6 @@
+@@ -53,26 +48,6 @@
  -- I suggest you to remap Mod4 to another key using xmodmap or other tools.
  -- However, you can use another modifier like Mod1, but it may interact with others.
  modkey = "Mod4"
@@ -41,7 +41,7 @@
  -- }}}
  
  -- {{{ Helper functions
-@@ -89,19 +64,7 @@
+@@ -91,19 +66,7 @@
  -- }}}
  
  -- {{{ Menu
@@ -62,7 +62,7 @@
  
  mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
                                       menu = mymainmenu })
-@@ -113,10 +76,10 @@
+@@ -115,10 +78,10 @@
  -- Keyboard map indicator and switcher
  mykeyboardlayout = awful.widget.keyboardlayout()
  
@@ -74,9 +74,9 @@
  
 +-- {{{ Wibar
  -- Create a wibox for each screen and add it
- local taglist_buttons = awful.util.table.join(
+ local taglist_buttons = gears.table.join(
                      awful.button({ }, 1, function(t) t:view_only() end),
-@@ -160,18 +123,6 @@
+@@ -162,18 +125,6 @@
                                                awful.client.focus.byidx(-1)
                                            end))
  
@@ -95,7 +95,7 @@
  -- Re-set wallpaper when a screen's geometry changes (e.g. different resolution)
  screen.connect_signal("property::geometry", set_wallpaper)
  
-@@ -180,7 +131,7 @@
+@@ -182,7 +133,7 @@
      set_wallpaper(s)
  
      -- Each screen has its own tag table.
@@ -104,7 +104,7 @@
  
      -- Create a promptbox for each screen
      s.mypromptbox = awful.widget.prompt()
-@@ -199,26 +150,7 @@
+@@ -201,26 +152,7 @@
      s.mytasklist = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, tasklist_buttons)
  
      -- Create the wibox
@@ -132,16 +132,16 @@
  end)
  -- }}}
  
-@@ -230,6 +162,8 @@
+@@ -232,6 +164,8 @@
  ))
  -- }}}
  
 +mykeys = require("mykeys")
 +
  -- {{{ Key bindings
- globalkeys = awful.util.table.join(
+ globalkeys = gears.table.join(
      awful.key({ modkey,           }, "s",      hotkeys_popup.show_help,
-@@ -326,6 +260,8 @@
+@@ -328,6 +262,8 @@
                    }
                end,
                {description = "lua execute prompt", group = "awesome"}),
@@ -150,15 +150,15 @@
      -- Menubar
      awful.key({ modkey }, "p", function() menubar.show() end,
                {description = "show the menubar", group = "launcher"})
-@@ -432,6 +368,7 @@
+@@ -446,6 +382,7 @@
                       focus = awful.client.focus.filter,
                       raise = true,
                       keys = clientkeys,
-+                     --size_hints_honor = false, version 4.1, github.com/awesomeWM/awesome/issues/1340
++                     size_hints_honor = false,
                       buttons = clientbuttons,
                       screen = awful.screen.preferred,
                       placement = awful.placement.no_overlap+awful.placement.no_offscreen
-@@ -464,17 +401,15 @@
+@@ -478,17 +415,15 @@
          }
        }, properties = { floating = true }},
  
@@ -179,14 +179,14 @@
  -- {{{ Signals
  -- Signal function to execute when a new client appears.
  client.connect_signal("manage", function (c)
-@@ -540,6 +475,8 @@
+@@ -554,6 +489,8 @@
      end
  end)
  
 -client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
 -client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 --- }}}
-\ No newline at end of file
+\ 文件尾没有换行符
 +client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus c.opacity = 1 end)
 +client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal c.opacity = 0.9 end)
 +-- }}}

@@ -1,3 +1,4 @@
+local gears = require("gears")
 local awful = require("awful")
 local naughty = require("naughty")
 local menubar = require("menubar")
@@ -13,7 +14,7 @@ local screenshot = "deepin-scrot"
 
 local altkey = "Mod1"
 
-local laptopkeys = awful.util.table.join(
+local laptopkeys = gears.table.join(
     -- keycode 123 = XF86AudioRaiseVolume
     awful.key({}, "XF86AudioRaiseVolume",
         function ()
@@ -29,21 +30,21 @@ local laptopkeys = awful.util.table.join(
     -- keycode 121 = XF86AudioMute
     awful.key({}, "XF86AudioMute",
         function ()
-            --awful.util.spawn("ponymix toggle")
+            --awful.spawn("ponymix toggle")
             os.execute(string.format("amixer -q set %s playback toggle", volume.channel))
             volume.update()
         end),
     -- keycode 198 = XF86AudioMicMute
     awful.key({}, "XF86AudioMicMute",
         function ()
-            awful.util.spawn("amixer sset Capture toggle")
+            awful.spawn("amixer sset Capture toggle")
         end),
 
     -- keycode 235 = XF86Display
     awful.key({ }, "XF86Display",
         function ()
             --naughty.notify({ title = "Oops, Key XF86Display not set" })
-            awful.util.spawn(xrandr)
+            awful.spawn(xrandr)
         end),
 
     -- keycode 179 = XF86Tools, --> toggle the Synaptics Touchpad
@@ -62,7 +63,7 @@ local laptopkeys = awful.util.table.join(
     awful.key({ }, "XF86Search",
         function ()
             --naughty.notify({ title = "Oops, Key XF86Search not set" })
-            awful.util.spawn(searchtool)
+            awful.spawn(searchtool)
         end),
 
     -- keycode 128 = XF86LaunchA
@@ -87,7 +88,7 @@ local laptopkeys = awful.util.table.join(
         end)
 )
 
-local volumekeys = awful.util.table.join(
+local volumekeys = gears.table.join(
    -- ALSA volume control
     awful.key({ altkey }, "Up",
         function ()
@@ -115,7 +116,7 @@ local volumekeys = awful.util.table.join(
         { description = "maximize volume", group = "audio" })
 )
 
-local otherkeys = awful.util.table.join(
+local otherkeys = gears.table.join(
     awful.key({ modkey,           }, "a", function () mymainmenu:show() end,
         {description = "show main menu", group = "awesome"}),
     -- OSD Caps_Lock notify
@@ -130,19 +131,19 @@ local otherkeys = awful.util.table.join(
             os.execute(string.format("volnoti-show -n 0 -s %s",str))
         end),
     -- Display
-    awful.key({ modkey, "Control" }, "p", function () awful.util.spawn(xrandr) end,
+    awful.key({ modkey, "Control" }, "p", function () awful.spawn(xrandr) end,
         { description = "xrandr", group = "system" }),
     --休眠
     awful.key({ modkey, "Control" }, "s",
         function ()
-            awful.util.spawn("systemctl suspend")
+            awful.spawn("systemctl suspend")
         end,
         { description = "system suspend", group = "system" }),
     --锁屏
-    awful.key({ modkey, "Control" }, "x", function () awful.util.spawn(screenlock) end,
+    awful.key({ modkey, "Control" }, "x", function () awful.spawn(screenlock) end,
         { description = "lock screen", group = "system" }),
     -- 截屏
-    awful.key({ }, "Print", function() awful.util.spawn(screenshot) end,
+    awful.key({ }, "Print", function() awful.spawn(screenshot) end,
         { description = "print screen", group = "system" }),
     -- Hide / show wibox
     awful.key({ modkey }, "b",
@@ -154,7 +155,7 @@ local otherkeys = awful.util.table.join(
 
 local revelationkeys = nil
 if package.loaded["revelation"] then
-    revelationkeys = awful.util.table.join(
+    revelationkeys = gears.table.join(
         -- keycode 152 = XF86Explorer
         awful.key({ }, "XF86Explorer", revelation),
         awful.key({ modkey, }, "e", revelation,
@@ -171,4 +172,4 @@ if package.loaded["revelation"] then
     )
 end
 
-return awful.util.table.join(laptopkeys, volumekeys, otherkeys, revelationkeys)
+return gears.table.join(laptopkeys, volumekeys, otherkeys, revelationkeys)
