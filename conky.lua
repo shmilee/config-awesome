@@ -67,7 +67,7 @@ end
 net_devices = {'eth0', 'eth1', 'wlan0', 'wlan1', 'docker0', 'ap0'}
 net_text = [[${if_existing /sys/class/net/%s/operstate up}
 ${color green}@%s: ${addr %s} ${hr 1}${color}
-${color green}${downspeedgraph %s 14,90} ${alignr}${upspeedgraph %s 14,90}${color}
+${color green}${downspeedgraph %s 16,90} ${alignr}${upspeedgraph %s 16,90}${color}
 ${font Arrows}i${font}${downspeed %s}/s ${alignr}${upspeed %s}/s${font Arrows}a${font}
 Total ${totaldown %s} ${alignr}Total ${totalup %s}
 ${endif}]]
