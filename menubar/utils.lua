@@ -45,6 +45,28 @@ utils.wm_name = "awesome"
 
 -- Private section
 
+local do_protected_call, call_callback
+do
+    -- Lua 5.1 cannot yield across a protected call. Instead of hardcoding a
+    -- check, we check for this problem: The following coroutine yields true on
+    -- success (so resume() returns true, true). On failure, pcall returns
+    -- false and a message, so resume() returns true, false, message.
+    local _, has_yieldable_pcall = coroutine.resume(coroutine.create(function()
+        return pcall(coroutine.yield, true)
+    end))
+    if has_yieldable_pcall then
+        do_protected_call = protected_call.call
+        call_callback = function(callback, ...)
+            return callback(...)
+        end
+    else
+        do_protected_call = function(f, ...)
+            return f(...)
+        end
+        call_callback = protected_call.call
+    end
+end
+
 local all_icon_sizes = {
     '128x128' ,
     '96x96',
@@ -121,6 +143,16 @@ local function get_icon_lookup_path()
     return icon_lookup_path
 end
 
+--- Remove CR newline from the end of the string.
+-- @param s string to trim
+function utils.rtrim(s)
+    if not s then return end
+    if string.byte(s, #s) == 13 then
+        return string.sub(s, 1, #s - 1)
+    end
+    return s
+end
+
 --- Lookup an icon in different folders of the filesystem.
 -- @tparam string icon_file Short or full name of the icon.
 -- @treturn string|boolean Full name of the icon, or false on failure.
@@ -175,6 +207,7 @@ function utils.parse_desktop_file(file)
     -- Parse the .desktop file.
     -- We are interested in [Desktop Entry] group only.
     for line in io.lines(file) do
+        line = utils.rtrim(line)
         if line:find("^%s*#") then
             -- Skip comments.
             (function() end)() -- I haven't found a nice way to silence luacheck here
@@ -260,11 +293,10 @@ end
 -- @tparam table callback.programs Paths of found .desktop files.
 function utils.parse_dir(dir_path, callback)
 
-    local function parser(dir, programs)
-        local f = gio.File.new_for_path(dir)
+    local function parser(file, programs)
         -- Except for "NONE" there is also NOFOLLOW_SYMLINKS
         local query = gio.FILE_ATTRIBUTE_STANDARD_NAME .. "," .. gio.FILE_ATTRIBUTE_STANDARD_TYPE
-        local enum, err = f:async_enumerate_children(query, gio.FileQueryInfoFlags.NONE)
+        local enum, err = file:async_enumerate_children(query, gio.FileQueryInfoFlags.NONE)
         if not enum then
             gdebug.print_error(err)
             return
@@ -278,14 +310,19 @@ function utils.parse_dir(dir_path, callback)
             end
             for _, info in ipairs(list) do
                 local file_type = info:get_file_type()
-                local file_path = enum:get_child(info):get_path()
+                local file_child = enum:get_child(info)
                 if file_type == 'REGULAR' then
-                    local program = utils.parse_desktop_file(file_path)
-                    if program then
-                        table.insert(programs, program)
+                    local path = file_child:get_path()
+                    if path then
+                        local success, program = pcall(utils.parse_desktop_file, path)
+                        if not success then
+                            gdebug.print_error("Error while reading '" .. path .. "': " .. program)
+                        elseif program then
+                            table.insert(programs, program)
+                        end
                     end
                 elseif file_type == 'DIRECTORY' then
-                    parser(file_path, programs)
+                    parser(file_child, programs)
                 end
             end
             if #list == 0 then
@@ -295,11 +332,11 @@ function utils.parse_dir(dir_path, callback)
         enum:async_close()
     end
 
-    gio.Async.start(function()
+    gio.Async.start(do_protected_call)(function()
         local result = {}
-        parser(dir_path, result)
-        protected_call.call(callback, result)
-    end)()
+        parser(gio.File.new_for_path(dir_path), result)
+        call_callback(callback, result)
+    end)
 end
 
 function utils.compute_textbox_width(textbox, s)
@@ -314,7 +351,8 @@ end
 -- @tparam number|screen s Screen
 -- @treturn int Text width.
 function utils.compute_text_width(text, s)
-    return utils.compute_textbox_width(wibox.widget.textbox(gstring.xml_escape(text)), s)
+    local w, _ = wibox.widget.textbox(gstring.xml_escape(text)):get_preferred_size(s)
+    return w
 end
 
 return utils

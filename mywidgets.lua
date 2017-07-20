@@ -267,7 +267,7 @@ function createmywibox(s)
 
     s.mywibox.rightwidgets = {
         layout = wibox.layout.fixed.horizontal,
-        mykeyboardlayout,
+        --mykeyboardlayout,
     }
     -- setting
     s.mywibox.enablewidgets = {
