@@ -72,10 +72,14 @@ end
 -- http://www.pm25.com/news/91.html
 -- AQI PM2.5 --> Air Pollution Level
 local function aqi2apl(aqi)
+    aqi = tonumber(aqi)
+    if aqi == nil then
+        return 'AQI: N/A '
+    end
     local aql={'优', '良',   '轻度污染', '中度污染', '重度污染','重度污染', '严重污染'}
     ----  aqi  0-50, 51-100, 101 - 150,  151 - 200,  201 - - 250 - - - 300, 301 - - 500
     local i=math.floor(aqi/50.16)+1
-    if i == nil then
+    if i <= 0 then
         return 'AQI: N/A '
     else
         if i > 7 then i = 7 end
