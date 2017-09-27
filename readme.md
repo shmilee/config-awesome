@@ -83,3 +83,14 @@ editor_cmd = terminal .. " -e '" .. editor .. " %s '"
         { "辞典 (&G)", "goldendict", lookup_icon('goldendict.png') },
     }
 ```
+
+Wallpaper
+---------
+
+* theme: think
+    - themes/think/think-1920x1200.jpg
+    - themes/think/violin-1920x1080.jpg
+
+* mywallpaper.lua
+    - bingwallpaper: www.bing.com, daily images
+    - more ...
