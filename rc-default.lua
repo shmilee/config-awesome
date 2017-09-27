@@ -10,8 +10,9 @@ local beautiful = require("beautiful")
 local naughty = require("naughty")
 local menubar = require("menubar")
 local hotkeys_popup = require("awful.hotkeys_popup").widget
--- Enable VIM help for hotkeys widget when client with matching name is opened:
-require("awful.hotkeys_popup.keys.vim")
+-- Enable hotkeys help widget for VIM and other apps
+-- when client with a matching name is opened:
+require("awful.hotkeys_popup.keys")
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -80,6 +81,7 @@ mykeyboardlayout = awful.widget.keyboardlayout()
 
 require("mytags")
 require("mywidgets")
+require("mywallpaper")
 
 -- {{{ Wibar
 -- Create a wibox for each screen and add it
@@ -137,7 +139,7 @@ awful.screen.connect_for_each_screen(function(s)
 
     -- Create a promptbox for each screen
     s.mypromptbox = awful.widget.prompt()
-    -- Create an imagebox widget which will contains an icon indicating which layout we're using.
+    -- Create an imagebox widget which will contain an icon indicating which layout we're using.
     -- We need one layoutbox per screen.
     s.mylayoutbox = awful.widget.layoutbox(s)
     s.mylayoutbox:buttons(gears.table.join(

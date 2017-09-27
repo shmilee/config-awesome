@@ -1,6 +1,5 @@
 local awful = require("awful")
-local beautiful = require("beautiful")
-local gears = require("gears")
+--local beautiful = require("beautiful")
 
 -- Table of layouts to cover with awful.layout.inc, order matters.
 awful.layout.layouts = {
@@ -42,26 +41,3 @@ mylayouts = {
 --    screen = s,
 --    layout = awful.layout.layouts[1],
 --})
-
--- more wallpapers, 2 3 4
-morewallpapers = {
-    "/usr/share/wallpapers-shmilee/1080/violin-1920x1080.jpg",
-    "/usr/share/wallpapers-shmilee/1200/arch-1920x1200.jpg",
-    "/usr/share/wallpapers-shmilee/1200/black-1920x1200.jpg",
-}
-
-function set_wallpaper(s)
-    -- Wallpaper 2 3 4
-    if s.index > 1 and s.index-1 <= #morewallpapers then
-        gears.wallpaper.maximized(morewallpapers[s.index-1], s, true)
-    else
-        if beautiful.wallpaper then
-            local wallpaper = beautiful.wallpaper
-            -- If wallpaper is a function, call it with the screen
-            if type(wallpaper) == "function" then
-                wallpaper = wallpaper(s)
-            end
-            gears.wallpaper.maximized(wallpaper, s, true)
-        end
-    end
-end

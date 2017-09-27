@@ -10,7 +10,17 @@ local theme = dofile("/usr/share/awesome/themes/zenburn/theme.lua")
 
 -- {{{ Main
 theme.dir       = os.getenv("HOME") .. "/.config/awesome/themes/think"
-theme.wallpaper = theme.dir .. "/think-1920x1200.jpg"
+theme.wallpaper_fallback = {
+    theme.dir .. "/think-1920x1200.jpg",
+    theme.dir .. "/violin-1920x1080.jpg",
+}
+theme.wallpaper = function(s)
+    if s.index % 2 == 1 then
+        return theme.wallpaper_fallback[1]
+    else
+        return theme.wallpaper_fallback[2]
+    end
+end
 -- }}}
 
 -- {{{ Styles
