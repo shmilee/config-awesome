@@ -23,7 +23,7 @@ local function get_bingwallpaper(screen, args)
     local RESOLUTION_HIGH = '1920x1080'
     local args         = args or {}
     local bing         = args.bing or 'https://www.bing.com'
-    local idx          = args.idx or 0 --TOMORROW:-1, TODAY:0, YESTERDAY:1
+    local idx          = args.idx or 0 --TOMORROW:-1, TODAY:0, YESTERDAY:1, ... 7
     local n            = args.n or {1, 2, 3, 4, 5, 6, 7, 8} -- n:1-8
     local curl         = args.curl or 'curl -f -s -m 10'
     local tmpdir       = args.tmpdir or '/tmp'
@@ -71,6 +71,10 @@ local function get_bingwallpaper(screen, args)
             local i = next(bingwallpaper.url, bingwallpaper.using)
             if i == nil then
                 i = next(bingwallpaper.url, i)
+            end
+            if i == nil then
+                -- bingwallpaper.url is empty, Net Unreachable
+                return false
             end
             local url = bingwallpaper.url[i]
             local path = tmpdir .. '/' .. string.gsub(url, "(.*/)(.*)", "%2")
