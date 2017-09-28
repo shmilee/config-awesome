@@ -27,6 +27,7 @@ local function get_bingwallpaper(screen, args)
     local n            = args.n or {1, 2, 3, 4, 5, 6, 7, 8} -- n:1-8
     local curl         = args.curl or 'curl -f -s -m 10'
     local tmpdir       = args.tmpdir or '/tmp'
+    local force_hd     = args.force_hd or false
     local timeout      = args.timeout or 60
     local timeout_info = args.timeout_info or 86400
     local settings     = args.settings or function(s)
@@ -44,7 +45,7 @@ local function get_bingwallpaper(screen, args)
             "%s '%s/HPImageArchive.aspx?format=js&idx=%d&n=8'", curl, bing, idx)
         easy_async(cmd, function(stdout, stderr, reason, exit_code)
             --naughty.notify({ title = bingwallpaper.screen.geometry.height })
-            if bingwallpaper.screen.geometry.height > 1000 then
+            if force_hd or bingwallpaper.screen.geometry.height > 1000 then
                 bingwallpaper.resolution = RESOLUTION_HIGH
             end
             bingwallpaper.url = {}
@@ -118,12 +119,14 @@ function set_wallpaper(s)
     if s.index % 2 == 0 then
         s.bingwallpaper = get_bingwallpaper(s, {
             idx = -1,
+            --tmpdir = os.getenv("HOME") .. "/.cache/bingwallpaper",
             timeout = 300,
         })
     --elseif s.index % 2 == 1 then
     --    s.bingwallpaper = get_bingwallpaper(s, {
     --        idx = 1,
     --        timeout = 300,
+    --        force_hd = true,
     --    })
     end
 end
