@@ -12,11 +12,13 @@ local newtimer    = require("lain.helpers").newtimer
 local file_exists = require("lain.helpers").file_exists
 local json        = require("lain.util").dkjson
 
+local io     = { popen = io.popen }
 local math   = { max  = math.max }
 local string = { format = string.format, gsub = string.gsub }
 local table  = { unpack = table.unpack}
 local next   = next
 
+-- BingWallPaper: fetch Bing's images with meta data
 local function get_bingwallpaper(screen, args)
     local bingwallpaper   = {}
     local RESOLUTION_LOW  = '1366x768'
@@ -105,6 +107,66 @@ local function get_bingwallpaper(screen, args)
     return bingwallpaper
 end
 
+-- BingSlide: Use images in the given dicrectory
+local function get_bingslide(screen, args)
+    local bingslide = {}
+    local args      = args or {}
+    local bingdir   = args.bingdir or nil
+    local imagetype = args.imagetype or {'jpg', 'png'}
+    local timeout   = args.timeout or 60
+    local settings  = args.settings or function(s)
+        gears.wallpaper.maximized(s.bingslide.path[s.bingslide.using], s, true)
+    end
+
+    bingslide.screen = screen
+    bingslide.using  = nil
+    bingslide.path   = nil
+
+    function bingslide.update_info()
+        if type(bingdir) ~= 'string' then
+            return false
+        end
+        local pfile, i = io.popen('ls -a "' .. bingdir .. '"'), 0
+        bingslide.path = {}
+        for filename in pfile:lines() do
+            local ext = string.gsub(filename, "(.*%.)(.*)", "%2")
+            for _, it in pairs(imagetype) do
+                if ext == it then
+                    i = i + 1
+                    bingslide.path[i] = bingdir .. '/' .. filename
+                    --naughty.notify({ title = bingslide.path[i]})
+                end
+            end
+        end
+        pfile:close()
+    end
+
+    function bingslide.update()
+        if bingslide.path == nil then
+            bingslide.update_info()
+        end
+        local i = next(bingslide.path, bingslide.using)
+        if i == nil then
+            i = next(bingslide.path, i)
+        end
+        if i == nil then
+            -- bingslide.path is empty
+            return false
+        end
+        if file_exists(bingslide.path[i]) then
+            easy_async('echo', function(stdout, stderr, reason, exit_code)
+                bingslide.using = i
+                --naughty.notify({ title = bingslide.path[bingslide.using]})
+                settings(bingslide.screen)
+            end)
+        end
+    end
+
+    bingslide.timer = newtimer("bingslide-" .. screen.index, timeout, bingslide.update, false, true)
+
+    return bingslide
+end
+
 function set_wallpaper(s)
     -- Wallpaper
     if beautiful.wallpaper then
@@ -122,9 +184,16 @@ function set_wallpaper(s)
             --tmpdir = os.getenv("HOME") .. "/.cache/bingwallpaper",
             timeout = 300,
         })
+    elseif s.index % 2 == 1 then
+        s.bingslide = get_bingslide(s, {
+            --bingdir = os.getenv("HOME") .. "/.cache/bingwallpaper",
+            bingdir = os.getenv("HOME") .. "/.config/awesome/themes/think",
+            timeout = 300,
+        })
     --elseif s.index % 2 == 1 then
     --    s.bingwallpaper = get_bingwallpaper(s, {
-    --        idx = 1,
+    --        idx = 7,
+    --        tmpdir = os.getenv("HOME") .. "/.cache/bingwallpaper",
     --        timeout = 300,
     --        force_hd = true,
     --    })

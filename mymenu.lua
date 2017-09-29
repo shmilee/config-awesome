@@ -14,6 +14,8 @@ editor_cmd = terminal .. " -e '" .. editor .. " %s '"
 local function next_bing(s)
     if s.bingwallpaper then
         s.bingwallpaper.update()
+    elseif s.bingslide then
+        s.bingslide.update()
     end
 end
 

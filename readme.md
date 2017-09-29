@@ -93,4 +93,5 @@ Wallpaper
 
 * mywallpaper.lua
     - bingwallpaper: www.bing.com, daily images
+    - bingslide: use images in the given dicrectory
     - more ...
