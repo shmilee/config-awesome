@@ -92,6 +92,10 @@ Wallpaper
     - themes/think/violin-1920x1080.jpg
 
 * mywallpaper.lua
-    - bingwallpaper: www.bing.com, daily images
     - bingslide: use images in the given dicrectory
+    - bingwallpaper: www.bing.com, daily images
+    - bingwallpaper: set lovebizhi API
+    - bingwallpaper: set baidu image API
+    - bingwallpaper: set nationalgeographic API
+    - bingwallpaper: set Windows 10 spotlight API
     - more ...
