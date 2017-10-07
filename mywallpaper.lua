@@ -19,6 +19,15 @@ local table  = { concat = table.concat, insert = table.insert }
 local next   = next
 local pairs  = pairs
 
+local function simple_range(head, tail, step)
+    local res = {}
+    while head <= tail do
+        table.insert(res, head)
+        head = head + step
+    end
+    return res
+end
+
 -- BingWallPaper: fetch Bing's images with meta data
 local function get_bingwallpaper(screen, args)
     local bingwallpaper = { screen=screen, url=nil, path=nil, using=nil }
@@ -212,7 +221,7 @@ function set_wallpaper(s)
                 screen_width=s.geometry.width,
                 screen_height=s.geometry.height,
             },
-            choices = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
+            choices = simple_range(1, 30, 1), -- { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
             get_url = function(bwp, data, choice)
                 if data['data'][choice] then
                     if bwp.force_hd then
@@ -243,10 +252,10 @@ function set_wallpaper(s)
             api = "https://image.baidu.com/channel/listjson",
             query = {
                 tag1='壁纸', tag2='唯美', -- ftags='风景',
-                pn=0, rn=10,
+                pn=0, rn=30,
                 width=s.geometry.width, height=s.geometry.height,
             },
-            choices = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
+            choices = simple_range(1, 30, 1), -- { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
             get_url = function(bwp, data, choice)
                 if data['data'][choice] then
                     return data['data'][choice]['download_url']
@@ -271,7 +280,7 @@ function set_wallpaper(s)
             api = "http://www.nationalgeographic.com/photography/photo-of-the-day/_jcr_content/.gallery.json",
             --api = "http://www.nationalgeographic.com/photography/photo-of-the-day/_jcr_content/.gallery.2017-08.json",
             query = {},
-            choices = { 1, 2 },
+            choices = simple_range(1, 8, 1),
             get_url = function(bwp, data, choice)
                 if data['items'][choice] then
                     if bwp.force_hd then
@@ -329,6 +338,7 @@ function set_wallpaper(s)
             end,
             cachedir = os.getenv("HOME") .. "/.cache/wallpaper-spotlight",
             timeout = 300,
+            timeout_info  = 1200,
         })
     end
 end
