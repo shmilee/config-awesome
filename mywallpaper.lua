@@ -366,4 +366,11 @@ function set_wallpaper(s)
             timeout_info  = 1200,
         })
     end
+    -- Need to sign up
+    -- bingwallpaper: unsplash
+    -- -- https://unsplash.com/documentation
+    -- -- client_id, curl xxx -d ''
+    -- bingwallpaper: pixabay
+    -- -- https://pixabay.com/api/docs/
+    -- -- key, orientation
 end
