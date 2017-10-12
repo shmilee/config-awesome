@@ -6,13 +6,11 @@
 local beautiful  = require("beautiful")
 local gears      = require("gears")
 local easy_async = require("awful.spawn").easy_async
+local newtimer   = require("lain.helpers").newtimer
+local json       = require("lain.util").dkjson
 --local naughty    = require("naughty")
 
-local newtimer    = require("lain.helpers").newtimer
-local file_exists = require("lain.helpers").file_exists
-local json        = require("lain.util").dkjson
-
-local io     = { popen = io.popen }
+local io     = { popen = io.popen, open = io.open }
 local math   = { max  = math.max }
 local string = { format = string.format, gsub = string.gsub }
 local table  = { concat = table.concat, insert = table.insert }
@@ -26,6 +24,21 @@ local function simple_range(head, tail, step)
         head = head + step
     end
     return res
+end
+
+local function file_exists(path)
+    local file = io.open(path, "rb")
+    if file then
+        file:close()
+    end
+    return file ~= nil
+end
+
+local function file_length(path)
+    local file = io.open(path, "rb")
+    local len = file:seek("end")
+    file:close()
+    return len
 end
 
 -- BingWallPaper: fetch Bing's images with meta data
@@ -100,17 +113,25 @@ local function get_bingwallpaper(screen, args)
                 -- bingwallpaper.url is empty, Net Unreachable
                 return false
             end
+            bingwallpaper.using = i
             if file_exists(bingwallpaper.path[i]) then
-                bingwallpaper.using = i
-                setting(bingwallpaper)
+                if file_length(bingwallpaper.path[i]) == 0 then
+                    --naughty.notify({ title = 'NO ' .. bingwallpaper.path[i]})
+                    bingwallpaper.update()
+                else
+                    --naughty.notify({ title = 'OK ' .. bingwallpaper.path[i]})
+                    setting(bingwallpaper)
+                end
             else
                 local cmd = string.format("%s %s -o %s", curl, bingwallpaper.url[i], bingwallpaper.path[i])
                 easy_async(cmd, function(stdout, stderr, reason, exit_code)
                     --naughty.notify({ title = exit_code })
-                    if exit_code == 0 then
-                        bingwallpaper.using = i
-                        --naughty.notify({ title = bingwallpaper.path[i]})
+                    if exit_code == 0 and file_length(bingwallpaper.path[i]) ~= 0 then
+                        --naughty.notify({ title = 'DL-OK ' .. bingwallpaper.path[i]})
                         setting(bingwallpaper)
+                    else
+                        --naughty.notify({ title = 'DL-NO ' .. bingwallpaper.path[i]})
+                        bingwallpaper.update()
                     end
                 end)
             end
@@ -165,12 +186,15 @@ local function get_bingslide(screen, args)
             -- bingslide.path is empty
             return false
         end
-        if file_exists(bingslide.path[i]) then
+        bingslide.using = i
+        if file_exists(bingslide.path[i]) and file_length(bingslide.path[i]) ~= 0 then
             easy_async('echo', function(stdout, stderr, reason, exit_code)
-                bingslide.using = i
-                --naughty.notify({ title = bingslide.path[bingslide.using]})
+                --naughty.notify({ title = 'OK ' .. bingslide.path[i]})
                 setting(bingslide)
             end)
+        else
+            --naughty.notify({ title = 'NO ' .. bingslide.path[i]})
+            bingslide.update()
         end
     end
 
@@ -193,6 +217,7 @@ function set_wallpaper(s)
     if s.index == 100 then
         s.bingslide = get_bingslide(s, {
             --bingdir = os.getenv("HOME") .. "/.cache/wallpaper-bing",
+            --bingdir = os.getenv("HOME") .. "/.cache/wallpaper-lovebizhi",
             bingdir = os.getenv("HOME") .. "/.config/awesome/themes/think",
             timeout = 300,
         })
@@ -208,14 +233,14 @@ function set_wallpaper(s)
         })
     end
     -- bingwallpaper: lovebizhi
-    if s.index == 100 then
+    if s.index == 2 then
         s.bingwallpaper = get_bingwallpaper(s, {
             api = "http://api.lovebizhi.com/macos_v4.php",
             query = {
                 a='category',
                 -- tid: moviestar=1, landscape=2, beauty=3, plant=4,
                 -- animal=5, game=6, cartoon=7, festival=8, ... 39 ...
-                tid=2,
+                tid=4,
                 uuid='686eb2caaa6d11e78665605718e08fa3',
                 retina=1, client_id=1008, order='hot',
                 screen_width=s.geometry.width,
