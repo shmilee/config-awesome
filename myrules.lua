@@ -29,7 +29,7 @@ local myrules = {
             "netease-cloud-music",
         },
       }, properties = {
-          --maximized = false,
+          maximized = false,
           maximized_horizontal = false,
           maximized_vertical = false }},
     -- Add titlebars to normal clients and dialogs
