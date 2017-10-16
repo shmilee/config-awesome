@@ -13,6 +13,7 @@ local myrules = {
         class = {
             "Tipswindow.py", -- deepin-scrot
             "Pidgin",
+            "Pinentry", -- gpg passwd
             "netease-cloud-music",
         },
       }, properties = { floating = true }},
