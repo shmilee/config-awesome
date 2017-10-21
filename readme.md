@@ -93,9 +93,32 @@ Wallpaper
 
 * mywallpaper.lua
     - bingslide: use images in the given dicrectory
+
+      | Input Variable | Meaning  | Type | Default |
+      | -------------- | -------- | ---- | ------- |
+      | bingdir   | images path      | string | nil |
+      | imagetype | images extension | table of strings | {'jpg', 'png'} |
+      | timeout   | refresh timeout seconds for setting next wallpaper | number | 60 |
+      | setting   | Set wallpaper    | function | `function(bingslide) ... end` |
+
     - bingwallpaper: www.bing.com, daily images
-    - bingwallpaper: set lovebizhi API
-    - bingwallpaper: set baidu image API
-    - bingwallpaper: set nationalgeographic API
-    - bingwallpaper: set Windows 10 spotlight API
+
+      | Input Variable | Meaning  | Type | Default |
+      | -------------- | -------- | ---- | ------- |
+      | api | web api | string | 'https://www.bing.com/HPImageArchive.aspx' |
+      | query | search query | table of parameters | { format='js', idx=0, n=8 } |
+      | choices | choices in response | table of numbers | { 1, 2, 3, 4, 5, 6, 7, 8 } |
+      | curl | curl cmd | string | 'curl -f -s -m 10' |
+      | cachedir | path to store images | string | '/tmp' |
+      | timeout   | refresh timeout seconds for setting next wallpaper | number | 60 |
+      | timeout_info | refresh timeout seconds for fetching new json | number | 86400 |
+      | setting   | Set wallpaper    | function | `function(bingwallpaper) ... end` |
+      | force_hd | force to use HD image(work with `get_url`) | boolean | false |
+      | get_url | get image url from response data | function | `function(bingwallpaper, data, choice) ... end` |
+      | get_name | get image name  from response data | function | `function(bingwallpaper, data, choice) ... end` |
+
+    - bingwallpaper: set lovebizhi API, `api`, `query`, `choices`, `get_url`, `get_name`
+    - bingwallpaper: set baidu image API, `api`, `query`, `choices`, `get_url`, `get_name`
+    - bingwallpaper: set nationalgeographic API, `api`, `query`, `choices`, `get_url`, `get_name`
+    - bingwallpaper: set Windows 10 spotlight API, `api`, `query`, `choices`, `curl`, `get_url`, `get_name`
     - more ...
