@@ -240,7 +240,7 @@ function set_wallpaper(s)
                 a='category',
                 -- tid: moviestar=1, landscape=2, beauty=3, plant=4,
                 -- animal=5, game=6, cartoon=7, festival=8, ... 39 ...
-                tid=4,
+                tid=2,
                 uuid='686eb2caaa6d11e78665605718e08fa3',
                 retina=1, client_id=1008, order='hot',
                 screen_width=s.geometry.width,
@@ -302,8 +302,8 @@ function set_wallpaper(s)
     -- bingwallpaper: nationalgeographic
     if s.index == 100 then
         s.bingwallpaper = get_bingwallpaper(s, {
-            api = "http://www.nationalgeographic.com/photography/photo-of-the-day/_jcr_content/.gallery.json",
-            --api = "http://www.nationalgeographic.com/photography/photo-of-the-day/_jcr_content/.gallery.2017-08.json",
+            api = "https://www.nationalgeographic.com/photography/photo-of-the-day/_jcr_content/.gallery.json",
+            --api = "https://www.nationalgeographic.com/photography/photo-of-the-day/_jcr_content/.gallery.2017-08.json",
             query = {},
             choices = simple_range(1, 8, 1),
             get_url = function(bwp, data, choice)
