@@ -8,8 +8,9 @@ local gears      = require("gears")
 local easy_async = require("awful.spawn").easy_async
 local newtimer   = require("lain.helpers").newtimer
 local json       = require("lain.util").dkjson
---local naughty    = require("naughty")
+local naughty    = require("naughty")
 
+local os     = { getenv = os.getenv, remove = os.remove }
 local io     = { popen = io.popen, open = io.open }
 local math   = { max  = math.max }
 local string = { format = string.format, gsub = string.gsub }
@@ -130,7 +131,8 @@ local function get_bingwallpaper(screen, args)
                         --naughty.notify({ title = 'DL-OK ' .. bingwallpaper.path[i]})
                         setting(bingwallpaper)
                     else
-                        --naughty.notify({ title = 'DL-NO ' .. bingwallpaper.path[i]})
+                        naughty.notify({ title = 'DL-NO ' .. bingwallpaper.path[i]})
+                        os.remove(bingwallpaper.path[i])
                         bingwallpaper.update()
                     end
                 end)
