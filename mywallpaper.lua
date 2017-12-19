@@ -106,12 +106,16 @@ local function get_bingwallpaper(screen, args)
         if bingwallpaper.url == nil then
             return false
         else
+            if next(bingwallpaper.url) == nil then
+                -- bingwallpaper.url is empty, Net Unreachable
+                return false
+            end
             local i = next(bingwallpaper.url, bingwallpaper.using)
             if i == nil then
                 i = next(bingwallpaper.url, i)
             end
-            if i == nil  or bingwallpaper.path[i] == nil then
-                -- bingwallpaper.url is empty, Net Unreachable
+            if bingwallpaper.path[i] == nil then
+                -- bingwallpaper.path[i] is broken
                 return false
             end
             bingwallpaper.using = i
