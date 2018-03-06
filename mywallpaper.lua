@@ -238,8 +238,42 @@ function set_wallpaper(s)
             force_hd = true,
         })
     end
-    -- bingwallpaper: lovebizhi
+    -- bingwallpaper: 360chrome
     if s.index == 2 then
+        s.bingwallpaper = get_bingwallpaper(s, {
+            api = "http://wallpaper.apc.360.cn/index.php",
+            curl = 'curl -f -s -m 30', -- max-time 30 for 4K
+            query = {
+                c='WallPaper', a='getAppsByCategory',
+                -- cid: http://cdn.apc.360.cn/index.php?c=WallPaper&a=getAllCategoriesV2&from=360chrome
+                -- "4K专区"=36, "美女模特"=6, "爱情美图"=30,
+                -- "风景大片"=9, "小清新"=15, "萌宠动物"=14, ...
+                cid=36,
+                start=100, count=20, from='360chrome',
+            },
+            choices = simple_range(0, 20, 1),
+            get_url = function(bwp, data, choice)
+                if data['data'][choice] then
+                    return string.gsub(data['data'][choice]['url'], "(.*/)__85(/.*)", "%1__90%2")
+                else
+                    return nil
+                end
+            end,
+            get_name = function(bwp, data, choice)
+                if data['data'][choice] then
+                    local name = string.gsub(bwp.url[choice], "(.*/)(.*)", "-%2")
+                    return data['data'][choice]['class_id'] .. '-' ..
+                        string.gsub(data['data'][choice]['utag'], ' ', '_') .. name
+                else
+                    return nil
+                end
+            end,
+            cachedir = os.getenv("HOME") .. "/.cache/wallpaper-360chrome",
+            timeout = 300,
+        })
+    end
+    -- bingwallpaper: lovebizhi
+    if s.index == 100 then
         s.bingwallpaper = get_bingwallpaper(s, {
             api = "http://api.lovebizhi.com/macos_v4.php",
             query = {
