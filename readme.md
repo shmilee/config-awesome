@@ -117,7 +117,7 @@ Wallpaper
       | get_url | get image url from response data | function | `function(bingwallpaper, data, choice) ... end` |
       | get_name | get image name  from response data | function | `function(bingwallpaper, data, choice) ... end` |
 
-    - bingwallpaper: set lovebizhi API, `api`, `query`, `choices`, `get_url`, `get_name`
+    - bingwallpaper: set 360chrome API, `api`, `query`, `choices`, `get_url`, `get_name`
     - bingwallpaper: set baidu image API, `api`, `query`, `choices`, `get_url`, `get_name`
     - bingwallpaper: set nationalgeographic API, `api`, `query`, `choices`, `get_url`, `get_name`
     - bingwallpaper: set Windows 10 spotlight API, `api`, `query`, `choices`, `curl`, `get_url`, `get_name`

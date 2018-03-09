@@ -272,45 +272,6 @@ function set_wallpaper(s)
             timeout = 300,
         })
     end
-    -- bingwallpaper: lovebizhi
-    if s.index == 100 then
-        s.bingwallpaper = get_bingwallpaper(s, {
-            api = "http://api.lovebizhi.com/macos_v4.php",
-            query = {
-                a='category',
-                -- tid: moviestar=1, landscape=2, beauty=3, plant=4,
-                -- animal=5, game=6, cartoon=7, festival=8, ... 39 ...
-                tid=2,
-                uuid='686eb2caaa6d11e78665605718e08fa3',
-                retina=1, client_id=1008, order='hot',
-                screen_width=s.geometry.width,
-                screen_height=s.geometry.height,
-            },
-            choices = simple_range(1, 30, 1), -- { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
-            get_url = function(bwp, data, choice)
-                if data['data'][choice] then
-                    if bwp.force_hd then
-                        return data['data'][choice]['image']['diy']
-                    else
-                        return string.gsub(data['data'][choice]['image']['original'], "(.*)%.webp", "%1.jpg")
-                    end
-                else
-                    return nil
-                end
-            end,
-            get_name = function(bwp, data, choice)
-                if data['data'][choice] then
-                    local name = string.gsub(bwp.url[choice], "(.*/)(.*)", "_%2")
-                    return data['name'] .. string.gsub(name, ",", "_")
-                else
-                    return nil
-                end
-            end,
-            cachedir = os.getenv("HOME") .. "/.cache/wallpaper-lovebizhi",
-            timeout = 300,
-            force_hd = true,
-        })
-    end
     -- bingwallpaper: baidu
     if s.index == 100 then
         s.bingwallpaper = get_bingwallpaper(s, {
