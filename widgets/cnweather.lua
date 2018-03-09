@@ -6,8 +6,8 @@
                                                   
 --]]
 
+local easy_async = require("awful.spawn").easy_async
 local newtimer   = require("lain.helpers").newtimer
-local async_pipe = require("lain.helpers").async
 local json       = require("lain.util").dkjson
 local curdir     = require("widgets.curdir")
 
@@ -93,9 +93,7 @@ local function cnweather_forecast(api, city, cityid, callback)
     local function get_data(f) return notification_text end
 
     if api == 'etouch' then
-        cmd = { 'bash', '-c',
-            string.format("%s 'http://wthrcdn.etouch.cn/weather_mini?citykey=%s' | gzip -d",
-            curl, cityid) }
+        cmd = string.format("%s --compressed 'http://wthrcdn.etouch.cn/weather_mini?citykey=%s'", curl, cityid)
         function get_data(weather_now)
             if not err and type(weather_now) == "table" and weather_now["desc"] == 'OK' then
                 for i = 1, #weather_now.data.forecast do
@@ -134,9 +132,9 @@ local function cnweather_forecast(api, city, cityid, callback)
         end
     end
 
-    return async_pipe(cmd, function(f)
+    return easy_async(cmd, function(stdout, stderr, reason, exit_code)
         local weather_now, pos, err
-        weather_now, pos, err = json.decode(f, 1, nil)
+        weather_now, pos, err = json.decode(stdout, 1, nil)
         notification_text = get_data(weather_now)
         callback(notification_text)
     end)
@@ -150,9 +148,7 @@ local function cnweather_now(api, city, cityid, callback)
     local function get_data(f) return weathertype, weather_now_icon, aql end
 
     if api == 'etouch' then
-        cmd = { 'bash', '-c',
-            string.format("%s 'http://wthrcdn.etouch.cn/weather_mini?citykey=%s' | gzip -d",
-            curl, cityid) }
+        cmd = string.format("%s --compressed 'http://wthrcdn.etouch.cn/weather_mini?citykey=%s'", curl, cityid)
         function get_data(weather_now)
             if not err and type(weather_now) == "table" and weather_now["desc"] == 'OK' then
                 weathertype = weather_now.data.forecast[1].type
@@ -176,9 +172,9 @@ local function cnweather_now(api, city, cityid, callback)
         end
     end
 
-    return async_pipe(cmd, function(f)
+    return easy_async(cmd, function(stdout, stderr, reason, exit_code)
         local weather_now, pos, err
-        weather_now, pos, err = json.decode(f, 1, nil)
+        weather_now, pos, err = json.decode(stdout, 1, nil)
         weathertype, weather_now_icon, aql = get_data(weather_now)
         callback(weathertype, weather_now_icon, aql)
     end)

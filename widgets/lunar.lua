@@ -3,8 +3,8 @@
       * (c) 2015, shmilee                         
 --]]
 
+local easy_async = require("awful.spawn").easy_async
 local newtimer  = require("lain.helpers").newtimer
-local async_pipe = require("lain.helpers").async
 local curdir    = require("widgets.curdir")
 local wibox     = require("wibox")
 
@@ -18,8 +18,8 @@ local function worker(args)
 
     lunar.widget = wibox.widget.textbox('')
     function update()
-        async_pipe(curdir .. 'lunar', function(f)
-            lunar_now = loadstring("return " .. f)()
+        easy_async(curdir .. 'lunar', function(out, err, reason, exit_code)
+            lunar_now = loadstring("return " .. out)()
             widget = lunar.widget
             settings()
         end)
