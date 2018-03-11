@@ -42,6 +42,55 @@ local function file_length(path)
     return len
 end
 
+-- http://blog.csdn.net/linjinya/article/details/79401448
+-- http://img0.bdstatic.com/static/common/pkg/cores_xxxxxxx.js
+local function baidu_url_uncompile(s)
+    local t = {
+        ["w"]="a",
+        ["k"]="b",
+        ["v"]="c",
+        ["1"]="d",
+        ["j"]="e",
+        ["u"]="f",
+        ["2"]="g",
+        ["i"]="h",
+        ["t"]="i",
+        ["3"]="j",
+        ["h"]="k",
+        ["s"]="l",
+        ["4"]="m",
+        ["g"]="n",
+        ["5"]="o",
+        ["r"]="p",
+        ["q"]="q",
+        ["6"]="r",
+        ["f"]="s",
+        ["p"]="t",
+        ["7"]="u",
+        ["e"]="v",
+        ["o"]="w",
+        ["8"]="1",
+        ["d"]="2",
+        ["n"]="3",
+        ["9"]="4",
+        ["c"]="5",
+        ["m"]="6",
+        ["0"]="7",
+        ["b"]="8",
+        ["l"]="9",
+        ["a"]="0",
+        ["_z2C$q"]=":",
+        ["_z&e3B"]=".",
+        ["AzdH3F"]="/",
+    }
+    local patterns= {"(_z2C$q)", "(_z&e3B)", "(AzdH3F)", '([a-w%d])'}
+    local i, p
+    for i, p in pairs(patterns) do
+        s = string.gsub(s, p, function(i) return t[i] end)
+    end
+    return s
+end
+
 -- BingWallPaper: fetch Bing's images with meta data
 local function get_bingwallpaper(screen, args)
     local bingwallpaper = { screen=screen, url=nil, path=nil, using=nil }
@@ -251,7 +300,7 @@ function set_wallpaper(s)
                 cid=36,
                 start=100, count=20, from='360chrome',
             },
-            choices = simple_range(0, 20, 1),
+            choices = simple_range(1, 20, 1),
             get_url = function(bwp, data, choice)
                 if data['data'][choice] then
                     return string.gsub(data['data'][choice]['url'], "(.*/)__85(/.*)", "%1__90%2")
@@ -275,23 +324,33 @@ function set_wallpaper(s)
     -- bingwallpaper: baidu
     if s.index == 100 then
         s.bingwallpaper = get_bingwallpaper(s, {
-            api = "https://image.baidu.com/channel/listjson",
+            api = "http://image.baidu.com/search/acjson",
             query = {
-                tag1='壁纸', tag2='唯美', -- ftags='风景',
+                tn='resultjson_com',
+                cg='wallpaper',
+                ipn='rj',
+                word='壁纸+不同风格+简约',
                 pn=0, rn=30,
-                width=s.geometry.width, height=s.geometry.height,
+                width=1920, height=1080,
+                --width=s.geometry.width, height=s.geometry.height,
+                -- ic: http://img1.bdstatic.com/static/searchresult/pkg/result_xxxxxxx.js
+                -- red: 1, orange: 256, yellow: 2, green: 4, blue: 16,
+                -- gray: 128, white: 1024, black: 512, bw: 2048, ...
+                --ic=1,
             },
-            choices = simple_range(1, 30, 1), -- { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
+            choices = simple_range(1, 30, 1),
             get_url = function(bwp, data, choice)
                 if data['data'][choice] then
-                    return data['data'][choice]['download_url']
+                    return baidu_url_uncompile(data['data'][choice]['objURL'])
                 else
                     return nil
                 end
             end,
             get_name = function(bwp, data, choice)
-                if data['data'][choice] then
-                    return data['data'][choice]['abs'] .. '_' .. data['data'][choice]['id'] .. '.jpg'
+                if bwp.url[choice] then
+                    local name = string.gsub(bwp.url[choice], "(.*/)(.*)", "-%2")
+                    name = string.gsub(name, '%?down$', "")
+                    return string.gsub(data['queryExt'], " ", "_") .. name
                 else
                     return nil
                 end
