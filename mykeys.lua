@@ -141,10 +141,19 @@ local otherkeys = gears.table.join(
         { description = "system suspend", group = "system" }),
     --锁屏
     awful.key({ modkey, "Control" }, "x", function () awful.spawn(screenlock) end,
-        { description = "lock screen", group = "system" }),
+        { description = "lock screen", group = "screen" }),
     -- 截屏
     awful.key({ }, "Print", function() awful.spawn(screenshot) end,
-        { description = "print screen", group = "system" }),
+        { description = "print screen", group = "screen" }),
+    -- next miscwallpaper
+    awful.key({ modkey, "Control" }, "w",
+        function ()
+            local s = awful.screen.focused()
+            if s.miscwallpaper then
+                s.miscwallpaper.update()
+            end
+        end,
+        { description = "next screen wallpaper", group = "screen" }),
     -- Hide / show wibox
     awful.key({ modkey }, "b",
         function ()

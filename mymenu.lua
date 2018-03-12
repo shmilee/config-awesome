@@ -11,22 +11,19 @@ terminal = "xfce4-terminal"
 editor = os.getenv("EDITOR") or "vim"
 editor_cmd = terminal .. " -e '" .. editor .. " %s '"
 
-local function next_bing(s)
-    if s.bingwallpaper then
-        s.bingwallpaper.update()
-    elseif s.bingslide then
-        s.bingslide.update()
-    end
-end
-
 -- Create a launcher widget and a main menu
 local myawesomemenu = {
-  { "hotkeys", function() return false, hotkeys_popup.show_help end},
-  { "next bing", function() next_bing(focused()) end },
-  { "manual", terminal .. " -e 'man awesome'" },
-  { "edit config", string.format(editor_cmd, awesome.conffile) },
-  { "restart", awesome.restart },
-  { "quit", function() awesome.quit() end}
+    { "hotkeys", function() return false, hotkeys_popup.show_help end},
+    { "next bing", function()
+        local s = focused()
+        if s.miscwallpaper then
+            s.miscwallpaper.update()
+        end
+    end },
+    { "manual", terminal .. " -e 'man awesome'" },
+    { "edit config", string.format(editor_cmd, awesome.conffile) },
+    { "restart", awesome.restart },
+    { "quit", function() awesome.quit() end}
 }
 
 mymainmenu = freedesktop.menu.build({
