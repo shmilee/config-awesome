@@ -121,6 +121,7 @@ Wallpaper
       | -------------- | -------- | ---- | ------- |
       | args.bingdir   | images path      | string | nil |
       | args.imagetype | images extension | table of strings | {'jpg', 'jpeg', 'png'} |
+      | args.filter    | filename filter pattern | string | '.*' |
       | args.async_update | setting next wallpaper after scaning `bingdir` | boolean | false |
       | args.setting   | Set wallpaper    | function | `function(bingslide) ... end` |
 

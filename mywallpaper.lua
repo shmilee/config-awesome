@@ -13,7 +13,7 @@ local naughty    = require("naughty")
 local os     = { getenv = os.getenv, remove = os.remove, time = os.time }
 local io     = { popen = io.popen, open = io.open }
 local math   = { max = math.max, randomseed = math.randomseed, random = math.random }
-local string = { format = string.format, gsub = string.gsub }
+local string = { format = string.format, gsub = string.gsub, match = string.match }
 local table  = { concat = table.concat, insert = table.insert }
 local next   = next
 local pairs  = pairs
@@ -206,6 +206,7 @@ local function get_bingslide(screen, args)
     local args      = args or {}
     local bingdir   = args.bingdir or nil
     local imagetype = args.imagetype or {'jpg', 'jpeg', 'png'}
+    local filter    = args.filter or '.*'
     local async_update  = args.async_update or false
     local setting   = args.setting or function(bs)
         gears.wallpaper.maximized(bs.path[bs.using], bs.screen, true)
@@ -218,12 +219,14 @@ local function get_bingslide(screen, args)
         local pfile, i = io.popen('ls -a "' .. bingdir .. '"'), 0
         bingslide.path = {}
         for filename in pfile:lines() do
-            local ext = string.gsub(filename, "(.*%.)(.*)", "%2")
-            for _, it in pairs(imagetype) do
-                if ext == it then
-                    i = i + 1
-                    bingslide.path[i] = bingdir .. '/' .. filename
-                    --naughty.notify({ title = bingslide.path[i]})
+            if string.match(filename, filter) ~= nil then
+                local ext = string.gsub(filename, "(.*%.)(.*)", "%2")
+                for _, it in pairs(imagetype) do
+                    if ext == it then
+                        i = i + 1
+                        bingslide.path[i] = bingdir .. '/' .. filename
+                        --naughty.notify({ title = bingslide.path[i]})
+                    end
                 end
             end
         end
@@ -542,7 +545,10 @@ function set_wallpaper(s)
             {
                 walltype='bingslide',
                 weight=2,
-                args={ bingdir = os.getenv("HOME") .. "/.cache/wallpaper-bing" },
+                args={
+                    bingdir = os.getenv("HOME") .. "/.cache/wallpaper-bing",
+                    filter='^2018',
+                },
             },
         }, {
             timeout = 300,
@@ -559,12 +565,18 @@ function set_wallpaper(s)
             {
                 walltype='bingslide',
                 weight=2,
-                args={ bingdir = os.getenv("HOME") .. "/.cache/wallpaper-bing" },
+                args={
+                    bingdir = os.getenv("HOME") .. "/.cache/wallpaper-bing",
+                    filter='^2017',
+                },
             },
             {
                 walltype='bingslide',
                 weight=2,
-                args={ bingdir = os.getenv("HOME") .. "/.cache/wallpaper-lovebizhi" },
+                args={
+                    bingdir = os.getenv("HOME") .. "/.cache/wallpaper-lovebizhi",
+                    filter = '^风光风景',
+                },
             },
         }, {
             timeout = 300,
