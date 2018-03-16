@@ -132,7 +132,19 @@ local otherkeys = gears.table.join(
         end),
     -- Display
     awful.key({ modkey, "Control" }, "p", function () awful.spawn(xrandr) end,
-        { description = "xrandr", group = "system" }),
+        { description = "xrandr", group = "screen" }),
+    -- lights on
+    awful.key({ modkey, "Control" }, "l",
+        function ()
+            if os.execute("xset q | grep 'DPMS is Enabled' 2>&1 >/dev/null") then
+                os.execute("xset -dpms s off")
+                naughty.notify({ title = "DPMS is Disabled" })
+            else
+                os.execute("xset +dpms s on")
+                naughty.notify({ title = "DPMS is Enabled" })
+            end
+        end,
+        { description = "screen blanking, DPMS on/off", group = "screen" }),
     --休眠
     awful.key({ modkey, "Control" }, "s",
         function ()
