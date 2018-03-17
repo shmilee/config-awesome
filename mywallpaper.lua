@@ -213,11 +213,11 @@ local function get_bingslide(screen, args)
     end
 
     function bingslide.update_info()
+        bingslide.path = {}
         if type(bingdir) ~= 'string' then
             return false
         end
         local pfile, i = io.popen('ls -a "' .. bingdir .. '"'), 0
-        bingslide.path = {}
         for filename in pfile:lines() do
             if string.match(filename, filter) ~= nil then
                 local ext = string.gsub(filename, "(.*%.)(.*)", "%2")
@@ -424,7 +424,10 @@ local function get_miscwallpaper(screen, wallpapers, args)
         end
         local wall = miscwallpaper.walls[miscwallpaper.using]
         if wall then
-            wall.update()
+            if wall.update() == false then
+                --naughty.notify({ title = 'skip: next -> next'})
+                miscwallpaper.update()
+            end
         else
             miscwallpaper.update()
         end
