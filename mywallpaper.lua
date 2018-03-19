@@ -427,6 +427,9 @@ local function get_miscwallpaper(screen, wallpapers, args)
             if wall.update() == false then
                 --naughty.notify({ title = 'skip: next -> next'})
                 miscwallpaper.update()
+            else
+                -- Restart the timer, correct timeout
+                miscwallpaper.timer:again()
             end
         else
             miscwallpaper.update()
@@ -551,6 +554,14 @@ function set_wallpaper(s)
                 args={
                     bingdir = os.getenv("HOME") .. "/.cache/wallpaper-bing",
                     filter='^2018',
+                },
+            },
+            {
+                walltype='bingslide',
+                weight=1,
+                args={
+                    bingdir = os.getenv("HOME") .. "/.cache/wallpaper-360chrome",
+                    --filter = '^$',
                 },
             },
         }, {
