@@ -34,7 +34,7 @@ local arrl_ld = separators.arrow_left("alpha", beautiful.bg_focus)
 local arrr = separators.arrow_right(beautiful.bg_focus, "alpha")
 
 -- Create a textclock widget
-local mytextclock = awful.widget.textclock(" %H:%M:%S ",1)
+local mytextclock = wibox.widget.textclock(" %H:%M:%S ",1)
 
 -- lunar
 local lunar = widgets.lunar({
@@ -127,15 +127,17 @@ if next(BAT_table) == nil then
 end
 local baticon = wibox.widget.imagebox(beautiful.bat)
 if use_battery_bar then
-    local batbar = awful.widget.progressbar()
-    batbar:set_color(beautiful.fg_normal)
-    batbar:set_width(55)
-    batbar:set_ticks(true)
-    batbar:set_ticks_size(6)
-    batbar:set_background_color(beautiful.bg_normal)
-    local batmargin = wibox.layout.margin(batbar, 2, 7)
-    batmargin:set_top(6)
-    batmargin:set_bottom(6)
+    batwidget = wibox.widget {
+        forced_height    = 4,
+        forced_width     = 55,
+        color            = beautiful.fg_normal,
+        background_color = beautiful.bg_normal,
+        margins          = 5,
+        paddings         = 1,
+        ticks            = true,
+        ticks_size       = 4,
+        widget           = wibox.widget.progressbar
+    }
     local batupd = widgets.dualbat({
         batterys     = BAT_table,
         followscreen = true,
@@ -144,15 +146,15 @@ if use_battery_bar then
                 bat_now.icon = beautiful.ac
             else
                 bat_perc = tonumber(bat_now.perc)
-                batbar:set_value(bat_perc / 100)
+                batwidget:set_value(bat_perc / 100)
                 if bat_perc > 50 then
-                    batbar:set_color(beautiful.fg_normal)
+                    batwidget:set_color(beautiful.fg_normal)
                     bat_now.icon = beautiful.bat
                 elseif bat_perc > 15 then
-                    batbar:set_color("#EB8F8F")
+                    batwidget:set_color("#EB8F8F")
                     bat_now.icon = beautiful.bat_low
                 else
-                    batbar:set_color("#D91E1E")
+                    batwidget:set_color("#D91E1E")
                     bat_now.icon = beautiful.bat_no
                 end
             end
@@ -162,9 +164,6 @@ if use_battery_bar then
             baticon:set_image(bat_now.icon)
         end
     })
-    batwidget = wibox.widget.background(batmargin)
-    batwidget:set_bgimage(beautiful.widget_bg)
-    batupd.attach(baticon)
     batupd.attach(batwidget)
 else
     local batupd = widgets.dualbat({
@@ -194,7 +193,6 @@ else
         end
     })
     batwidget = batupd.widget
-    batupd.attach(baticon)
     batupd.attach(batwidget)
 end
 
