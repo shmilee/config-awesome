@@ -206,6 +206,7 @@ local function get_bingslide(screen, args)
     local args      = args or {}
     local bingdir   = args.bingdir or nil
     local imagetype = args.imagetype or {'jpg', 'jpeg', 'png'}
+    local ls        = args.ls or 'ls -a'
     local filter    = args.filter or '.*'
     local async_update  = args.async_update or false
     local setting   = args.setting or function(bs)
@@ -217,7 +218,7 @@ local function get_bingslide(screen, args)
         if type(bingdir) ~= 'string' then
             return false
         end
-        local pfile, i = io.popen('ls -a "' .. bingdir .. '"'), 0
+        local pfile, i = io.popen(string.format('%s "%s"', ls, bingdir)), 0
         for filename in pfile:lines() do
             if string.match(filename, filter) ~= nil then
                 local ext = string.gsub(filename, "(.*%.)(.*)", "%2")
@@ -554,6 +555,7 @@ function set_wallpaper(s)
                 args={
                     bingdir = os.getenv("HOME") .. "/.cache/wallpaper-bing",
                     filter='^2018',
+                    --ls = 'ls -r',
                 },
             },
             {
@@ -562,6 +564,7 @@ function set_wallpaper(s)
                 args={
                     bingdir = os.getenv("HOME") .. "/.cache/wallpaper-360chrome",
                     --filter = '^$',
+                    ls = 'ls -r',
                 },
             },
         }, {
