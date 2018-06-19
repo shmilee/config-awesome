@@ -15,6 +15,7 @@ local myrules = {
             "Pidgin",
             "Pinentry", -- gpg passwd
             "netease-cloud-music",
+            "Gdpy3-gui", "gdpy3-gui",
         },
       }, properties = { floating = true }},
     -- WineQQ
