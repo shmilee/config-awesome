@@ -470,11 +470,13 @@ function set_wallpaper(s)
                 weight=1,
                 args={
                     query = {
-                        c='WallPaper', a='getAppsByCategory',
-                        -- cid: http://cdn.apc.360.cn/index.php?c=WallPaper&a=getAllCategoriesV2&from=360chrome
+                        c='WallPaper',
+                        -- Category, cid: http://cdn.apc.360.cn/index.php?c=WallPaper&a=getAllCategoriesV2&from=360chrome
                         -- "4K专区"=36, "美女模特"=6, "爱情美图"=30,
                         -- "风景大片"=9, "小清新"=15, "萌宠动物"=14, ...
-                        cid=36,
+                        a='getAppsByCategory', cid=36,
+                        -- search, kw: 4k, 4k专区, 美女, 风景, 风景大片, 写真 ...
+                        -- a='search', kw='4k 风景',
                         start=100, count=20, from='360chrome',
                     },
                     choices = simple_range(1, 20, 1),
