@@ -194,6 +194,14 @@ local function get_bingwallpaper(screen, args)
         end
     end
 
+    function bingwallpaper.print_using()
+        if bingwallpaper.path == nil then
+            return nil
+        else
+            return bingwallpaper.path[bingwallpaper.using]
+        end
+    end
+
     bingwallpaper.timer_info = timer({ timeout = timeout_info, autostart=true, callback=bingwallpaper.update_info })
     bingwallpaper.timer_info:emit_signal('timeout')
 
@@ -255,6 +263,14 @@ local function get_bingslide(screen, args)
         else
             --naughty.notify({ title = 'NO ' .. bingslide.path[i]})
             bingslide.update()
+        end
+    end
+
+    function bingslide.print_using()
+        if bingslide.path == nil then
+            return nil
+        else
+            return bingslide.path[bingslide.using]
         end
     end
 
@@ -434,6 +450,15 @@ local function get_miscwallpaper(screen, wallpapers, args)
             end
         else
             miscwallpaper.update()
+        end
+    end
+
+    function miscwallpaper.print_using()
+        local wall = miscwallpaper.walls[miscwallpaper.using]
+        if wall then
+            naughty.notify({ title = 'Using Wallpaper ' .. wall.print_using()})
+        else
+            naughty.notify({ title = 'Using Wallpaper nil' })
         end
     end
 
