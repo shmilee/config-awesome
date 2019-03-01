@@ -462,7 +462,7 @@ local function get_miscwallpaper(screen, wallpapers, args)
 
     function miscwallpaper.print_using()
         local wall = miscwallpaper.walls[miscwallpaper.using]
-        if wall then
+        if wall.print_using() then
             naughty.notify({ title = 'Using Wallpaper ' .. wall.print_using()})
         else
             naughty.notify({ title = 'Using Wallpaper nil' })
