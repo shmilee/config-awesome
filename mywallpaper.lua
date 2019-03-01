@@ -300,8 +300,15 @@ local miscwallpaper_available = {
         args.get_name = args.get_name or function(bwp, data, choice)
             if data['data'][choice] then
                 local name = string.gsub(bwp.url[choice], "(.*/)(.*)", "-%2")
-                return data['data'][choice]['class_id'] .. '-' ..
-                    string.gsub(data['data'][choice]['utag'], ' ', '_') .. name
+                local utag, patterns, i, p = data['data'][choice]['utag'], {{'[_ ]+', '-'}}
+                if not utag then
+                    utag = data['data'][choice]['tag']
+                    patterns = {{'category', ''}, {'全部', ''}, {'[_ ]+', '_'}, {'^[_]*(.-)[_]*$', '%1'}}
+                end
+                for i, p in pairs(patterns) do
+                    utag = string.gsub(utag, p[1], p[2])
+                end
+                return data['data'][choice]['class_id'] .. '-' .. utag .. name
             else
                 return nil
             end
