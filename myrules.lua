@@ -16,6 +16,7 @@ local myrules = {
             "Pinentry", -- gpg passwd
             "netease-cloud-music",
             "Gdpy3-gui", "gdpy3-gui",
+            "mathpix-snipping-tool", "Mathpix Snipping Tool",
         },
       }, properties = { floating = true }},
     -- WineQQ
