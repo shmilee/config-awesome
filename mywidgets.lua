@@ -5,6 +5,7 @@ local beautiful = require("beautiful")
 local lain = require("lain")
 local widgets = require("widgets")
 local helpers = require("lain.helpers")
+local awaywidget = require("away.widget")
 
 -- setting
 local use_battery_bar = true
@@ -37,17 +38,17 @@ local arrr = separators.arrow_right(beautiful.bg_focus, "alpha")
 local mytextclock = wibox.widget.textclock(" %H:%M:%S ",1)
 
 -- lunar
-local lunar = widgets.lunar({
+local mylunar = awaywidget.lunar({
     timeout  = 10800,
-    settings = function()
-        widget:set_markup(lunar_now.month .. lunar_now.day)
+    settings = function(lunar)
+        lunar.widget:set_markup(lunar.now.jq .. lunar.now.month .. lunar.now.day)
     end
 })
 
 -- Calendar
 lain.widget.calendar({
     cal = '/usr/bin/env TERM=linux /usr/bin/cal --color=always',
-    attach_to = {mytextclock, lunar},
+    attach_to = {mytextclock, mylunar},
     notification_preset = {
         font = 'Ubuntu Mono 12',
         fg   = beautiful.fg_normal,
@@ -275,7 +276,7 @@ function createmywibox(s)
         {volicon, volume.widget},
         {baticon, batwidget},
         {wibox.widget.systray(), yawn.icon},
-        {lunar, mytextclock},
+        {mylunar, mytextclock},
         {s.mylayoutbox},
     }
     local right_layout_toggle = true
