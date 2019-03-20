@@ -3,13 +3,8 @@ local awful = require("awful")
 local wibox = require("wibox")
 local beautiful = require("beautiful")
 local lain = require("lain")
-local widgets = require("widgets")
 local helpers = require("lain.helpers")
 local awaywidget = require("away.widget")
-
--- setting
-local use_battery_bar = true
-local weather_widget  = 'cn'
 
 -- get device table in path/prefix*
 local function get_device(path,prefix)
@@ -40,15 +35,14 @@ local mytextclock = wibox.widget.textclock(" %H:%M:%S ",1)
 -- lunar
 local mylunar = awaywidget.lunar({
     timeout  = 10800,
-    settings = function(lunar)
-        lunar.widget:set_markup(lunar.now.jq .. lunar.now.month .. lunar.now.day)
-    end
+    font ='Ubuntu Mono 12',
 })
+mylunar:attach(mylunar.wtext)
 
 -- Calendar
 lain.widget.calendar({
     cal = '/usr/bin/env TERM=linux /usr/bin/cal --color=always',
-    attach_to = {mytextclock, mylunar},
+    attach_to = {mytextclock},
     notification_preset = {
         font = 'Ubuntu Mono 12',
         fg   = beautiful.fg_normal,
@@ -121,82 +115,6 @@ local temp  = lain.widget.temp({
     end
 })
 
--- Battery, Battery bar
-local BAT_table   = get_device('/sys/class/power_supply','BAT')
-if next(BAT_table) == nil then
-    use_battery_bar = false
-end
-local baticon = wibox.widget.imagebox(beautiful.bat)
-if use_battery_bar then
-    batwidget = wibox.widget {
-        forced_height    = 4,
-        forced_width     = 55,
-        color            = beautiful.fg_normal,
-        background_color = beautiful.bg_normal,
-        margins          = 5,
-        paddings         = 1,
-        ticks            = true,
-        ticks_size       = 4,
-        widget           = wibox.widget.progressbar
-    }
-    local batupd = widgets.dualbat({
-        batterys     = BAT_table,
-        followscreen = true,
-        settings = function()
-            if bat_now.perc == "N/A" then
-                bat_now.icon = beautiful.ac
-            else
-                bat_perc = tonumber(bat_now.perc)
-                batwidget:set_value(bat_perc / 100)
-                if bat_perc > 50 then
-                    batwidget:set_color(beautiful.fg_normal)
-                    bat_now.icon = beautiful.bat
-                elseif bat_perc > 15 then
-                    batwidget:set_color("#EB8F8F")
-                    bat_now.icon = beautiful.bat_low
-                else
-                    batwidget:set_color("#D91E1E")
-                    bat_now.icon = beautiful.bat_no
-                end
-            end
-            if bat_now.ac_status == "1" or bat_now.status == "Charging" then
-                bat_now.icon = beautiful.ac
-            end
-            baticon:set_image(bat_now.icon)
-        end
-    })
-    batupd.attach(batwidget)
-else
-    local batupd = widgets.dualbat({
-        batterys     = BAT_table,
-        followscreen = true,
-        settings = function()
-            if bat_now.perc == "N/A" then
-                bat_now.icon = beautiful.ac
-                widget:set_markup(" AC ")
-            else
-                bat_perc = tonumber(bat_now.perc)
-                if bat_perc > 50 then
-                    widget:set_markup(" " .. bat_now.perc .. "% ")
-                    bat_now.icon = beautiful.bat
-                elseif bat_perc > 15 then
-                    widget:set_markup(markup("#EB8F8F", bat_now.perc .. "% "))
-                    bat_now.icon = beautiful.bat_low
-                else
-                    widget:set_markup(markup("#D91E1E", bat_now.perc .. "% "))
-                    bat_now.icon = beautiful.bat_no
-                end
-            end
-            if bat_now.ac_status == "1" or bat_now.status == "Charging" then
-                bat_now.icon = beautiful.ac
-            end
-            baticon:set_image(bat_now.icon)
-        end
-    })
-    batwidget = batupd.widget
-    batupd.attach(batwidget)
-end
-
 -- ALSA volume
 local volicon = wibox.widget.imagebox(beautiful.vol)
 volume = lain.widget.alsa({
@@ -241,25 +159,45 @@ volume.widget:buttons (gears.table.join (
     end)
 ))
 
--- Weather
-if weather_widget == 'cn' then
-    yawn = widgets.cnweather({
-        --timeout = 600,            -- 10 min
-        --timeout_forecast = 18000, -- 5 hrs
-        api          = 'etouch',     -- etouch, xiaomi
-        city         = '杭州',       -- for ?
-        cityid       = 101210101,    -- for etouch, xiaomi
-        city_desc    = '杭州市',     -- desc for the city
-        followscreen = true
-    })
-else
-    yawn = lain.widget.weather({
-        city_id   = 1808926,
-        lang      = 'zh_cn',
-        followtag = true,
-    })
-end
-yawn.attach(yawn.icon)
+-- battery
+local battery = awaywidget.battery({font ='Ubuntu Mono 12'})
+battery:attach(battery.wicon)
+
+-- available weather module's query
+local weather_querys = {
+    etouch = {
+        citykey=101210101, --杭州
+    },
+    meizu = {
+        cityIds=101210101,
+    },
+    tianqi = {
+        version='v1',
+        cityid= 101210101,
+    },
+    xiaomiv2 = {
+        cityId=101210101,
+    },
+    xiaomiv3 ={
+        latitude = 0,
+        longitude = 0,
+        locationKey = 'weathercn:101210101', --杭州
+        appKey = 'weather20151024',
+        sign = 'zUFJoAR2ZVrDy1vF3D07',
+        isGlobal = 'false',
+        locale = 'zh_cn',
+        days = 6,
+    },
+}
+local weather = awaywidget.weather['tianqi']({
+    timeout = 600, -- 10 min
+    query = weather_querys['tianqi'],
+    --curl = 'curl -f -s -m 1.7'
+    --font ='Ubuntu Mono 12',
+    --get_info = function(weather, data) end,
+    --setting = function(weather) end,
+})
+weather:attach(weather.wicon)
 
 function createmywibox(s)
     s.mywibox = awful.wibar({ position = "top", screen = s, height =20, opacity = 0.88 })
@@ -274,9 +212,9 @@ function createmywibox(s)
         {cpuicon, cpu.widget},
         {tempicon, temp.widget},
         {volicon, volume.widget},
-        {baticon, batwidget},
-        {wibox.widget.systray(), yawn.icon},
-        {mylunar, mytextclock},
+        {battery.wicon, battery.wtext},
+        {wibox.widget.systray(), weather.wicon, weather.wtext},
+        {mylunar.wtext, mytextclock},
         {s.mylayoutbox},
     }
     local right_layout_toggle = true
