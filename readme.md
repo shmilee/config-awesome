@@ -4,20 +4,12 @@ My Awesome WM Config Files
 Preview:
 --------
 
-* archmenu
-
-![archmenu](preview/archmenu.jpg)
-
-* laptop with 2 batterys, desktop without battery
-
-![bat](preview/bat.jpg)
-
-* weather, calendar
-
-![cal-weather](preview/cal-weather.jpg)
+[Screenshots](https://github.com/shmilee/config-awesome/issues/1)
 
 Usage:
 ------
+
+Install [dependencies](https://github.com/shmilee/awesome-away#dependencies).
 
 ```
 mv ~/.config/awesome ~/.config/awesome.old
@@ -48,7 +40,7 @@ compton
 conky
 fcitx
 parcellite
-sogou-autostart
+fcitx-autostart
 volnoti
 wicd-gtk
 redshift-gtk
@@ -84,12 +76,28 @@ editor_cmd = terminal .. " -e '" .. editor .. " %s '"
     }
 ```
 
-Wallpaper
----------
+theme:think
+-----------
 
-* theme: think
-    - themes/think/think-1920x1200.jpg
-    - themes/think/violin-1920x1080.jpg
+inherit **zenburn** theme, then add
 
-* mywallpaper.lua, use `away.wallpaper`
+1. function theme.wallpaper(s)
+   - use `away.wallpaper`
+     + `os.getenv("HOME") .. "/.cache/wallpaper-bing"`
+     + `os.getenv("HOME") .. "/.cache/wallpaper-360chrome"`
+     + `os.getenv("HOME") .. "/.cache/wallpaper-bing"`
+     + `os.getenv("HOME") .. "/.cache/wallpaper-lovebizhi"`
+   - fallback
+     + think-1920x1200.jpg
+     + violin-1920x1080.jpg
 
+2. table theme.layouts for 4 screens
+3. table theme.tagnames for 4 screens
+4. Widgets from `away`, `lain`
+   - mytextclock
+   - mylunar, myweather, mybattery: need [dependencies](https://github.com/shmilee/awesome-away#dependencies)
+   - myvolume: nedd amixer, [volnoti](https://github.com/hcchu/volnoti)
+   - mytemp
+   - mycpu
+   - mymem
+5. function theme.createmywibox(s)
