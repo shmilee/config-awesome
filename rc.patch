@@ -1,6 +1,6 @@
---- /etc/xdg/awesome/rc.lua	2017-07-19 18:25:20.000000000 +0800
-+++ ./rc-default.lua	2017-09-27 13:49:36.000000000 +0800
-@@ -41,12 +41,7 @@
+--- /etc/xdg/awesome/rc.lua	2019-02-08 04:19:47.000000000 +0800
++++ rc-default.lua	2019-03-21 14:01:39.000000000 +0800
+@@ -45,12 +45,7 @@
  
  -- {{{ Variable definitions
  -- Themes define colours, icons, font and wallpapers.
@@ -10,103 +10,51 @@
 -terminal = "xterm"
 -editor = os.getenv("EDITOR") or "nano"
 -editor_cmd = terminal .. " -e " .. editor
-+beautiful.init(os.getenv("HOME") .. "/.config/awesome/themes/think/theme.lua")
++beautiful.init(gears.filesystem.get_xdg_config_home() .. "awesome/themes/think/theme.lua")
  
  -- Default modkey.
  -- Usually, Mod4 is the key with a logo between Control and Alt.
-@@ -54,26 +49,6 @@
- -- I suggest you to remap Mod4 to another key using xmodmap or other tools.
- -- However, you can use another modifier like Mod1, but it may interact with others.
- modkey = "Mod4"
--
---- Table of layouts to cover with awful.layout.inc, order matters.
--awful.layout.layouts = {
--    awful.layout.suit.floating,
--    awful.layout.suit.tile,
--    awful.layout.suit.tile.left,
--    awful.layout.suit.tile.bottom,
--    awful.layout.suit.tile.top,
--    awful.layout.suit.fair,
--    awful.layout.suit.fair.horizontal,
--    awful.layout.suit.spiral,
--    awful.layout.suit.spiral.dwindle,
--    awful.layout.suit.max,
--    awful.layout.suit.max.fullscreen,
--    awful.layout.suit.magnifier,
--    awful.layout.suit.corner.nw,
--    -- awful.layout.suit.corner.ne,
--    -- awful.layout.suit.corner.sw,
--    -- awful.layout.suit.corner.se,
--}
- -- }}}
- 
- -- {{{ Helper functions
-@@ -92,19 +67,7 @@
- -- }}}
+@@ -82,19 +77,7 @@
  
  -- {{{ Menu
---- Create a launcher widget and a main menu
+ -- Create a launcher widget and a main menu
 -myawesomemenu = {
--   { "hotkeys", function() return false, hotkeys_popup.show_help end},
+-   { "hotkeys", function() hotkeys_popup.show_help(nil, awful.screen.focused()) end },
 -   { "manual", terminal .. " -e man awesome" },
 -   { "edit config", editor_cmd .. " " .. awesome.conffile },
 -   { "restart", awesome.restart },
--   { "quit", function() awesome.quit() end}
+-   { "quit", function() awesome.quit() end },
 -}
 -
 -mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
 -                                    { "open terminal", terminal }
 -                                  }
 -                        })
+-
 +require("mymenu")
- 
  mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
                                       menu = mymainmenu })
-@@ -116,10 +79,11 @@
- -- Keyboard map indicator and switcher
+ 
+@@ -106,8 +89,6 @@
  mykeyboardlayout = awful.widget.keyboardlayout()
  
---- {{{ Wibar
+ -- {{{ Wibar
 --- Create a textclock widget
 -mytextclock = wibox.widget.textclock()
-+require("mytags")
-+require("mywidgets")
-+require("mywallpaper")
  
-+-- {{{ Wibar
  -- Create a wibox for each screen and add it
  local taglist_buttons = gears.table.join(
-                     awful.button({ }, 1, function(t) t:view_only() end),
-@@ -163,18 +127,6 @@
-                                               awful.client.focus.byidx(-1)
-                                           end))
- 
--local function set_wallpaper(s)
--    -- Wallpaper
--    if beautiful.wallpaper then
--        local wallpaper = beautiful.wallpaper
--        -- If wallpaper is a function, call it with the screen
--        if type(wallpaper) == "function" then
--            wallpaper = wallpaper(s)
--        end
--        gears.wallpaper.maximized(wallpaper, s, true)
--    end
--end
--
- -- Re-set wallpaper when a screen's geometry changes (e.g. different resolution)
- screen.connect_signal("property::geometry", set_wallpaper)
- 
-@@ -183,7 +135,7 @@
+@@ -169,7 +150,7 @@
      set_wallpaper(s)
  
      -- Each screen has its own tag table.
 -    awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9" }, s, awful.layout.layouts[1])
-+    awful.tag(mytagnames[s.index], s, mylayouts[s.index])
++    awful.tag(beautiful.tagnames[s.index], s, beautiful.layouts[s.index])
  
      -- Create a promptbox for each screen
      s.mypromptbox = awful.widget.prompt()
-@@ -202,26 +154,7 @@
-     s.mytasklist = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, tasklist_buttons)
+@@ -196,26 +177,7 @@
+     }
  
      -- Create the wibox
 -    s.mywibox = awful.wibar({ position = "top", screen = s })
@@ -129,29 +77,29 @@
 -            s.mylayoutbox,
 -        },
 -    }
-+    createmywibox(s)
++    beautiful.createmywibox(s)
  end)
  -- }}}
  
-@@ -233,6 +166,8 @@
- ))
- -- }}}
+@@ -229,6 +191,8 @@
  
-+mykeys = require("mykeys")
-+
  -- {{{ Key bindings
  globalkeys = gears.table.join(
-     awful.key({ modkey,           }, "s",      hotkeys_popup.show_help,
-@@ -329,6 +264,8 @@
-                   }
-               end,
-               {description = "lua execute prompt", group = "awesome"}),
 +    -- add mykeys
-+    mykeys,
-     -- Menubar
-     awful.key({ modkey }, "p", function() menubar.show() end,
-               {description = "show the menubar", group = "launcher"})
-@@ -447,6 +384,7 @@
++    require("mykeys"),
+     awful.key({ modkey,           }, "s",      hotkeys_popup.show_help,
+               {description="show help", group="awesome"}),
+     awful.key({ modkey,           }, "Left",   awful.tag.viewprev,
+@@ -443,7 +407,7 @@
+ 
+ -- {{{ Rules
+ -- Rules to apply to new clients (through the "manage" signal).
+-awful.rules.rules = {
++awful.rules.rules = gears.table.join({
+     -- All clients will match this rule.
+     { rule = { },
+       properties = { border_width = beautiful.border_width,
+@@ -451,6 +415,7 @@
                       focus = awful.client.focus.filter,
                       raise = true,
                       keys = clientkeys,
@@ -159,35 +107,34 @@
                       buttons = clientbuttons,
                       screen = awful.screen.preferred,
                       placement = awful.placement.no_overlap+awful.placement.no_offscreen
-@@ -479,17 +417,15 @@
-         }
+@@ -489,14 +454,15 @@
        }, properties = { floating = true }},
  
--    -- Add titlebars to normal clients and dialogs
+     -- Add titlebars to normal clients and dialogs
 -    { rule_any = {type = { "normal", "dialog" }
 -      }, properties = { titlebars_enabled = true }
 -    },
--
++    --{ rule_any = {type = { "normal", "dialog" }
++    --  }, properties = { titlebars_enabled = true }
++    --},
+ 
      -- Set Firefox to always map on the tag named "2" on screen 1.
      -- { rule = { class = "Firefox" },
      --   properties = { screen = 1, tag = "2" } },
- }
+-}
++  },
++  require("myrules"))
  -- }}}
  
-+myrules = require("myrules")
-+for _,v in pairs(myrules) do table.insert(awful.rules.rules, v) end
-+
  -- {{{ Signals
- -- Signal function to execute when a new client appears.
- client.connect_signal("manage", function (c)
-@@ -555,6 +491,8 @@
-     end
+@@ -559,6 +525,8 @@
+     c:emit_signal("request::activate", "mouse_enter", {raise = false})
  end)
  
 -client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
 -client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 --- }}}
-\ No newline at end of file
+\ 文件尾没有换行符
 +client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus c.opacity = 1 end)
 +client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal c.opacity = 0.9 end)
 +-- }}}
