@@ -9,6 +9,11 @@ local awful = require("awful")
 local gears = require("gears")
 local wibox = require("wibox")
 local dpi   = require("beautiful").xresources.apply_dpi
+local os    = {
+    setlocale = os.setlocale,
+    getenv = os.getenv,
+    execute = os.execute,
+}
 
 -- inherit zenburn theme
 local theme = dofile("/usr/share/awesome/themes/zenburn/theme.lua")
@@ -171,9 +176,9 @@ local arrr = separators.arrow_right(theme.bg_focus, "alpha")
 local mytextclock = wibox.widget.textclock(" %H:%M:%S ",1)
 
 -- Calendar
-local mycalendar = lain.widget.calendar({
-    cal = '/usr/bin/env TERM=linux /usr/bin/cal --color=always',
+local mycal = lain.widget.cal({
     attach_to = { mytextclock },
+    week_start = 1,
     notification_preset = {
         font = widget_font,
         fg   = theme.fg_normal,
@@ -181,6 +186,8 @@ local mycalendar = lain.widget.calendar({
     },
     followtag = true,
 })
+--os.setlocale(os.getenv("LANG"))
+mytextclock:disconnect_signal("mouse::enter", mycal.hover_on)
 
 -- lunar
 local mylunar = away.widget.lunar({
@@ -265,8 +272,8 @@ myvolume.widget:buttons (gears.table.join (
       awful.spawn(terminal .. " -e alsamixer")
     end),
     awful.button({}, 2, function() -- middle click
-        os.execute(string.format("amixer-q set %s 100%%", myvolume.channel))
-        volume.update()
+        os.execute(string.format("amixer -q set %s 100%%", myvolume.channel))
+        myvolume.update()
     end),
     awful.button ({}, 3, function() -- right click
       os.execute(string.format("amixer -q set %s playback toggle", myvolume.channel))
@@ -290,6 +297,10 @@ local mytempicon = wibox.widget.imagebox(theme.temp)
 local mytemp = lain.widget.temp({
     --tempfile = "/sys/class/thermal/thermal_zone0/temp",
     settings = function()
+        if coretemp_now == "N/A" then
+            widget:set_markup(core_temp .. "°C ")
+            return
+        end
         local core_temp = tonumber(string.format("%.0f",coretemp_now))
         if core_temp >70 then
             widget:set_markup(markup("#D91E1E", core_temp .. "°C "))
@@ -305,8 +316,7 @@ local mytemp = lain.widget.temp({
 local mycpuicon = wibox.widget.imagebox(theme.cpu)
 local mycpu = lain.widget.cpu({
     settings = function()
-        local cpu_usage = tonumber(cpu_now.usage)
-        if cpu_usage > 50 then
+        if cpu_now.usage > 50 then
             widget:set_markup(markup("#e33a6e", cpu_now.usage .. "% "))
         else
             widget:set_markup(cpu_now.usage .. "% ")
@@ -318,12 +328,10 @@ local mycpu = lain.widget.cpu({
 local mymemicon = wibox.widget.imagebox(theme.mem)
 local mymem = lain.widget.mem({
     settings = function()
-        local mem_used = tonumber(mem_now.used) / 1024
-        local mem_prec = tonumber(mem_now.used) / tonumber(mem_now.total) * 100
-        if mem_used > 1 then
-            widget:set_markup(markup("#e0da37", string.format("%.2fG(%.0f%%)", mem_used, mem_prec)))
+        if mem_now.used/1024 > 1 then
+            widget:set_markup(markup("#e0da37", string.format("%.2fG(%.0f%%)", mem_now.used/1024, mem_now.perc)))
         else
-            widget:set_markup(string.format("%sM(%.0f%%)", mem_now.used, mem_prec))
+            widget:set_markup(string.format("%sM(%.0f%%)", mem_now.used, mem_now.perc))
         end
     end
 })
