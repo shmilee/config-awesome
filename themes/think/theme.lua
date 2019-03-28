@@ -10,6 +10,8 @@ local gears = require("gears")
 local wibox = require("wibox")
 local dpi   = require("beautiful").xresources.apply_dpi
 local os    = {
+    date = os.date,
+    time = os.time,
     setlocale = os.setlocale,
     getenv = os.getenv,
     execute = os.execute,
@@ -45,7 +47,7 @@ theme.wallpaper = function(s)
                 args={
                     id='Local bing',
                     dirpath = os.getenv("HOME") .. "/.cache/wallpaper-bing",
-                    filter='^2019',
+                    filter=os.date('^%Y%m',os.time()-365*24*3600),
                     --ls = 'ls -r',
                 },
             },
