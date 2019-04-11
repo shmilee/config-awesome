@@ -9,8 +9,8 @@ revelation.init({tag_name = 'Expose'})
 -- setting tools
 local xrandr = "arandr"
 local searchtool = "synapse"
-local screenlock = "slimlock"
-local screenshot = "deepin-scrot"
+local screenlock = "xsecurelock"
+local screenshot = "scrot"
 
 local altkey = "Mod1"
 
