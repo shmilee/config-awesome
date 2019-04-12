@@ -92,7 +92,7 @@ end
 -- }}}
 
 -- {{{ Styles
-theme.font      = "WenQuanYi Micro Hei 10"
+theme.font      = "WenQuanYi Micro Hei 9"
 -- }}}
 
 -- {{{ Widgets
