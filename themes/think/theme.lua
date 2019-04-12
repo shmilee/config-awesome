@@ -92,7 +92,7 @@ end
 -- }}}
 
 -- {{{ Styles
-theme.font      = "Microsoft YaHei 9"
+theme.font      = "WenQuanYi Micro Hei 10"
 -- }}}
 
 -- {{{ Widgets

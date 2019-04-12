@@ -43,7 +43,7 @@ parcellite
 fcitx-autostart
 volnoti
 wicd-gtk
-redshift-gtk
+/usr/bin/redshift-gtk
 ```
 
 * mykeys.lua
@@ -52,8 +52,8 @@ redshift-gtk
 [$] grep ^local mykeys.lua |grep -v -E "=.*require|key.*=" |awk -F\" '{print $2}'
 arandr
 synapse
-slimlock
-deepin-scrot
+xsecurelock
+scrot
 ```
 
 * mymenu.lua
@@ -101,3 +101,15 @@ inherit **zenburn** theme, then add
    - mycpu
    - mymem
 5. function theme.createmywibox(s)
+
+fonts
+-----
+
+1. conky
+   - default: WenQuanYi Micro Hei
+   - arch logo: openlogos
+   - arrow: PizzaDude Bullets
+
+2. theme:think
+   - default: WenQuanYi Micro Hei
+   - widget: Ubuntu Mono
