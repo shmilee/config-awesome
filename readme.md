@@ -108,7 +108,7 @@ fonts
 1. conky
    - default: WenQuanYi Micro Hei
    - arch logo: openlogos
-   - arrow: PizzaDude Bullets
+   - arrow: Wingdings 3
 
 2. theme:think
    - default: WenQuanYi Micro Hei
