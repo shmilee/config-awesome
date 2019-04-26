@@ -209,7 +209,7 @@ local weather_querys = {
     },
     tianqi = {
         version='v1',
-        cityid=101210101,
+        --cityid=101210101,
     },
     xiaomiv2 = {
         cityId=101210101,
