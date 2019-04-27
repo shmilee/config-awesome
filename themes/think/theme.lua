@@ -391,4 +391,10 @@ function theme.createmywibox(s)
     }
 end
 
+local meiriyiwen = away.widget.meiriyiwen({
+    font = 'WenQuanYi Micro Hei 16',
+    ratio = 0.9
+})
+yiwen = meiriyiwen.update
+
 return theme
