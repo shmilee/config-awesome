@@ -100,6 +100,7 @@ inherit **zenburn** theme, then add
    - mytemp
    - mycpu
    - mymem
+   - yiwen
 5. function theme.createmywibox(s)
 
 fonts

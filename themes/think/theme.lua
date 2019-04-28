@@ -327,16 +327,11 @@ local mycpu = lain.widget.cpu({
 })
 
 -- MEM
-local mymemicon = wibox.widget.imagebox(theme.mem)
-local mymem = lain.widget.mem({
-    settings = function()
-        if mem_now.used/1024 > 1 then
-            widget:set_markup(markup("#e0da37", string.format("%.2fG(%.0f%%)", mem_now.used/1024, mem_now.perc)))
-        else
-            widget:set_markup(string.format("%sM(%.0f%%)", mem_now.used, mem_now.perc))
-        end
-    end
+local mymem = away.widget.memory({
+    timeout = 2,
+    --settings = function(mymem) end,
 })
+mymem.wicon:set_image(theme.mem)
 
 -- }}}
 
@@ -349,7 +344,7 @@ function theme.createmywibox(s)
     }
     -- add widgets
     s.mywibox.enablewidgets = {
-        {mymemicon, mymem.widget},
+        {mymem.wicon, mymem.wtext},
         {mycpuicon, mycpu.widget},
         {mytempicon, mytemp.widget},
         {myvolicon, myvolume.widget},
@@ -392,8 +387,10 @@ function theme.createmywibox(s)
 end
 
 local meiriyiwen = away.widget.meiriyiwen({
-    font = 'WenQuanYi Micro Hei 16',
-    ratio = 0.9
+    font = 'WenQuanYi Micro Hei',
+    font_size = 15,
+    ratio = 0,
+    height = 0.9,
 })
 yiwen = meiriyiwen.update
 
