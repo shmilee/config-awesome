@@ -20,9 +20,8 @@ end
 
 run_once("compton","-CGfF -o 0.38 -O 200 -I 200 -t 0 -l 0 -r 3 -D2 -m 0.88")
 run_once("conky","-c " .. os.getenv("HOME") .. "/.config/awesome/conky.lua")
-run_once("fcitx")
 run_once("parcellite")
-run_once("fcitx-autostart",nil,"sogou-qimpanel")
+run_once("fcitx-autostart",nil,"fcitx")
 run_once("volnoti","-t 2 -a 0.8 -r 50")
 run_once("wicd-gtk","-t","/usr/bin/python2 -O /usr/share/wicd/gtk/wicd-client.py")
 run_once("/usr/bin/redshift-gtk", nil, "python3 /usr/bin/redshift-gtk")
