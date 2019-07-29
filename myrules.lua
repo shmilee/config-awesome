@@ -24,6 +24,14 @@ local myrules = {
         instance = { 'TM.exe', 'QQ.exe' }
       }, properties = { floating = true,
                         border_width = 0 }},
+    { rule_any = {
+        class = { "VirtualBox Machine", "VBoxSDL" },
+      }, properties = {
+          new_tag = {
+            name = "VBox",
+            volatile = true, -- Remove the tag when the client is closed.
+          },
+          fullscreen = true }},
     -- not maximized
     { rule_any = {
         class = {
