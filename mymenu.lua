@@ -45,6 +45,7 @@ mymainmenu = freedesktop.menu.build({
         { "JabRef (&R)", "jabref", lookup_icon('jabref') },
         { "BT下载 (&D)", "transmission-gtk", lookup_icon('transmission') },
         { "辞典 (&G)", "goldendict", lookup_icon('goldendict') },
+        { "Win7 (&W)", "VBoxSDL --startvm Win7", icon_theme():find_icon_path('virtualbox') },
     }
 })
 
