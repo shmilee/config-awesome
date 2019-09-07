@@ -210,8 +210,8 @@ local weather_querys = {
     tianqi = {
         version='v1',
         --cityid=101210101,
-        appid=1001,
-        appsecret=5566,
+        appid=95327666,
+        appsecret='ao8FYdtI',
     },
     xiaomiv2 = {
         cityId=101210101,
