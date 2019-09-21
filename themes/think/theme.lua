@@ -70,6 +70,12 @@ theme.wallpaper = function(s)
                 --args={},
             },
             {
+                name='wallhaven', weight=2,
+                args={
+                    query = { q='landscape', atleast='1920x1080', sorting='favorites', page=1 }
+                },
+            },
+            {
                 name='local', weight=2,
                 args={
                     id='Local bing',
