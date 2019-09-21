@@ -84,7 +84,7 @@ inherit **zenburn** theme, then add
    - use `away.wallpaper`
      + `os.getenv("HOME") .. "/.cache/wallpaper-bing"`
      + `os.getenv("HOME") .. "/.cache/wallpaper-360chrome"`
-     + `os.getenv("HOME") .. "/.cache/wallpaper-bing"`
+     + `os.getenv("HOME") .. "/.cache/wallpaper-wallhaven"`
      + `os.getenv("HOME") .. "/.cache/wallpaper-lovebizhi"`
    - fallback
      + think-1920x1200.jpg
