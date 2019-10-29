@@ -19,9 +19,10 @@ local myrules = {
             "mathpix-snipping-tool", "Mathpix Snipping Tool",
         },
       }, properties = { floating = true }},
-    -- WineQQ
+    -- QQ
     { rule_any = {
-        instance = { 'TM.exe', 'QQ.exe' }
+        instance = { 'TM.exe', 'QQ.exe' },
+        class = { 'qq', 'Qq' },
       }, properties = { floating = true,
                         border_width = 0 }},
     { rule_any = {
