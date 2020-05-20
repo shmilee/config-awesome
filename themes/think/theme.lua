@@ -64,7 +64,7 @@ theme.wallpaper = function(s)
         return theme.wallpaper_fallback[1]
     -- screen 2
     else
-        s.miscwallpaper = away.wallpaper.get_miscwallpaper(s, { timeout=300, random=true }, {
+        s.miscwallpaper = away.wallpaper.get_miscwallpaper(s, { timeout=300, random=true, update_by_tag=true }, {
             {
                 name='360chrome', weight=2,
                 --args={},
