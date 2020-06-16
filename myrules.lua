@@ -25,6 +25,12 @@ local myrules = {
         class = { 'qq', 'Qq' },
       }, properties = { floating = true,
                         border_width = 0 }},
+    -- DingDing
+    { rule_any = {
+        class = { "dingtalk.exe", "tblive.exe" },
+      }, properties = { floating = true,
+                        border_width = 0 }},
+    -- vbox
     { rule_any = {
         class = { "VirtualBox Machine", "VBoxSDL" },
       }, properties = {
