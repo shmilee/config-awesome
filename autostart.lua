@@ -18,7 +18,7 @@ local function run_once(prg,arg_string,pname,screen)
 end
 -- }}}
 
-run_once("compton","-CGfF -o 0.38 -O 200 -I 200 -t 0 -l 0 -r 3 -D2 -m 0.88")
+run_once("picom","-CGfF -o 0.38 -O 200 -I 200 -t 0 -l 0 -r 3 -D2 -m 0.88")
 run_once("conky","-c " .. os.getenv("HOME") .. "/.config/awesome/conky.lua")
 run_once("parcellite")
 run_once("fcitx-autostart",nil,"fcitx")
