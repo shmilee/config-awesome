@@ -9,7 +9,7 @@ revelation.init({tag_name = 'Expose'})
 -- setting tools
 local xrandr = "arandr"
 local searchtool = "synapse"
-local screenlock = "xsecurelock"
+local screenlock = "XSECURELOCK_NO_COMPOSITE=1 xsecurelock"
 local screenshot = "scrot"
 
 local altkey = "Mod1"
@@ -124,7 +124,7 @@ local otherkeys = gears.table.join(
         end,
         { description = "system suspend", group = "system" }),
     --锁屏
-    awful.key({ modkey, "Control" }, "x", function () awful.spawn(screenlock) end,
+    awful.key({ modkey, "Control" }, "x", function () awful.spawn.with_shell(screenlock) end,
         { description = "lock screen", group = "screen" }),
     -- 截屏
     awful.key({ }, "Print", function() awful.spawn(screenshot) end,
