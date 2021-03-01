@@ -32,10 +32,14 @@ theme.wallpaper_fallback = {
 theme.wallpaper = function(s)
     -- screen 1
     if s.index % 2 == 1 then
+        --s.videowallpaper = away.wallpaper.get_videowallpaper(s, {
+        --    path = os.getenv("HOME") ..'/视频/3 Hours of Amazing Nature Scenery & Relaxing Music for Stress Relief..mp4',
+        --})
+        --s.videowallpaper.update()
         s.miscwallpaper = away.wallpaper.get_miscwallpaper(s, { timeout=300 }, {
             {
-                name='bing', weight=2,
-                args={
+                name = 'bing', weight = 2,
+                args = {
                     -- idx: TOMORROW=-1, TODAY=0, YESTERDAY=1, ... 7
                     query = { format='js', idx=-1, n=8 },
                     --cachedir = os.getenv("HOME") .. "/.cache/wallpaper-bing",
@@ -43,18 +47,18 @@ theme.wallpaper = function(s)
                 },
             },
             {
-                name='local', weight=1,
-                args={
-                    id='Local bing',
+                name = 'local', weight = 1,
+                args = {
+                    id = 'Local bing',
                     dirpath = os.getenv("HOME") .. "/.cache/wallpaper-bing",
-                    filter=os.date('^%Y%m',os.time()-365*24*3600),
+                    filter = os.date('^%Y%m',os.time()-365*24*3600),
                     --ls = 'ls -r',
                 },
             },
             {
-                name='local', weight=2,
-                args={
-                    id='Local 360chrome',
+                name = 'local', weight = 2,
+                args = {
+                    id = 'Local 360chrome',
                     dirpath = os.getenv("HOME") .. "/.cache/wallpaper-360chrome",
                     --filter = '^$',
                     ls = 'ls -r',
@@ -66,27 +70,27 @@ theme.wallpaper = function(s)
     else
         s.miscwallpaper = away.wallpaper.get_miscwallpaper(s, { timeout=300, random=true, update_by_tag=true }, {
             {
-                name='360chrome', weight=2,
-                --args={},
+                name = '360chrome', weight = 2,
+                --args = {},
             },
             {
-                name='wallhaven', weight=2,
-                args={
+                name = 'wallhaven', weight = 2,
+                args = {
                     query = { q='landscape', atleast='1920x1080', sorting='favorites', page=1 }
                 },
             },
             {
-                name='local', weight=2,
-                args={
-                    id='Local bing',
+                name = 'local', weight = 2,
+                args = {
+                    id = 'Local bing',
                     dirpath = os.getenv("HOME") .. "/.cache/wallpaper-bing",
-                    filter='^2018',
+                    filter = '^2018',
                 },
             },
             {
-                name='local', weight=2,
-                args={
-                    id='Local lovebizhi',
+                name = 'local', weight = 2,
+                args = {
+                    id = 'Local lovebizhi',
                     dirpath = os.getenv("HOME") .. "/.cache/wallpaper-lovebizhi",
                     filter = '^风光风景',
                 },
@@ -208,21 +212,21 @@ mylunar:attach(mylunar.wtext)
 -- available module's query
 local weather_querys = {
     etouch = {
-        citykey=101210101, --杭州
+        citykey = 101210101, --杭州
     },
     meizu = {
-        cityIds=101210101,
+        cityIds = 101210101,
     },
     tianqi = {
-        version='v1',
-        --cityid=101210101,
-        appid=95327666,
-        appsecret='ao8FYdtI',
+        version = 'v1',
+        --cityid = 101210101,
+        appid = 95327666,
+        appsecret = 'ao8FYdtI',
     },
     xiaomiv2 = {
-        cityId=101210101,
+        cityId = 101210101,
     },
-    xiaomiv3 ={
+    xiaomiv3 = {
         latitude = 0,
         longitude = 0,
         locationKey = 'weathercn:101210101', --杭州
@@ -344,7 +348,7 @@ mymem.wicon:set_image(theme.mem)
 -- }}}
 
 function theme.createmywibox(s)
-    s.mywibox = awful.wibar({ position = "top", screen = s, height =20, opacity = 0.88 })
+    s.mywibox = awful.wibar({ position = "top", screen = s, height = 20, opacity = 0.88 })
 
     s.mywibox.rightwidgets = {
         layout = wibox.layout.fixed.horizontal,
