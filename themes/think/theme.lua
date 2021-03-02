@@ -33,7 +33,19 @@ theme.wallpaper = function(s)
     -- screen 1
     if s.index % 2 == 1 then
         --s.videowallpaper = away.wallpaper.get_videowallpaper(s, {
-        --    path = os.getenv("HOME") ..'/视频/3 Hours of Amazing Nature Scenery & Relaxing Music for Stress Relief..mp4',
+        --    --path = os.getenv("HOME") ..'/视频/Futari.Dake.No.Hanabi.mp4',
+        --    --xargs = {'-b -ov -ni -nf -un -s -st -sp -o 0.816'},
+        --    --
+        --    --http://fy4.nsmc.org.cn/portal/cn/theme/FY4A.html
+        --    --path = 'http://img.nsmc.org.cn/CLOUDIMAGE/FY4A/MTCC/VIDEO/FY4A.disk.72h.mp4',
+        --    path = 'http://img.nsmc.org.cn/CLOUDIMAGE/FY4A/MTCC/VIDEO/FY4A.china.72h.mp4',
+        --    xargs = {'-b -ov -ni -nf -un -s -st -sp -o 0.98'},
+        --    pargs = {
+        --        '-wid WID --stop-screensaver=no',
+        --        '--hwdec=auto --hwdec-codecs=all',
+        --        '--no-audio --no-osc --no-osd-bar --no-input-default-bindings',
+        --        '--loop-file',
+        --    },
         --})
         --s.videowallpaper.update()
         s.miscwallpaper = away.wallpaper.get_miscwallpaper(s, { timeout=300 }, {

@@ -86,6 +86,7 @@ inherit **zenburn** theme, then add
      + `os.getenv("HOME") .. "/.cache/wallpaper-360chrome"`
      + `os.getenv("HOME") .. "/.cache/wallpaper-wallhaven"`
      + `os.getenv("HOME") .. "/.cache/wallpaper-lovebizhi"`
+     + local or online(like FY-4A) video wallpaper
    - fallback
      + think-1920x1200.jpg
      + violin-1920x1080.jpg
