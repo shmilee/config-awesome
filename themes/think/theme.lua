@@ -29,25 +29,35 @@ theme.wallpaper_fallback = {
     theme.dir .. "/think-1920x1200.jpg",
     theme.dir .. "/violin-1920x1080.jpg",
 }
+
+local function set_videowall_s1(s)
+    --if true then return end
+    s.videowallpaper = away.wallpaper.get_videowallpaper(s, {
+        path = os.getenv("HOME") ..'/视频/Futari.Dake.No.Hanabi.mp4',
+        xargs = {'-b -ov -ni -nf -un -s -st -sp -o 0.816'},
+    })
+    s.videowallpaper.update()
+end
+local function set_videowall_s2(s)
+    if true then return end
+    --http://fy4.nsmc.org.cn/portal/cn/theme/FY4A.html
+    s.videowallpaper = away.wallpaper.get_videowallpaper(s, {
+        path = 'http://img.nsmc.org.cn/CLOUDIMAGE/FY4A/MTCC/VIDEO/FY4A.disk.72h.mp4',
+        --path = 'http://img.nsmc.org.cn/CLOUDIMAGE/FY4A/MTCC/VIDEO/FY4A.china.72h.mp4',
+        xargs = {'-b -ov -ni -nf -un -s -st -sp -o 0.98'},
+        pargs = {
+            '-wid WID --stop-screensaver=no',
+            '--hwdec=auto --hwdec-codecs=all',
+            '--no-audio --no-osc --no-osd-bar --no-input-default-bindings',
+            '--loop-file --speed=0.2',
+        },
+    })
+    s.videowallpaper.update()
+end
+
 theme.wallpaper = function(s)
     -- screen 1
     if s.index % 2 == 1 then
-        --s.videowallpaper = away.wallpaper.get_videowallpaper(s, {
-        --    --path = os.getenv("HOME") ..'/视频/Futari.Dake.No.Hanabi.mp4',
-        --    --xargs = {'-b -ov -ni -nf -un -s -st -sp -o 0.816'},
-        --    --
-        --    --http://fy4.nsmc.org.cn/portal/cn/theme/FY4A.html
-        --    --path = 'http://img.nsmc.org.cn/CLOUDIMAGE/FY4A/MTCC/VIDEO/FY4A.disk.72h.mp4',
-        --    path = 'http://img.nsmc.org.cn/CLOUDIMAGE/FY4A/MTCC/VIDEO/FY4A.china.72h.mp4',
-        --    xargs = {'-b -ov -ni -nf -un -s -st -sp -o 0.98'},
-        --    pargs = {
-        --        '-wid WID --stop-screensaver=no',
-        --        '--hwdec=auto --hwdec-codecs=all',
-        --        '--no-audio --no-osc --no-osd-bar --no-input-default-bindings',
-        --        '--loop-file',
-        --    },
-        --})
-        --s.videowallpaper.update()
         s.miscwallpaper = away.wallpaper.get_miscwallpaper(s, { timeout=300 }, {
             {
                 name = 'bing', weight = 2,
@@ -77,6 +87,7 @@ theme.wallpaper = function(s)
                 },
             },
         })
+        set_videowall_s1(s)
         return theme.wallpaper_fallback[1]
     -- screen 2
     else
@@ -108,6 +119,7 @@ theme.wallpaper = function(s)
                 },
             },
         })
+        set_videowall_s2(s)
         return theme.wallpaper_fallback[2]
     end
 end
