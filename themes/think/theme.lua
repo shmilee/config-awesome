@@ -35,6 +35,7 @@ local function set_videowall_s1(s)
     s.videowallpaper = away.wallpaper.get_videowallpaper(s, {
         path = os.getenv("HOME") ..'/视频/Futari.Dake.No.Hanabi.mp4',
         xargs = {'-b -ov -ni -nf -un -s -st -sp -o 0.816'},
+        after_prg = 'conky\\s+-c\\s+.*/awesome/conky.lua',
     })
     s.videowallpaper.update()
 end
@@ -51,6 +52,7 @@ local function set_videowall_s2(s)
             '--no-audio --no-osc --no-osd-bar --no-input-default-bindings',
             '--loop-file --speed=0.2',
         },
+        after_prg = 'conky\\s+-c\\s+.*/awesome/conky.lua',
     })
     s.videowallpaper.update()
 end
@@ -91,7 +93,7 @@ theme.wallpaper = function(s)
         return theme.wallpaper_fallback[1]
     -- screen 2
     else
-        s.miscwallpaper = away.wallpaper.get_miscwallpaper(s, { timeout=300, random=true, update_by_tag=true }, {
+        s.miscwallpaper = away.wallpaper.get_miscwallpaper(s, { timeout=300, random=true, update_by_tag=false }, {
             {
                 name = '360chrome', weight = 2,
                 --args = {},
