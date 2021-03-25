@@ -43,8 +43,10 @@ local function set_videowall_s2(s)
     if true then return end
     --http://fy4.nsmc.org.cn/portal/cn/theme/FY4A.html
     s.videowallpaper = away.wallpaper.get_videowallpaper(s, {
-        path = 'http://img.nsmc.org.cn/CLOUDIMAGE/FY4A/MTCC/VIDEO/FY4A.disk.72h.mp4',
-        --path = 'http://img.nsmc.org.cn/CLOUDIMAGE/FY4A/MTCC/VIDEO/FY4A.china.72h.mp4',
+        -- 3h, 6h, 12h, 24h, 48h, 72h
+        path = 'http://img.nsmc.org.cn/CLOUDIMAGE/FY4A/MTCC/VIDEO/FY4A.disk.24h.mp4',
+        --path = 'http://img.nsmc.org.cn/CLOUDIMAGE/FY4A/MTCC/VIDEO/FY4A.china.24h.mp4',
+        ---path = 'http://img.nsmc.org.cn/CLOUDIMAGE/GEOS/MOS/IRX/VIDEO/GEOS.MOS.IRX.GBAL.24h.mp4',
         xargs = {'-b -ov -ni -nf -un -s -st -sp -o 0.98'},
         pargs = {
             '-wid WID --stop-screensaver=no',
