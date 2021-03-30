@@ -37,7 +37,6 @@ local function set_videowall_s1(s)
         xargs = {'-b -ov -ni -nf -un -s -st -sp -o 0.816'},
         after_prg = 'conky\\s+-c\\s+.*/awesome/conky.lua',
     })
-    s.videowallpaper.update()
 end
 local function set_videowall_s2(s)
     if true then return end
@@ -55,8 +54,8 @@ local function set_videowall_s2(s)
             '--loop-file --speed=0.2',
         },
         after_prg = 'conky\\s+-c\\s+.*/awesome/conky.lua',
+        timeout = 3600*12,
     })
-    s.videowallpaper.update()
 end
 
 theme.wallpaper = function(s)
