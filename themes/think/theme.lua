@@ -40,6 +40,11 @@ local function set_videowall_s1(s)
 end
 local function set_videowall_s2(s)
     if true then return end
+    s.videowallpaper = away.wallpaper.get_bilivideowallpaper(s, {
+        path='https://live.bilibili.com/9196015',
+        --choices = {'flv'},
+    })
+    if true then return end
     --http://fy4.nsmc.org.cn/portal/cn/theme/FY4A.html
     s.videowallpaper = away.wallpaper.get_videowallpaper(s, {
         -- 3h, 6h, 12h, 24h, 48h, 72h
