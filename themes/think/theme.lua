@@ -386,6 +386,13 @@ function theme.createmywibox(s)
         layout = wibox.layout.fixed.horizontal,
         --mykeyboardlayout,
     }
+    if s.videowallpaper then
+        table.insert(mybattery.observer.handlers, function(observer, val)
+            if observer.status == 'Discharging' then
+                s.videowallpaper.kill_and_set() -- save energy
+            end
+        end)
+    end
     -- add widgets
     s.mywibox.enablewidgets = {
         {mymem.wicon, mymem.wtext},
