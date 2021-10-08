@@ -134,7 +134,7 @@ end
 -- }}}
 
 -- {{{ Styles
-theme.font      = "WenQuanYi Micro Hei 9"
+theme.font      = "WenQuanYi Micro Hei " ..  dpi(9)
 -- }}}
 
 -- {{{ Widgets
@@ -172,6 +172,8 @@ theme.touchpad_on       = theme.dir .. "/misc/touchpad_on.png"
 theme.touchpad_off      = theme.dir .. "/misc/touchpad_off.png"
 --theme.icon_theme = "Adwaita"
 theme.icon_theme = "Faenza"
+theme.client_rounded = true
+theme.client_rounded_radius =  dpi(8)
 -- }}}
 
 -- {{{ Layout
@@ -207,7 +209,7 @@ theme.tagnames = {
 
 -- {{{ Create Widgets
 local markup = lain.util.markup
-local widget_font = 'Ubuntu Mono 12'
+local widget_font = 'Ubuntu Mono ' ..  dpi(12)
 
 -- Separators
 local separators = lain.util.separators
@@ -380,7 +382,7 @@ mymem.wicon:set_image(theme.mem)
 -- }}}
 
 function theme.createmywibox(s)
-    s.mywibox = awful.wibar({ position = "top", screen = s, height = 20, opacity = 0.88 })
+    s.mywibox = awful.wibar({ position = "top", screen = s, height =  dpi(20), opacity = 0.88 })
 
     s.mywibox.rightwidgets = {
         layout = wibox.layout.fixed.horizontal,
@@ -439,7 +441,7 @@ end
 
 local meiriyiwen = away.widget.meiriyiwen({
     font = 'WenQuanYi Micro Hei',
-    font_size = 15,
+    font_size =  dpi(15),
     ratio = 0,
     height = 0.9,
 })
