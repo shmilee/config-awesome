@@ -255,7 +255,8 @@ local weather_querys = {
         version = 'v1',
         --cityid = 101210101,
         appid = 95327666,
-        appsecret = 'ao8FYdtI',
+        appsecret = 'uDwe3wVY',
+        unescape = 1,
     },
     xiaomiv2 = {
         cityId = 101210101,
@@ -277,7 +278,6 @@ local myweather = away.widget.weather[chosen_wea]({
     query = weather_querys[chosen_wea],
     --curl = 'curl -f -s -m 1.7'
     --font = widget_font,
-    --get_info = function(weather, data) end,
     --setting = function(weather) end,
 })
 myweather:attach(myweather.wicon)
