@@ -30,37 +30,38 @@ theme.wallpaper_fallback = {
     theme.dir .. "/violin-1920x1080.jpg",
 }
 
-local function set_videowall_s1(s)
-    --if true then return end
-    s.videowallpaper = away.wallpaper.get_videowallpaper(s, {
-        path = os.getenv("HOME") ..'/视频/Futari.Dake.No.Hanabi.mp4',
-        xargs = {'-b -ov -ni -nf -un -s -st -sp -o 0.816'},
-        after_prg = 'conky\\s+-c\\s+.*/awesome/conky.lua',
-    })
-end
-local function set_videowall_s2(s)
-    if true then return end
-    s.videowallpaper = away.wallpaper.get_bilivideowallpaper(s, {
-        path='https://live.bilibili.com/9196015',
-        --choices = {'flv'},
-    })
-    if true then return end
-    --http://fy4.nsmc.org.cn/portal/cn/theme/FY4A.html
-    s.videowallpaper = away.wallpaper.get_videowallpaper(s, {
-        -- 3h, 6h, 12h, 24h, 48h, 72h
-        path = 'http://img.nsmc.org.cn/CLOUDIMAGE/FY4A/MTCC/VIDEO/FY4A.disk.24h.mp4',
-        --path = 'http://img.nsmc.org.cn/CLOUDIMAGE/FY4A/MTCC/VIDEO/FY4A.china.24h.mp4',
-        ---path = 'http://img.nsmc.org.cn/CLOUDIMAGE/GEOS/MOS/IRX/VIDEO/GEOS.MOS.IRX.GBAL.24h.mp4',
-        xargs = {'-b -ov -ni -nf -un -s -st -sp -o 0.98'},
-        pargs = {
-            '-wid WID --stop-screensaver=no',
-            '--hwdec=auto --hwdec-codecs=all',
-            '--no-audio --no-osc --no-osd-bar --no-input-default-bindings',
-            '--loop-file --speed=0.2',
-        },
-        after_prg = 'conky\\s+-c\\s+.*/awesome/conky.lua',
-        timeout = 3600*12,
-    })
+local function set_videowall_si(s, i)
+    if i == 1 then
+        s.videowallpaper = away.wallpaper.get_videowallpaper(s, {
+            path = os.getenv("HOME") ..'/视频/Futari.Dake.No.Hanabi.mp4',
+            xargs = {'-b -ov -ni -nf -un -s -st -sp -o 0.816'},
+            after_prg = 'conky\\s+-c\\s+.*/awesome/conky.lua',
+        })
+    elseif i == 2 then
+        --http://fy4.nsmc.org.cn/portal/cn/theme/FY4A.html
+        s.videowallpaper = away.wallpaper.get_videowallpaper(s, {
+            -- 3h, 6h, 12h, 24h, 48h, 72h
+            path = 'http://img.nsmc.org.cn/CLOUDIMAGE/FY4A/MTCC/VIDEO/FY4A.disk.24h.mp4',
+            --path = 'http://img.nsmc.org.cn/CLOUDIMAGE/FY4A/MTCC/VIDEO/FY4A.china.24h.mp4',
+            ---path = 'http://img.nsmc.org.cn/CLOUDIMAGE/GEOS/MOS/IRX/VIDEO/GEOS.MOS.IRX.GBAL.24h.mp4',
+            xargs = {'-b -ov -ni -nf -un -s -st -sp -o 0.98'},
+            pargs = {
+                '-wid WID --stop-screensaver=no',
+                '--hwdec=auto --hwdec-codecs=all',
+                '--no-audio --no-osc --no-osd-bar --no-input-default-bindings',
+                '--loop-file --speed=0.2',
+            },
+            after_prg = 'conky\\s+-c\\s+.*/awesome/conky.lua',
+            timeout = 3600*12,
+        })
+    elseif i == 3 then
+        s.videowallpaper = away.wallpaper.get_bilivideowallpaper(s, {
+            path='https://live.bilibili.com/9196015',
+            --choices = {'flv'},
+        })
+    else
+        return nil
+    end
 end
 
 theme.wallpaper = function(s)
@@ -95,7 +96,7 @@ theme.wallpaper = function(s)
                 },
             },
         })
-        set_videowall_s1(s)
+        set_videowall_si(s, 1)
         return theme.wallpaper_fallback[1]
     -- screen 2
     else
@@ -127,7 +128,7 @@ theme.wallpaper = function(s)
                 },
             },
         })
-        set_videowall_s2(s)
+        set_videowall_si(s, 2)
         return theme.wallpaper_fallback[2]
     end
 end
