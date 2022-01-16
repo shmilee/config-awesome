@@ -96,7 +96,7 @@ inherit **zenburn** theme, then add
 4. Widgets from `away`, `lain`
    - mytextclock
    - mylunar, myweather, mybattery: need [dependencies](https://github.com/shmilee/awesome-away#dependencies)
-   - myvolume: need amixer, [volnoti](https://github.com/hcchu/volnoti)
+   - myvolume: need amixer, pavucontrol, [volnoti](https://github.com/hcchu/volnoti)
    - mytemp
    - mycpu
    - mymem
