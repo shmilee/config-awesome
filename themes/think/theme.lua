@@ -318,7 +318,7 @@ local myvolume = lain.widget.alsa({
 myvolume.step = "2%"
 myvolume.widget:buttons (gears.table.join (
     awful.button ({}, 1, function() -- left click
-      awful.spawn(terminal .. " -e pavucontrol")
+      awful.spawn("pavucontrol")
     end),
     awful.button({}, 2, function() -- middle click
         os.execute(string.format("amixer -q set %s 100%%", myvolume.channel))
