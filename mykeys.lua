@@ -3,7 +3,7 @@ local awful = require("awful")
 local naughty = require("naughty")
 local menubar = require("menubar")
 local beautiful = require("beautiful")
-local revelation = require("revelation")
+local revelation = require("away.third_party.revelation")
 revelation.init({tag_name = 'Expose'})
 
 -- setting tools
@@ -15,31 +15,7 @@ local screenshot = "scrot"
 local altkey = "Mod1"
 
 local laptopkeys = gears.table.join(
-    -- keycode 123 = XF86AudioRaiseVolume
-    awful.key({}, "XF86AudioRaiseVolume",
-        function ()
-            os.execute(string.format("amixer -q set %s %s+", beautiful.myvolume.channel, beautiful.myvolume.step))
-            beautiful.myvolume.update()
-        end),
-    -- keycode 122 = XF86AudioLowerVolume
-    awful.key({}, "XF86AudioLowerVolume",
-        function ()
-            os.execute(string.format("amixer -q set %s %s-", beautiful.myvolume.channel, beautiful.myvolume.step))
-            beautiful.myvolume.update()
-        end),
-    -- keycode 121 = XF86AudioMute
-    awful.key({}, "XF86AudioMute",
-        function ()
-            --awful.spawn("ponymix toggle")
-            os.execute(string.format("amixer -q set %s playback toggle", beautiful.myvolume.channel))
-            beautiful.myvolume.update()
-        end),
-    -- keycode 198 = XF86AudioMicMute
-    awful.key({}, "XF86AudioMicMute",
-        function ()
-            awful.spawn("amixer sset Capture toggle")
-        end),
-
+    beautiful.widgets.volume.laptopkeys,
     -- keycode 235 = XF86Display
     awful.key({ }, "XF86Display",
         function ()
@@ -147,7 +123,7 @@ local otherkeys = gears.table.join(
 )
 
 local revelationkeys = nil
-if package.loaded["revelation"] then
+if revelation then
     revelationkeys = gears.table.join(
         -- keycode 152 = XF86Explorer
         awful.key({ }, "XF86Explorer", revelation),
