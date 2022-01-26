@@ -14,8 +14,6 @@ Install [dependencies](https://github.com/shmilee/awesome-away#dependencies).
 ```
 mv ~/.config/awesome ~/.config/awesome.old
 git clone --recursive https://github.com/shmilee/config-awesome.git ~/.config/awesome
-cd ~/.config/awesome
-ln -s rc-default.lua rc.lua
 ```
 
 Update:
@@ -36,12 +34,12 @@ Default applications
 
 ```
 [$] grep ^run_once autostart.lua|awk -F\" '{print $2}'
-compton
+picom
 conky
 parcellite
 fcitx-autostart
 volnoti
-wicd-gtk
+nm-applet
 /usr/bin/redshift-gtk
 ```
 
@@ -51,7 +49,7 @@ wicd-gtk
 [$] grep ^local mykeys.lua |grep -v -E "=.*require|key.*=" |awk -F\" '{print $2}'
 arandr
 synapse
-xsecurelock
+XSECURELOCK_NO_COMPOSITE=1 xsecurelock
 scrot
 ```
 
@@ -60,57 +58,34 @@ scrot
 ```lua
 terminal = "xfce4-terminal"
 editor = os.getenv("EDITOR") or "vim"
-editor_cmd = terminal .. " -e '" .. editor .. " %s '"
 ```
 
 ```lua
     after = {
-        { "终端 (&T)", terminal, icon_theme():find_icon_path('terminal') },
-        { "文件管理 (&F)", "thunar", lookup_icon('Thunar') },
-        { "监视器 (&M)", terminal .. " -e htop", lookup_icon('htop') },
-        { "火狐 (&B)", "firefox", lookup_icon('firefox') },
-        { "JabRef (&R)", "jabref", lookup_icon('jabref') },
-        { "BT下载 (&D)", "transmission-gtk", lookup_icon('transmission') },
-        { "辞典 (&G)", "goldendict", lookup_icon('goldendict') },
+        { "终端 (&T)", terminal, find_icon('terminal') },
+        { "文件管理 (&F)", "thunar", find_icon('Thunar') },
+        { "监视器 (&M)", terminal .. " -e htop", find_icon('htop') },
+        { "火狐 (&B)", "firefox", find_icon('firefox') },
+        { "JabRef (&R)", "jabref", find_icon('jabref') },
+        { "BT下载 (&D)", "transmission-gtk", find_icon('transmission') },
+        { "辞典 (&G)", "goldendict", find_icon('goldendict') },
+        { "Win7 (&W)", "VBoxSDL --startvm Win7", find_icon('virtualbox') },
     }
 ```
 
-theme:think
------------
-
-inherit **zenburn** theme, then add
-
-1. function theme.wallpaper(s)
-   - use `away.wallpaper`
-     + `os.getenv("HOME") .. "/.cache/wallpaper-bing"`
-     + `os.getenv("HOME") .. "/.cache/wallpaper-360chrome"`
-     + `os.getenv("HOME") .. "/.cache/wallpaper-wallhaven"`
-     + `os.getenv("HOME") .. "/.cache/wallpaper-lovebizhi"`
-     + local or online(like FY-4A) video wallpaper
-   - fallback
-     + think-1920x1200.jpg
-     + violin-1920x1080.jpg
-
-2. table theme.layouts for 4 screens
-3. table theme.tagnames for 4 screens
-4. Widgets from `away`, `lain`
-   - mytextclock
-   - mylunar, myweather, mybattery: need [dependencies](https://github.com/shmilee/awesome-away#dependencies)
-   - myvolume: need amixer, pavucontrol, [volnoti](https://github.com/hcchu/volnoti)
-   - mytemp
-   - mycpu
-   - mymem
-   - yiwen
-5. function theme.createmywibox(s)
-
-fonts
------
-
-1. conky
+* conky and fonts
    - default: WenQuanYi Micro Hei
    - arch logo: openlogos
    - arrow: Wingdings 3
 
-2. theme:think
-   - default: WenQuanYi Micro Hei
-   - widget: Ubuntu Mono
+* other keys and rules
+
+theme:think
+-----------
+
+inherit **away think** theme, then change
+
+1. function `theme.set_videowall(s, i)`
+    + local or online(like FY-4A, bili-sapce) video wallpaper
+
+2. add meiriyiwen

@@ -12,7 +12,7 @@ editor_cmd = terminal .. " -e '" .. editor .. " %s '"
 
 -- Create a launcher widget and a main menu
 local myawesomemenu = {
-    { "hotkeys", function() return false, hotkeys_popup.show_help end},
+    { "hotkeys", function() hotkeys_popup.show_help(nil, awful.screen.focused()) end},
     { "this bing", function()
         local s = focused()
         if s.miscwallpaper then
