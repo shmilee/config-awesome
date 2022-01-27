@@ -3,8 +3,10 @@ local awful = require("awful")
 local naughty = require("naughty")
 local menubar = require("menubar")
 local beautiful = require("beautiful")
-local revelation = require("away.third_party.revelation")
-revelation.init({tag_name = 'Expose'})
+local reveloaded, revelation = pcall(require, "away.third_party.revelation")
+if reveloaded then
+    revelation.init({tag_name = 'Expose'})
+end
 
 -- setting tools
 local xrandr = "arandr"
@@ -65,7 +67,11 @@ local laptopkeys = gears.table.join(
 )
 
 local otherkeys = gears.table.join(
-    awful.key({ modkey,           }, "a", function () mymainmenu:show() end,
+    awful.key({ modkey,           }, "a",
+        function ()
+            local s = awful.screen.focused()
+            s.mymainmenu:toggle()
+        end,
         {description = "show main menu", group = "awesome"}),
     -- OSD Caps_Lock notify
     awful.key({ }, "Caps_Lock",
@@ -123,7 +129,7 @@ local otherkeys = gears.table.join(
 )
 
 local revelationkeys = nil
-if revelation then
+if reveloaded then
     revelationkeys = gears.table.join(
         -- keycode 152 = XF86Explorer
         awful.key({ }, "XF86Explorer", revelation),

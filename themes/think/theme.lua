@@ -45,6 +45,18 @@ function theme.set_videowall(s, i)
     end
 end
 
+local find_icon = away.menu.find_icon
+theme.custommenu = {
+    { "终端 (&T)", theme.terminal, find_icon('terminal', theme.icon_theme) },
+    { "文件管理 (&F)", "thunar", find_icon('Thunar', theme.icon_theme) },
+    { "监视器 (&M)", theme.terminal .. " -e htop", find_icon('htop', theme.icon_theme) },
+    { "火狐 (&B)", "firefox", find_icon('firefox', theme.icon_theme) },
+    { "JabRef (&R)", "jabref", find_icon('jabref', theme.icon_theme) },
+    { "BT下载 (&D)", "transmission-gtk", find_icon('transmission', theme.icon_theme) },
+    { "辞典 (&G)", "goldendict", find_icon('goldendict', theme.icon_theme) },
+    { "Win7 (&W)", "VBoxSDL --startvm Win7", find_icon('virtualbox', theme.icon_theme) },
+}
+
 local meiriyiwen = away.widget.meiriyiwen({
     font = 'WenQuanYi Micro Hei',
     font_size =  dpi(15),
