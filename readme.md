@@ -53,26 +53,6 @@ XSECURELOCK_NO_COMPOSITE=1 xsecurelock
 scrot
 ```
 
-* mymenu.lua
-
-```lua
-terminal = "xfce4-terminal"
-editor = os.getenv("EDITOR") or "vim"
-```
-
-```lua
-    after = {
-        { "终端 (&T)", terminal, find_icon('terminal') },
-        { "文件管理 (&F)", "thunar", find_icon('Thunar') },
-        { "监视器 (&M)", terminal .. " -e htop", find_icon('htop') },
-        { "火狐 (&B)", "firefox", find_icon('firefox') },
-        { "JabRef (&R)", "jabref", find_icon('jabref') },
-        { "BT下载 (&D)", "transmission-gtk", find_icon('transmission') },
-        { "辞典 (&G)", "goldendict", find_icon('goldendict') },
-        { "Win7 (&W)", "VBoxSDL --startvm Win7", find_icon('virtualbox') },
-    }
-```
-
 * conky and fonts
    - default: WenQuanYi Micro Hei
    - arch logo: openlogos
@@ -83,9 +63,26 @@ editor = os.getenv("EDITOR") or "vim"
 theme:think
 -----------
 
-inherit **away think** theme, then change
+Install [dependencies](https://github.com/shmilee/awesome-away#theme-think).
+
+Inherit **away think** theme, then change
 
 1. function `theme.set_videowall(s, i)`
     + local or online(like FY-4A, bili-sapce) video wallpaper
 
-2. add meiriyiwen
+2. menu needs applications:
+
+```lua
+theme.custommenu = {
+    { "终端 (&T)", theme.terminal, find_icon('terminal', theme.icon_theme) },
+    { "文件管理 (&F)", "thunar", find_icon('Thunar', theme.icon_theme) },
+    { "监视器 (&M)", theme.terminal .. " -e htop", find_icon('htop', theme.icon_theme) },
+    { "火狐 (&B)", "firefox", find_icon('firefox', theme.icon_theme) },
+    { "JabRef (&R)", "jabref", find_icon('jabref', theme.icon_theme) },
+    { "BT下载 (&D)", "transmission-gtk", find_icon('transmission', theme.icon_theme) },
+    { "辞典 (&G)", "goldendict", find_icon('goldendict', theme.icon_theme) },
+    { "Win7 (&W)", "VBoxSDL --startvm Win7", find_icon('virtualbox', theme.icon_theme) },
+}
+```
+
+3. add meiriyiwen
