@@ -28,13 +28,17 @@ local laptopkeys = gears.table.join(
     -- keycode 179 = XF86Tools, --> toggle the Synaptics Touchpad
     awful.key({ }, "XF86Tools",
         function ()
-            os.execute("synclient TouchpadOff=$(synclient -l | grep -c 'TouchpadOff.*=.*0')")
-            if os.execute("synclient -l | grep 'TouchpadOff.*=.*0' >/dev/null") then
-                str = beautiful.touchpad_on
-            else
-                str = beautiful.touchpad_off
-            end
-            os.execute(string.format("volnoti-show -n 0 -s %s",str))
+            local Tget = "synclient -l | grep -c 'TouchpadOff.*=.*0'"
+            local check_cmd = string.format("synclient TouchpadOff=$(%s); %s", Tget, Tget)
+            awful.spawn.easy_async_with_shell(check_cmd, function (o, e, r, c)
+                local Timg
+                if c == 0 then
+                    Timg = beautiful.touchpad_on
+                else
+                    Timg = beautiful.touchpad_off
+                end
+                awful.spawn(string.format("volnoti-show -n 0 -s %s", Timg))
+            end)
         end),
 
     -- keycode 225 = XF86Search
@@ -56,18 +60,24 @@ local laptopkeys = gears.table.join(
     -- Brightness
     awful.key({ }, "XF86MonBrightnessDown",
         function ()
-            os.execute(string.format("volnoti-show -s %s `xbacklight -dec %s; xbacklight`",
-                "/usr/share/pixmaps/volnoti/display-brightness-symbolic.svg", 5))
+            local check_cmd = "xbacklight -dec 5; xbacklight"
+            local bri_img = "/usr/share/pixmaps/volnoti/display-brightness-symbolic.svg"
+            awful.spawn.easy_async_with_shell(check_cmd, function (o, e, r, c)
+                awful.spawn(string.format("volnoti-show -s %s %s", bri_img, o))
+            end)
         end),
     awful.key({ }, "XF86MonBrightnessUp",
         function ()
-            os.execute(string.format("volnoti-show -s %s `xbacklight -inc %s; xbacklight`",
-                "/usr/share/pixmaps/volnoti/display-brightness-symbolic.svg", 5))
+            local check_cmd = "xbacklight -inc 5; xbacklight"
+            local bri_img = "/usr/share/pixmaps/volnoti/display-brightness-symbolic.svg"
+            awful.spawn.easy_async_with_shell(check_cmd, function (o, e, r, c)
+                awful.spawn(string.format("volnoti-show -s %s %s", bri_img, o))
+            end)
         end)
 )
 
 local otherkeys = gears.table.join(
-    awful.key({ modkey,           }, "a",
+    awful.key({ modkey, }, "a",
         function ()
             local s = awful.screen.focused()
             s.mymainmenu:toggle()
@@ -76,13 +86,16 @@ local otherkeys = gears.table.join(
     -- OSD Caps_Lock notify
     awful.key({ }, "Caps_Lock",
         function()
-            local str = "sleep 0.2; xset q|grep 'Caps Lock:[ ]*on' >/dev/null"
-            if os.execute(str) then
-                str = beautiful.capslock_on
-            else
-                str = beautiful.capslock_off
-            end
-            os.execute(string.format("volnoti-show -n 0 -s %s",str))
+            local check_cmd = "sleep 0.2; xset q|grep 'Caps Lock:[ ]*on' >/dev/null"
+            awful.spawn.easy_async_with_shell(check_cmd, function (o, e, r, c)
+                local caps_img
+                if c == 0 then
+                    caps_img = beautiful.capslock_on
+                else
+                    caps_img = beautiful.capslock_off
+                end
+                awful.spawn(string.format("volnoti-show -n 0 -s %s", caps_img))
+            end)
         end),
     -- Display
     awful.key({ modkey, "Control" }, "p", function () awful.spawn(xrandr) end,
@@ -90,13 +103,18 @@ local otherkeys = gears.table.join(
     -- lights on
     awful.key({ modkey, "Control" }, "l",
         function ()
-            if os.execute("xset q | grep 'DPMS is Enabled' 2>&1 >/dev/null") then
-                os.execute("xset -dpms s off")
-                naughty.notify({ title = "DPMS is Disabled" })
-            else
-                os.execute("xset +dpms s on")
-                naughty.notify({ title = "DPMS is Enabled" })
-            end
+            local check_cmd = "xset q | grep 'DPMS is Enabled' 2>&1 >/dev/null"
+            awful.spawn.easy_async_with_shell(check_cmd, function (o, e, r, c)
+                local cmd, title
+                if c == 0 then
+                    cmd, title = "xset -dpms s off", "DPMS is Disabled"
+                else
+                    cmd, title = "xset +dpms s on", "DPMS is Enabled"
+                end
+                awful.spawn.easy_async(cmd, function (out, err, r, ecode)
+                    naughty.notify({ title = title })
+                end)
+            end)
         end,
         { description = "screen blanking, DPMS on/off", group = "screen" }),
     --休眠
