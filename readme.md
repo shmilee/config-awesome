@@ -75,16 +75,17 @@ Inherit **away think** theme, then change
    + `theme.terminal = "xfce4-terminal"`
 
 ```lua
-{
-    { "终端 (&T)", theme.terminal, find_icon('terminal', theme.icon_theme) },
-    { "文件管理 (&F)", "thunar", find_icon('Thunar', theme.icon_theme) },
-    { "监视器 (&M)", theme.terminal .. " -e htop", find_icon('htop', theme.icon_theme) },
-    { "火狐 (&B)", "firefox", find_icon('firefox', theme.icon_theme) },
-    { "JabRef (&R)", "jabref", find_icon('jabref', theme.icon_theme) },
-    { "BT下载 (&D)", "transmission-gtk", find_icon('transmission', theme.icon_theme) },
-    { "辞典 (&G)", "goldendict", find_icon('goldendict', theme.icon_theme) },
-    { "Win7 (&W)", "VBoxSDL --startvm Win7", find_icon('virtualbox', theme.icon_theme) },
-}
+    find_icon = away.menu.find_icon
+    custommenu = {
+        { "终端 (&T)", theme.terminal, find_icon('terminal') },
+        { "文件管理 (&F)", "thunar", find_icon('Thunar') },
+        { "监视器 (&M)", theme.terminal .. " -e htop", find_icon('htop') },
+        { "火狐 (&B)", "firefox", find_icon('firefox') },
+        { "JabRef (&R)", "jabref", find_icon('jabref') },
+        { "BT下载 (&D)", "transmission-gtk", find_icon('transmission') },
+        { "辞典 (&G)", "goldendict", find_icon('goldendict') },
+        { "Win7 (&W)", "VBoxSDL --startvm Win7", find_icon('virtualbox') },
+    }
 ```
 
 3. add meiriyiwen
