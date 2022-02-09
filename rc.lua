@@ -45,7 +45,7 @@ end
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, font and wallpapers.
-beautiful.init(gears.filesystem.get_xdg_config_home() .. "awesome/themes/think/theme.lua")
+beautiful.init(gears.filesystem.get_xdg_config_home() .. "awesome/mythemethink.lua")
 
 -- This is used later as the default terminal to run.
 terminal = beautiful.terminal

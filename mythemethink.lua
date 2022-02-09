@@ -45,17 +45,20 @@ function theme.set_videowall(s, i)
     end
 end
 
+theme.terminal = "xfce4-terminal"
 local find_icon = away.menu.find_icon
-theme.custommenu = {
-    { "终端 (&T)", theme.terminal, find_icon('terminal') },
-    { "文件管理 (&F)", "thunar", find_icon('Thunar') },
-    { "监视器 (&M)", theme.terminal .. " -e htop", find_icon('htop') },
-    { "火狐 (&B)", "firefox", find_icon('firefox') },
-    { "JabRef (&R)", "jabref", find_icon('jabref') },
-    { "BT下载 (&D)", "transmission-gtk", find_icon('transmission') },
-    { "辞典 (&G)", "goldendict", find_icon('goldendict') },
-    { "Win7 (&W)", "VBoxSDL --startvm Win7", find_icon('virtualbox') },
-}
+function theme.custommenu()
+    return {
+        { "终端 (&T)", theme.terminal, find_icon('terminal') },
+        { "文件管理 (&F)", "thunar", find_icon('Thunar') },
+        { "监视器 (&M)", theme.terminal .. " -e htop", find_icon('htop') },
+        { "火狐 (&B)", "firefox", find_icon('firefox') },
+        { "JabRef (&R)", "jabref", find_icon('jabref') },
+        { "BT下载 (&D)", "transmission-gtk", find_icon('transmission') },
+        { "辞典 (&G)", "goldendict", find_icon('goldendict') },
+        { "Win7 (&W)", "VBoxSDL --startvm Win7", find_icon('virtualbox') },
+    }
+end
 
 local meiriyiwen = away.widget.meiriyiwen({
     font = 'WenQuanYi Micro Hei',

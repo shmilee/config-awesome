@@ -60,8 +60,8 @@ scrot
 
 * other keys and rules
 
-theme:think
------------
+mytheme:think
+-------------
 
 Install [dependencies](https://github.com/shmilee/awesome-away#theme-think).
 
@@ -72,8 +72,10 @@ Inherit **away think** theme, then change
 
 2. menu needs applications:
 
+   + `theme.terminal = "xfce4-terminal"`
+
 ```lua
-theme.custommenu = {
+{
     { "终端 (&T)", theme.terminal, find_icon('terminal', theme.icon_theme) },
     { "文件管理 (&F)", "thunar", find_icon('Thunar', theme.icon_theme) },
     { "监视器 (&M)", theme.terminal .. " -e htop", find_icon('htop', theme.icon_theme) },
