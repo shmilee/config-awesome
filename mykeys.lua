@@ -4,6 +4,7 @@ local naughty = require("naughty")
 local menubar = require("menubar")
 local beautiful = require("beautiful")
 local reveloaded, revelation = pcall(require, "away.third_party.revelation")
+local mickyloaded, micky = pcall(require, "away.third_party.micky")
 if reveloaded then
     revelation.init({tag_name = 'Expose'})
 end
@@ -164,5 +165,12 @@ if reveloaded then
              { description = "'expose' view of terminal clients", group = "revelation" })
     )
 end
+local mickykeys = nil
+if mickyloaded then
+    mickykeys = gears.table.join(
+        awful.key({ modkey, "Control" }, "c", micky.toggle,
+            { description = "cursor follow client", group = "client" })
+    )
+end
 
-return gears.table.join(laptopkeys, otherkeys, revelationkeys)
+return gears.table.join(laptopkeys, otherkeys, revelationkeys, mickykeys)

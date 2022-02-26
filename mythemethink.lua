@@ -90,6 +90,6 @@ local meiriyiwen = away.widget.meiriyiwen({
 
 -- globals
 yiwen = meiriyiwen.update
-micky = require("away.third_party.micky")
+micky = require("away.third_party.micky").move_to_client
 
 return theme
