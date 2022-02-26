@@ -87,6 +87,9 @@ local meiriyiwen = away.widget.meiriyiwen({
     ratio = 0,
     height = 0.9,
 })
+
+-- globals
 yiwen = meiriyiwen.update
+micky = require("away.third_party.micky")
 
 return theme

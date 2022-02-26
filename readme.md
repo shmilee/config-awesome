@@ -73,6 +73,7 @@ Inherit **away think** theme, then change
 2. menu needs applications:
 
    + `theme.terminal = "xfce4-terminal"`
+   + `theme.xrandr_menu()`, `xrandr`
 
 ```lua
     find_icon = away.menu.find_icon
@@ -88,4 +89,5 @@ Inherit **away think** theme, then change
     }
 ```
 
-3. add meiriyiwen
+3. add yiwen = meiriyiwen.update
+4. add micky
