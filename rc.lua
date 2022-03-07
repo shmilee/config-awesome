@@ -100,6 +100,9 @@ end
 -- Re-set wallpaper when a screen's geometry changes (e.g. different resolution)
 screen.connect_signal("property::geometry", set_wallpaper)
 
+-- delete wallpaper timer when a screen is removed
+screen.connect_signal("removed", beautiful.del_wallpaper_timer)
+
 -- Create a wibox for each screen and add it
 awful.screen.connect_for_each_screen(beautiful.createmywibox)
 -- }}}

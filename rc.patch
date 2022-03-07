@@ -1,5 +1,5 @@
 --- /etc/xdg/awesome/rc.lua	2021-09-15 03:42:54.000000000 +0800
-+++ rc.lua	2022-02-09 15:54:51.000000000 +0800
++++ rc.lua	2022-03-07 18:03:20.000000000 +0800
 @@ -45,12 +45,10 @@
  
  -- {{{ Variable definitions
@@ -91,7 +91,7 @@
  
  local function set_wallpaper(s)
      -- Wallpaper
-@@ -164,71 +100,18 @@
+@@ -164,71 +100,21 @@
  -- Re-set wallpaper when a screen's geometry changes (e.g. different resolution)
  screen.connect_signal("property::geometry", set_wallpaper)
  
@@ -118,7 +118,9 @@
 -        filter  = awful.widget.taglist.filter.all,
 -        buttons = taglist_buttons
 -    }
--
++-- delete wallpaper timer when a screen is removed
++screen.connect_signal("removed", beautiful.del_wallpaper_timer)
+ 
 -    -- Create a tasklist widget
 -    s.mytasklist = awful.widget.tasklist {
 -        screen  = s,
@@ -168,7 +170,7 @@
      awful.key({ modkey,           }, "s",      hotkeys_popup.show_help,
                {description="show help", group="awesome"}),
      awful.key({ modkey,           }, "Left",   awful.tag.viewprev,
-@@ -250,8 +133,12 @@
+@@ -250,8 +136,12 @@
          end,
          {description = "focus previous by index", group = "client"}
      ),
@@ -183,7 +185,7 @@
  
      -- Layout manipulation
      awful.key({ modkey, "Shift"   }, "j", function () awful.client.swap.byidx(  1)    end,
-@@ -443,7 +330,7 @@
+@@ -443,7 +333,7 @@
  
  -- {{{ Rules
  -- Rules to apply to new clients (through the "manage" signal).
@@ -192,7 +194,7 @@
      -- All clients will match this rule.
      { rule = { },
        properties = { border_width = beautiful.border_width,
-@@ -451,6 +338,7 @@
+@@ -451,6 +341,7 @@
                       focus = awful.client.focus.filter,
                       raise = true,
                       keys = clientkeys,
@@ -200,7 +202,7 @@
                       buttons = clientbuttons,
                       screen = awful.screen.preferred,
                       placement = awful.placement.no_overlap+awful.placement.no_offscreen
-@@ -489,14 +377,15 @@
+@@ -489,14 +380,15 @@
        }, properties = { floating = true }},
  
      -- Add titlebars to normal clients and dialogs
@@ -220,7 +222,7 @@
  -- }}}
  
  -- {{{ Signals
-@@ -512,6 +401,14 @@
+@@ -512,6 +404,14 @@
          -- Prevent clients from being unreachable after screen count changes.
          awful.placement.no_offscreen(c)
      end
@@ -235,7 +237,7 @@
  end)
  
  -- Add a titlebar if titlebars_enabled is set to true in the rules.
-@@ -559,6 +456,8 @@
+@@ -559,6 +459,8 @@
      c:emit_signal("request::activate", "mouse_enter", {raise = false})
  end)
  
