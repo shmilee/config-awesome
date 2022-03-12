@@ -4,6 +4,7 @@
 -------------------------------
 
 local away  = require("away")
+local awful = require("awful")
 local dpi   = require("beautiful").xresources.apply_dpi
 local os    = { getenv = os.getenv }
 
@@ -74,7 +75,15 @@ function theme.custommenu()
         { "文件管理 (&F)", "thunar", find_icon('Thunar') },
         { "监视器 (&M)", theme.terminal .. " -e htop", find_icon('htop') },
         { "火狐 (&B)", "firefox", find_icon('firefox') },
-        { "JabRef (&R)", "jabref", find_icon('jabref') },
+        -- add ${JABREF_EXT_Options} in:
+        -- https://aur.archlinux.org/cgit/aur.git/tree/jabref.sh?h=jabref&id=cbac45cbb358a9154fb52f8abe6818a1aab637e5
+        { "JabRef (&R)", function()
+            local dpi = awful.screen.focused().dpi or 96
+            local Options = '-Dglass.gtk.uiScale=' .. dpi .. 'dpi'
+            Options = Options .. ' -Djdk.gtk.version=2'
+            --away.util.print_info("JABREF_EXT_Options='" .. Options .. "' jabref")
+            awful.spawn.with_shell("JABREF_EXT_Options='" .. Options .. "' jabref")
+        end, find_icon('jabref') },
         { "BT下载 (&D)", "transmission-gtk", find_icon('transmission') },
         { "辞典 (&G)", "goldendict", find_icon('goldendict') },
         { "Win7 (&W)", "VBoxSDL --startvm Win7", find_icon('virtualbox') },
