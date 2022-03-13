@@ -69,6 +69,65 @@ function theme.xrandr_menu()
     })
 end
 
+local function update_videowall()
+    local s = awful.screen.focused()
+    if s.videowallpaper then
+        s.videowallpaper.update()
+    end
+end
+
+local function kill_videowall()
+    local s = awful.screen.focused()
+    if s.videowallpaper then
+        s.videowallpaper.kill_and_set()
+    end
+end
+
+function theme.updates_menu()
+    return {
+        { "main menu", function()
+            local s = awful.screen.focused()
+            if s.mymainmenu then
+                s.mymainmenu:update()
+            end
+        end },
+        { "misc wall", function()
+            local s = awful.screen.focused()
+            if s.miscwallpaper then
+                s.miscwallpaper.update()
+            end
+        end },
+        { "video wall", update_videowall },
+        { "conky", function()
+            kill_videowall() -- kill videowallpaper
+            local cmd = "conky -c " .. os.getenv("HOME") .. "/.config/awesome/conky.lua"
+            local check_cmd = "pgrep -f -u $USER -x '".. cmd .. "'"
+            awful.spawn.easy_async_with_shell(check_cmd, function(o, e, r, c)
+                if c == 0 then
+                    -- kill old
+                    away.util.print_info('kill conky PID ' .. o .. '!')
+                    awful.spawn.easy_async('kill ' .. o, function(out, e, r, code)
+                        if code == 0 then
+                            awful.spawn.with_shell(cmd) -- run new
+                            update_videowall() -- start new videowallpaper
+                        else
+                            away.util.print_info('kill -9 conky PID ' .. o .. '!')
+                            awful.spawn.easy_async('kill -9 ' .. o, function(o, e, r, c)
+                                awful.spawn.with_shell(cmd) -- run new
+                                update_videowall() -- start new videowallpaper
+                            end)
+                        end
+                    end)
+                else
+                    awful.spawn.with_shell(cmd) -- run new
+                    update_videowall() -- start new videowallpaper
+                end
+            end)
+        end },
+        { "kill videowall", kill_videowall },
+    }
+end
+
 function theme.custommenu()
     return {
         { "终端 (&T)", theme.terminal, find_icon('terminal') },
