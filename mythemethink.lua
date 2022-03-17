@@ -7,10 +7,12 @@ local away  = require("away")
 local awful = require("awful")
 local dpi   = require("beautiful").xresources.apply_dpi
 local os    = { getenv = os.getenv }
+local table = { insert = table.insert }
 
 -- inherit away think theme
 local theme = dofile(away.util.curdir .. "themes/think/theme.lua")
 
+-- overwite
 function theme.get_videowall(s, i)
     if i == 1 then
         return away.wallpaper.get_videowallpaper(s, {
@@ -54,6 +56,7 @@ local xrandr_info = [[Monitors: 2
  1: +HDMI1 3840/1220x2160/690+1366+0  HDMI1
 ]]
 
+-- overwite
 function theme.xrandr_menu()
     return away.xrandr({
         info = xrandr_info,
@@ -83,22 +86,14 @@ local function kill_videowall()
     end
 end
 
+-- save old
+local old_updates_menu = theme.updates_menu
+-- overwite
 function theme.updates_menu()
-    return {
-        { "main menu", function()
-            local s = awful.screen.focused()
-            if s.mymainmenu then
-                s.mymainmenu:update()
-            end
-        end },
-        { "misc wall", function()
-            local s = awful.screen.focused()
-            if s.miscwallpaper then
-                s.miscwallpaper.update()
-            end
-        end },
-        { "video wall", update_videowall },
-        { "conky", function()
+    local menu = old_updates_menu()
+    table.insert(menu, { "kill videowall", kill_videowall })
+    table.insert(menu, {
+        "conky", function()
             kill_videowall() -- kill videowallpaper
             local cmd = "conky -c " .. os.getenv("HOME") .. "/.config/awesome/conky.lua"
             local check_cmd = "pgrep -f -u $USER -x '".. cmd .. "'"
@@ -123,11 +118,19 @@ function theme.updates_menu()
                     update_videowall() -- start new videowallpaper
                 end
             end)
-        end },
-        { "kill videowall", kill_videowall },
-    }
+        end
+    })
+    table.insert(menu, {
+        "weather", function()
+            if theme.widgets and theme.widgets.weather then
+                theme.widgets.weather.update()
+            end
+        end
+    })
+    return menu
 end
 
+-- overwite
 function theme.custommenu()
     return {
         { "终端 (&T)", theme.terminal, find_icon('terminal') },
