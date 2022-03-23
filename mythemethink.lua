@@ -137,14 +137,14 @@ function theme.custommenu()
         { "文件管理 (&F)", "thunar", find_icon('Thunar') },
         { "监视器 (&M)", theme.terminal .. " -e htop", find_icon('htop') },
         { "火狐 (&B)", "firefox", find_icon('firefox') },
-        -- add ${JABREF_EXT_Options} in:
-        -- https://aur.archlinux.org/cgit/aur.git/tree/jabref.sh?h=jabref&id=cbac45cbb358a9154fb52f8abe6818a1aab637e5
+        -- ${JABREF_OPTIONS} in:
+        -- https://aur.archlinux.org/cgit/aur.git/commit/?h=jabref&id=7490271d44f20135cefe11b3e134a98cd5ef69f7
         { "JabRef (&R)", function()
             local dpi = awful.screen.focused().dpi or 96
             local Options = '-Dglass.gtk.uiScale=' .. dpi .. 'dpi'
             Options = Options .. ' -Djdk.gtk.version=2'
             --away.util.print_info("JABREF_EXT_Options='" .. Options .. "' jabref")
-            awful.spawn.with_shell("JABREF_EXT_Options='" .. Options .. "' jabref")
+            awful.spawn.with_shell("JABREF_OPTIONS='" .. Options .. "' jabref")
         end, find_icon('jabref') },
         { "BT下载 (&D)", "transmission-gtk", find_icon('transmission') },
         { "辞典 (&G)", "goldendict", find_icon('goldendict') },
