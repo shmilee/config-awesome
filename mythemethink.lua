@@ -51,24 +51,16 @@ end
 theme.terminal = "xfce4-terminal"
 local find_icon = away.menu.find_icon
 
-local xrandr_info = [[Monitors: 2
- 0: +*eDP1 1366/310x768/170+0+0  eDP1
- 1: +HDMI1 3840/1220x2160/690+1366+0  HDMI1
-]]
-
 -- overwite
 function theme.xrandr_menu()
-    return away.xrandr({
-        info = xrandr_info,
-        items = {
-            { menuname="HS-MiTV", dpi=144, complete=true, monitors={
-                { key='eDP1-310x170', scale=1.5 }, -- laptop T450
-                { key='HDMI1-1220x690', scale=1.0 } -- MiTV
-            } },
-            { menuname='Reset', dpi=96, complete=true, monitors={
-                { key='eDP1-310x170', scale=1.0 }, -- laptop T450
-            } },
-        }
+    return away.xrandr_menu({
+        { name="H-S-MiTV", dpi=144, complete=true, monitors={
+            { key='eDP1-310x170-0dae9-f11-7e-e', scale=1.5 },  -- laptop T450
+            { key='HDMI1-1220x690-61a44-a45-db-d', scale=1.0 } -- Mi TV
+        } },
+        { name='Reset', complete=true, monitors={
+            'eDP1-310x170-0dae9-f11-7e-e',  -- laptop T450, dpi=96, scale=1.0
+        } },
     })
 end
 
