@@ -64,29 +64,14 @@ function theme.xrandr_menu()
     })
 end
 
-local function update_videowall()
-    local s = awful.screen.focused()
-    if s.videowallpaper then
-        s.videowallpaper.update()
-    end
-end
-
-local function kill_videowall()
-    local s = awful.screen.focused()
-    if s.videowallpaper then
-        s.videowallpaper.kill_and_set()
-    end
-end
-
 -- save old
 local old_updates_menu = theme.updates_menu
 -- overwite
 function theme.updates_menu()
     local menu = old_updates_menu()
-    table.insert(menu, { "kill videowall", kill_videowall })
     table.insert(menu, {
         "conky", function()
-            kill_videowall() -- kill videowallpaper
+            theme.kill_focused_videowall() -- kill videowallpaper
             local cmd = "conky -c " .. os.getenv("HOME") .. "/.config/awesome/conky.lua"
             local check_cmd = "pgrep -f -u $USER -x '".. cmd .. "'"
             awful.spawn.easy_async_with_shell(check_cmd, function(o, e, r, c)
@@ -96,27 +81,20 @@ function theme.updates_menu()
                     awful.spawn.easy_async('kill ' .. o, function(out, e, r, code)
                         if code == 0 then
                             awful.spawn.with_shell(cmd) -- run new
-                            update_videowall() -- start new videowallpaper
+                            theme.update_focused_videowall() -- start new videowallpaper
                         else
                             away.util.print_info('kill -9 conky PID ' .. o .. '!')
                             awful.spawn.easy_async('kill -9 ' .. o, function(o, e, r, c)
                                 awful.spawn.with_shell(cmd) -- run new
-                                update_videowall() -- start new videowallpaper
+                                theme.update_focused_videowall() -- start new videowallpaper
                             end)
                         end
                     end)
                 else
                     awful.spawn.with_shell(cmd) -- run new
-                    update_videowall() -- start new videowallpaper
+                    theme.update_focused_videowall() -- start new videowallpaper
                 end
             end)
-        end
-    })
-    table.insert(menu, {
-        "weather", function()
-            if theme.widgets and theme.widgets.weather then
-                theme.widgets.weather.update()
-            end
         end
     })
     return menu
