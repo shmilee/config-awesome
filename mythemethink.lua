@@ -118,7 +118,7 @@ function theme.custommenu()
         end, find_icon('jabref') },
         { "BT下载 (&D)", "transmission-gtk", find_icon('transmission') },
         { "辞典 (&G)", "goldendict", find_icon('goldendict') },
-        { "Win7 (&W)", "VBoxSDL --startvm Win7", find_icon('virtualbox') },
+        { "Win7 (&7)", "VBoxSDL --startvm Win7", find_icon('virtualbox') },
     }
 end
 
