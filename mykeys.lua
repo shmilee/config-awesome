@@ -98,11 +98,8 @@ local otherkeys = gears.table.join(
                 awful.spawn(string.format("volnoti-show -n 0 -s %s", caps_img))
             end)
         end),
-    -- Display
-    awful.key({ modkey, "Control" }, "p", function () awful.spawn(xrandr) end,
-        { description = "xrandr", group = "screen" }),
     -- lights on
-    awful.key({ modkey, "Control" }, "l",
+    awful.key({ modkey, "Control" }, "p",
         function ()
             local check_cmd = "xset q | grep 'DPMS is Enabled' 2>&1 >/dev/null"
             awful.spawn.easy_async_with_shell(check_cmd, function (o, e, r, c)
