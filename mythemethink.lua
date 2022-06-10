@@ -13,6 +13,7 @@ local table = { insert = table.insert }
 local theme = dofile(away.util.curdir .. "themes/think/theme.lua")
 
 -- overwite
+theme.enable_videowall = false
 function theme.get_videowall(s, i)
     if i == 1 then
         return away.wallpaper.get_videowallpaper(s, {
