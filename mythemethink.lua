@@ -118,7 +118,13 @@ function theme.custommenu()
             awful.spawn.with_shell("JABREF_OPTIONS='" .. Options .. "' jabref")
         end, find_icon('jabref') },
         { "BT下载 (&D)", "transmission-gtk", find_icon('transmission') },
-        { "辞典 (&G)", "goldendict", find_icon('goldendict') },
+        { "辞典 (&G)", function()
+            -- https://doc.qt.io/qt-5/highdpi.html#high-dpi-support-in-qt
+            local dpi = awful.screen.focused().dpi or 96
+            local scale = dpi//(96/4)/4  -- 1.0, 1.25, 1.5, ...
+            local qt_env = 'QT_FONT_DPI=96 QT_SCALE_FACTOR=' .. scale
+            awful.spawn.with_shell(qt_env .. " goldendict")
+        end, find_icon('goldendict') },
         { "Win7 (&7)", "VBoxSDL --startvm Win7", find_icon('virtualbox') },
     }
 end
