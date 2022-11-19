@@ -54,30 +54,31 @@ conky.text = [[
 ${font openlogos:size=20}${color #0090FF}B${color}${font} ${font Blod:size=20}$alignc$uptime${font}${alignr}
 ]]
 
-disk_devices = {'sda', 'sdb', 'sdc', 'sdd', 'sr0'}
-disk_text = [[${if_existing /dev/%s}
-${color green}@%s: ${combine ${head /sys/block/%s/device/model 1 10} ${hr 1}}${color}
-${color blue}${diskiograph_write %s 14,90} ${alignr}${diskiograph_read %s 14,90}${color}
+local disk_devices = {'sda', 'sdb', 'sdc', 'sdd', 'sr0'}
+local disk_text = [[${if_existing /dev/%s}
+${color green}@%s: ${combine ${head /sys/block/%s/device/model 1 10} ${hr 1}}${color}${color blue}${diskiograph_write %s 16,90} ${alignr}${diskiograph_read %s 16,90}${color}
 ${font Wingdings 3}i${font} ${diskio_write %s} ${alignr}${diskio_read %s} ${font Wingdings 3}h${font}
 ${endif}]]
 for i,n in pairs(disk_devices) do
     conky.text = conky.text .. string.format(disk_text, n,n,n,n,n,n,n)
 end
 
-net_devices = {'eth0', 'eth1', 'wlan0', 'wlan1', 'docker0', 'ap0'}
-net_text = [[${if_existing /sys/class/net/%s/operstate up}
+local net_devices = {'eth0', 'eth1', 'wlan0', 'wlan1', 'docker0', 'ap0'}
+local net_text = [[${if_existing /sys/class/net/%s/operstate %s}
 ${color green}@%s: ${addr %s} ${hr 1}${color}
-${color green}${downspeedgraph %s 16,90} ${alignr}${upspeedgraph %s 16,90}${color}
+${color blue}${downspeedgraph %s 16,90} ${alignr}${upspeedgraph %s 16,90}${color}
 ${font Wingdings 3}i${font} ${downspeed %s}/s ${alignr}${upspeed %s}/s ${font Wingdings 3}h${font}
 Total ${totaldown %s} ${alignr}Total ${totalup %s}
 ${endif}]]
 for i,n in pairs(net_devices) do
-    conky.text = conky.text .. string.format(net_text, n,n,n,n,n,n,n,n,n)
+    conky.text = conky.text .. string.format(net_text, n,'up', n,n,n,n,n,n,n,n)
 end
+local n = 'tailscale0'
+conky.text = conky.text .. string.format(net_text, n,'unknown', n,n,n,n,n,n,n,n)
 
 conky.text = conky.text .. [[${color green}${hr 1}${color}
 ]]
-the_Date = {
+local the_Date = {
     {y = 2023, m =  1, d =  1, name = '元旦'},
 --    {y = 2019, m =  1, d = 16, name = '(冬)考试周'},
 --    {y = 2019, m =  1, d = 26, name = '寒假'},
@@ -101,21 +102,21 @@ table.sort(the_Date, function (a,b)
     return os.time({year = a.y, month = a.m, day = a.d, hour = 12})
         < os.time({year = b.y, month = b.m, day = b.d, hour = 12})
 end)
-n     = 2 -- 2,1,0
-space = '      '
-space = space .. space -- 2
-from  = os.date('*t')
-from  = os.time({year = from.year, month = from.month, day = from.day, hour = 12})
+local n     = 2 -- 2,1,0
+local space = '      '
+local space = space .. space -- 2
+local from  = os.date('*t')
+local from  = os.time({year = from.year, month = from.month, day = from.day, hour = 12})
 for i = 1,#the_Date,1 do
-    to  = os.time({year = the_Date[i].y, month = the_Date[i].m, day = the_Date[i].d, hour = 12})
-    spr = to - from
+    local to  = os.time({year = the_Date[i].y, month = the_Date[i].m, day = the_Date[i].d, hour = 12})
+    local spr = to - from
     if spr > 0 then
         spr = (string.format("%.0f", spr / 86400))
         conky.text = conky.text .. 
             string.format([[%s${font Bold:size=16}%s${font}天${alignr}${font Bold:size=12}%s${font}
 ]], space, spr, the_Date[i].name)
         n = n - 1
-        if n == -1 then break; end 
+        if n == -1 then break end 
         space = string.gsub(space,'      ','',1)
     end
 end
