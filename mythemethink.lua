@@ -101,6 +101,20 @@ function theme.updates_menu()
     return menu
 end
 
+function theme.more_awesomemenu()
+    return {
+        { string.rep('-', 10), function () end }, -- sep
+        { "lock screen", function()
+            awful.spawn.with_shell('XSECURELOCK_NO_COMPOSITE=1 xsecurelock')
+        end },
+        -- systemctl
+        { "suspend", function() awful.spawn("systemctl suspend") end },
+        { "reboot", function() awful.spawn("systemctl reboot") end },
+        { "poweroff", function() awful.spawn("systemctl poweroff") end },
+        { string.rep('-', 10), function () end }
+    }
+end
+
 -- overwite
 function theme.custommenu()
     return {
