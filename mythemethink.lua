@@ -139,7 +139,7 @@ function theme.custommenu()
             local qt_env = 'QT_FONT_DPI=96 QT_SCALE_FACTOR=' .. scale
             awful.spawn.with_shell(qt_env .. " goldendict")
         end, find_icon('goldendict') },
-        { "Win7 (&7)", "VBoxSDL --startvm Win7", find_icon('virtualbox') },
+        { "Win7 (&7)", "VBoxManage startvm Win7", find_icon('virtualbox') },
     }
 end
 
