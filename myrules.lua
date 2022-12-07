@@ -32,7 +32,7 @@ local myrules = {
                         border_width = 0 }},
     -- vbox
     { rule_any = {
-        class = { "VirtualBox Machine", "VBoxSDL" },
+        class = { "VirtualBox Machine", "VirtualBox Machine" },
       }, properties = {
           new_tag = {
             name = "VBox",
