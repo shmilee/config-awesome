@@ -56,7 +56,7 @@ ${font openlogos:size=20}${color #0090FF}B${color}${font} ${font Blod:size=20}$a
 
 local disk_devices = {'sda', 'sdb', 'sdc', 'sdd', 'sr0'}
 local disk_text = [[${if_existing /dev/%s}
-${color green}@%s: ${combine ${head /sys/block/%s/device/model 1 10} ${hr 1}}${color}${color blue}${diskiograph_write %s 16,90} ${alignr}${diskiograph_read %s 16,90}${color}
+${color green}@%s: ${combine ${head /sys/block/%s/device/model 1 10} ${hr 1}}${color}${diskiograph_write %s 20,90 0000ff 0000ff} ${alignr}${diskiograph_read %s 20,90 0000ff 00ffff -t}
 ${font Wingdings 3}i${font} ${diskio_write %s} ${alignr}${diskio_read %s} ${font Wingdings 3}h${font}
 ${endif}]]
 for i,n in pairs(disk_devices) do
@@ -66,7 +66,7 @@ end
 local net_devices = {'eth0', 'eth1', 'wlan0', 'wlan1', 'docker0', 'ap0'}
 local net_text = [[${if_existing /sys/class/net/%s/operstate %s}
 ${color green}@%s: ${addr %s} ${hr 1}${color}
-${color blue}${downspeedgraph %s 16,90} ${alignr}${upspeedgraph %s 16,90}${color}
+${color blue}${downspeedgraph %s 20,90 0000ff 00ffff -t} ${alignr}${upspeedgraph %s 20,90 0000ff 0000ff}${color}
 ${font Wingdings 3}i${font} ${downspeed %s}/s ${alignr}${upspeed %s}/s ${font Wingdings 3}h${font}
 Total ${totaldown %s} ${alignr}Total ${totalup %s}
 ${endif}]]
@@ -79,24 +79,24 @@ conky.text = conky.text .. string.format(net_text, n,'unknown', n,n,n,n,n,n,n,n)
 conky.text = conky.text .. [[${color green}${hr 1}${color}
 ]]
 local the_Date = {
-    {y = 2023, m =  1, d =  1, name = '元旦'},
+    {y = 2024, m =  1, d =  1, name = '元旦'},
 --    {y = 2019, m =  1, d = 16, name = '(冬)考试周'},
 --    {y = 2019, m =  1, d = 26, name = '寒假'},
-    {y = 2022, m =  2, d = 18, name = '(春)开学'},
-    {y = 2022, m =  4, d =  5, name = '清明'},
-    {y = 2022, m =  4, d = 16, name = '(春)考试周'},
-    {y = 2022, m =  5, d =  1, name = '劳动节'},
-    {y = 2022, m =  5, d = 14, name = '(春)校运会'},
-    {y = 2022, m =  5, d = 21, name = '校庆'},
-    {y = 2022, m =  6, d =  3, name = '端午'},
-    {y = 2022, m =  6, d = 13, name = '(夏)考试周'},
-    {y = 2022, m =  6, d =  27, name = '暑假'},
+--    {y = 2024, m =  2, d = 18, name = '(春)开学'},
+    {y = 2023, m =  4, d =  5, name = '清明'},
+--    {y = 2023, m =  4, d = 16, name = '(春)考试周'},
+    {y = 2023, m =  5, d =  1, name = '劳动节'},
+--    {y = 2023, m =  5, d = 14, name = '(春)校运会'},
+    {y = 2023, m =  5, d = 21, name = '校庆'},
+    {y = 2023, m =  6, d =  3, name = '端午'},
+--    {y = 2023, m =  6, d = 13, name = '(夏)考试周'},
+--    {y = 2023, m =  6, d =  27, name = '暑假'},
 --    {y = 2018, m =  9, d = 14, name = '(秋)开学'},
-    {y = 2022, m =  9, d = 10, name = '中秋'},
-    {y = 2022, m = 10, d =  1, name = '国庆'},
+    {y = 2023, m =  9, d = 10, name = '中秋'},
+    {y = 2023, m = 10, d =  1, name = '国庆'},
 --    {y = 2018, m = 10, d = 26, name = '(秋)校运会'},
 --    {y = 2018, m = 11, d = 14, name = '(秋)考试周'},
-    {y = 2022, m = 12, d = 31, name = '学生节'}
+    {y = 2023, m = 12, d = 31, name = '学生节'}
 }
 table.sort(the_Date, function (a,b)
     return os.time({year = a.y, month = a.m, day = a.d, hour = 12})
