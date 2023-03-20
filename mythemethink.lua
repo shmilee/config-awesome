@@ -56,15 +56,15 @@ local find_icon = away.menu.find_icon
 function theme.xrandr_menu()
     return away.xrandr_menu({
         { name="H-S-U27QX", dpi=192, complete=true, monitors={
-            { key='eDP1-310x170-0dae9-f11-7e-e', scale=2.0 },  -- laptop T450
-            { key='DP1-600x340-10ac7-c22-01-9', scale=1.0 }    -- DELL U2723QX
+            { key='eDP1-310x170-1366x768', scale=2.0 },  -- laptop T450
+            { key='DELL-U2723QX-600x340-3840x2160', scale=1.0 }    -- DELL U2723QX
         } },
         { name="H-S-MiTV", dpi=144, complete=true, monitors={
-            { key='eDP1-310x170-0dae9-f11-7e-e', scale=1.5 },  -- laptop T450
-            { key='HDMI1-1220x690-61a44-a45-db-d', scale=1.0 } -- Mi TV
+            { key='eDP1-310x170-1366x768', scale=1.5 },  -- laptop T450
+            { key='Mi-TV-1220x690-3840x2160', scale=1.0 } -- Mi TV
         } },
         { name='Reset', complete=true, monitors={
-            'eDP1-310x170-0dae9-f11-7e-e',  -- laptop T450, dpi=96, scale=1.0
+            'eDP1-310x170-1366x768',  -- laptop T450, dpi=96, scale=1.0
         } },
     })
 end
