@@ -52,6 +52,23 @@ end
 theme.terminal = "xfce4-terminal"
 local find_icon = away.menu.find_icon
 
+-- @param start autostart/restart
+function theme.restart_programs(start)
+    start = start or 'restart'
+    -- util.single_instance(program, args, matcher, start)
+    away.util.single_instance("conky", "-c " .. os.getenv("HOME") .. "/.config/awesome/conky.lua", nil, start)
+    away.util.single_instance("parcellite", nil, nil, start)
+    away.util.single_instance("nm-applet", nil, nil, start)
+    away.util.single_instance("/usr/bin/redshift-gtk", nil, "python3 /usr/bin/redshift-gtk", start)
+end
+
+function theme.autostart_programs()
+    theme.restart_programs('autostart')
+    away.util.single_instance("fcitx-autostart", nil, "fcitx")
+    away.util.single_instance("picom", "-f -o 0.38 -O 200 -I 200 -t 0 -l 0 -r 3 -D2")
+    away.util.single_instance("volnoti", "-t 2 -a 0.8 -r 50")
+end
+
 -- overwite
 function theme.xrandr_menu()
     return away.xrandr_menu({
@@ -74,6 +91,9 @@ local old_updates_menu = theme.updates_menu
 -- overwite
 function theme.updates_menu()
     local menu = old_updates_menu()
+    table.insert(menu, {
+        "autostart", theme.restart_programs
+    })
     table.insert(menu, {
         "conky", function()
             theme.kill_focused_videowall() -- kill videowallpaper
