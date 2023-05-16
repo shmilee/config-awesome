@@ -72,11 +72,19 @@ end
 -- overwite
 function theme.xrandr_menu()
     return away.xrandr_menu({
-        { name="H-S-U27QX", dpi=192, complete=true, monitors={
+        { name="HS-U27QX", dpi=192, complete=true, monitors={
             { key='eDP1-310x170-1366x768', scale=2.0 },  -- laptop T450
             { key='DELL-U2723QX-600x340-3840x2160', scale=1.0 }    -- DELL U2723QX
         } },
-        { name="H-S-MiTV", dpi=144, complete=true, monitors={
+        { name="HS-ZJ308", dpi=192, complete=true, monitors={
+            { key='eDP1-310x170-1366x768', scale=2.0 },  -- laptop T450
+            { key='PC-Monitor-600x340-3840x2160', scale=1.0 }    -- MAXHUB
+        } },
+        { name="HS-ZJ402", dpi=192, complete=true, monitors={
+            { key='eDP1-310x170-1366x768', scale=2.0 },  -- laptop T450
+            { key='PC-Monitor-1220x680-3840x2160', scale=1.0 }    -- MAXHUB
+        } },
+        { name="HS-MiTV", dpi=144, complete=true, monitors={
             { key='eDP1-310x170-1366x768', scale=1.5 },  -- laptop T450
             { key='Mi-TV-1220x690-3840x2160', scale=1.0 } -- Mi TV
         } },
