@@ -19,12 +19,14 @@ local altkey = "Mod1"
 
 local laptopkeys = gears.table.join(
     beautiful.widgets.volume.laptopkeys,
+    -- ref: https://wiki.linuxquestions.org/wiki/XF86_keyboard_symbols
     -- keycode 235 = XF86Display
     awful.key({ }, "XF86Display",
         function ()
             --naughty.notify({ title = "Oops, Key XF86Display not set" })
             awful.spawn(xrandr)
-        end),
+        end,
+        { description = "show xrandr", group = "screen" }),
 
     -- keycode 179 = XF86Tools, --> toggle the Synaptics Touchpad
     awful.key({ }, "XF86Tools",
@@ -40,17 +42,20 @@ local laptopkeys = gears.table.join(
                 end
                 awful.spawn(string.format("volnoti-show -n 0 -s %s", Timg))
             end)
-        end),
+        end,
+        { description = "toggle touchpad on/off", group = "misc" }),
 
     -- keycode 225 = XF86Search
     awful.key({ }, "XF86Search",
         function ()
             --naughty.notify({ title = "Oops, Key XF86Search not set" })
             awful.spawn(searchtool)
-        end),
+        end,
+        { description = "open search tool", group = "launcher" }),
 
     -- keycode 128 = XF86LaunchA
-    awful.key({ }, "XF86LaunchA", function() menubar.show() end),
+    awful.key({ }, "XF86LaunchA", function() menubar.show() end,
+        { description = "show the menubar", group = "launcher" }),
 
     -- keeeycode 152 = XF86Explorer
     --awful.key({ }, "XF86Explorer",
@@ -66,7 +71,8 @@ local laptopkeys = gears.table.join(
             awful.spawn.easy_async_with_shell(check_cmd, function (o, e, r, c)
                 awful.spawn(string.format("volnoti-show -s %s %s", bri_img, o))
             end)
-        end),
+        end,
+        { description = "brightness down", group = "screen" }),
     awful.key({ }, "XF86MonBrightnessUp",
         function ()
             local check_cmd = "xbacklight -inc 5; xbacklight"
@@ -74,7 +80,18 @@ local laptopkeys = gears.table.join(
             awful.spawn.easy_async_with_shell(check_cmd, function (o, e, r, c)
                 awful.spawn(string.format("volnoti-show -s %s %s", bri_img, o))
             end)
-        end)
+        end,
+        { description = "brightness up", group = "screen" })
+)
+
+local keypadkeys = gears.table.join(
+    -- keynames ref: https://awesomewm.org/apidoc/popups_and_bars/awful.hotkeys_popup.widget.html
+    awful.key({ modkey,           }, "KP_Left",   awful.tag.viewprev,
+              {description = "view previous", group = "tag"}),
+    awful.key({ modkey,           }, "KP_Right",  awful.tag.viewnext,
+              {description = "view next", group = "tag"}),
+    awful.key({ modkey,           }, "KP_Enter", function () awful.spawn(beautiful.terminal) end,
+              {description = "open a terminal", group = "launcher"})
 )
 
 local otherkeys = gears.table.join(
@@ -97,7 +114,8 @@ local otherkeys = gears.table.join(
                 end
                 awful.spawn(string.format("volnoti-show -n 0 -s %s", caps_img))
             end)
-        end),
+        end,
+        { description = "toggle capslock on/off", group = "misc" }),
     -- lights on
     awful.key({ modkey, "Control" }, "p",
         function ()
@@ -120,7 +138,7 @@ local otherkeys = gears.table.join(
         function ()
             awful.spawn("systemctl suspend")
         end,
-        { description = "system suspend", group = "system" }),
+        { description = "system suspend", group = "misc" }),
     --锁屏
     awful.key({ modkey, "Control" }, "x", function () awful.spawn.with_shell(screenlock) end,
         { description = "lock screen", group = "screen" }),
@@ -170,4 +188,4 @@ if mickyloaded then
     )
 end
 
-return gears.table.join(laptopkeys, otherkeys, revelationkeys, mickykeys)
+return gears.table.join(laptopkeys, keypadkeys, otherkeys, revelationkeys, mickykeys)
