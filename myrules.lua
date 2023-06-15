@@ -17,6 +17,7 @@ local myrules = {
             "netease-cloud-music",
             "Gdpy3-gui", "gdpy3-gui",
             "mathpix-snipping-tool", "Mathpix Snipping Tool",
+            "wemeetapp", -- tencent meeting
         },
       }, properties = { floating = true }},
     -- QQ
