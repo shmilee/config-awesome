@@ -78,38 +78,46 @@ conky.text = conky.text .. string.format(net_text, n,'unknown', n,n,n,n,n,n,n,n)
 
 conky.text = conky.text .. [[${color green}${hr 1}${color}
 ]]
+local today = os.date("*t")
+local today  = {year = today.year, month = today.month, day = today.day}
+local function compare_date(a, b)
+    return os.time(a) < os.time(b)
+end
+local function delta_date(a, b)
+    return os.time(b) - os.time(a)
+end
+
 local the_Date = {
-    {y = 2024, m =  1, d =  1, name = '元旦'},
---    {y = 2019, m =  1, d = 16, name = '(冬)考试周'},
---    {y = 2019, m =  1, d = 26, name = '寒假'},
---    {y = 2024, m =  2, d = 18, name = '(春)开学'},
-    {y = 2023, m =  4, d =  5, name = '清明'},
---    {y = 2023, m =  4, d = 16, name = '(春)考试周'},
-    {y = 2023, m =  5, d =  1, name = '劳动节'},
---    {y = 2023, m =  5, d = 14, name = '(春)校运会'},
-    {y = 2023, m =  5, d = 21, name = '校庆'},
-    {y = 2023, m =  6, d =  3, name = '端午'},
---    {y = 2023, m =  6, d = 13, name = '(夏)考试周'},
---    {y = 2023, m =  6, d =  27, name = '暑假'},
---    {y = 2018, m =  9, d = 14, name = '(秋)开学'},
-    {y = 2023, m =  9, d = 10, name = '中秋'},
-    {y = 2023, m = 10, d =  1, name = '国庆'},
---    {y = 2018, m = 10, d = 26, name = '(秋)校运会'},
---    {y = 2018, m = 11, d = 14, name = '(秋)考试周'},
-    {y = 2023, m = 12, d = 31, name = '学生节'}
+    {year = today.year, month =  1, day =  1, name = '元旦'},
+    {year = today.year, month =  3, day = 20, name = '春分'},
+    {year = today.year, month =  5, day =  1, name = '劳动节'},
+    {year = today.year, month =  5, day = 21, name = '校庆'},
+    {year = today.year, month =  6, day = 21, name = '夏至'},
+    {year = today.year, month =  9, day = 22, name = '秋分'},
+    {year = today.year, month = 10, day =  1, name = '国庆'},
+    {year = today.year, month = 12, day = 21, name = '冬至'},
+    {year = today.year, month = 12, day = 31, name = '学生节'},
+--    {y = today.year, m =  1, d = 26, name = '寒假'},
+--    {y = today.year, m =  6, d =  27, name = '暑假'},
+    {year = today.year, month =  2, day = 10, name = '春节'},
+    {year = today.year, month =  4, day =  4, name = '清明'},
+    {year = today.year, month =  6, day = 10, name = '端午'},
+    {year = today.year, month =  9, day = 17, name = '中秋'},
 }
-table.sort(the_Date, function (a,b)
-    return os.time({year = a.y, month = a.m, day = a.d, hour = 12})
-        < os.time({year = b.y, month = b.m, day = b.d, hour = 12})
-end)
+-- update year
+for i = 1,#the_Date,1 do
+    if compare_date(the_Date[i], today) then
+        the_Date[i].year = the_Date[i].year + 1
+    end
+end
+-- sort
+table.sort(the_Date, compare_date)
+-- print
 local n     = 2 -- 2,1,0
 local space = '      '
 local space = space .. space -- 2
-local from  = os.date('*t')
-local from  = os.time({year = from.year, month = from.month, day = from.day, hour = 12})
 for i = 1,#the_Date,1 do
-    local to  = os.time({year = the_Date[i].y, month = the_Date[i].m, day = the_Date[i].d, hour = 12})
-    local spr = to - from
+    local spr = delta_date(today, the_Date[i])
     if spr > 0 then
         spr = (string.format("%.0f", spr / 86400))
         conky.text = conky.text .. 
