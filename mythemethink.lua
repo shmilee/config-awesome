@@ -12,6 +12,10 @@ local table = { insert = table.insert }
 -- inherit away think theme
 local theme = dofile(away.util.curdir .. "themes/think/theme.lua")
 
+-- https://github.com/lxgw/LxgwNeoXiHei-Screen
+theme.thefont = "LXGW Neo XiHei Screen"
+theme.font = "LXGW Neo XiHei Screen 12"
+
 -- overwite
 theme.enable_videowall = false
 function theme.get_videowall(s, i)
