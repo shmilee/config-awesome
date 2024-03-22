@@ -33,14 +33,14 @@ Default applications
 * autostart.lua
 
 ```
-[$] grep ^run_once autostart.lua|awk -F\" '{print $2}'
-picom
+[$] grep single_instance mythemethink.lua | awk -F\" '{print $2}' | sort | uniq
 conky
-parcellite
 fcitx-autostart
-volnoti
 nm-applet
+parcellite
+picom
 /usr/bin/redshift-gtk
+volnoti
 ```
 
 * mykeys.lua
@@ -67,16 +67,19 @@ Install [dependencies](https://github.com/shmilee/awesome-away#theme-think).
 
 Inherit **away think** theme, then change
 
-1. function `theme.set_videowall(s, i)`
+1. font [LxgwNeoXiHei-Screen](https://github.com/lxgw/LxgwNeoXiHei-Screen)
+
+2. disable videowall; function `theme.get_videowall(s, i)`
     + local or online(like FY-4A, bili-sapce) video wallpaper
 
-2. menu needs applications:
+3. autostart and menu applications:
 
    + `theme.terminal = "xfce4-terminal"`
+   + `theme.updates_menu()`
    + `theme.xrandr_menu()`, `xrandr`
+   + `theme.custommenu()`
 
 ```lua
-    find_icon = away.menu.find_icon
     custommenu = {
         { "终端 (&T)", theme.terminal, find_icon('terminal') },
         { "文件管理 (&F)", "thunar", find_icon('Thunar') },
@@ -89,5 +92,5 @@ Inherit **away think** theme, then change
     }
 ```
 
-3. add yiwen = meiriyiwen.update
-4. add micky
+4. add yiwen = meiriyiwen.update
+5. add micky
