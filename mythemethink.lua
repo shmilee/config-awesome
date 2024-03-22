@@ -56,18 +56,12 @@ end
 theme.terminal = "xfce4-terminal"
 local find_icon = away.menu.find_icon
 
--- @param start autostart/restart
-function theme.restart_programs(start)
-    start = start or 'restart'
-    -- util.single_instance(program, args, matcher, start)
-    away.util.single_instance("conky", "-c " .. os.getenv("HOME") .. "/.config/awesome/conky.lua", nil, start)
-    away.util.single_instance("parcellite", nil, nil, start)
-    away.util.single_instance("nm-applet", nil, nil, start)
-    away.util.single_instance("/usr/bin/redshift-gtk", nil, "python3 /usr/bin/redshift-gtk", start)
-end
-
 function theme.autostart_programs()
-    theme.restart_programs('autostart')
+    -- util.single_instance(program, args, matcher, start, callback)
+    away.util.single_instance("conky", "-c " .. os.getenv("HOME") .. "/.config/awesome/conky.lua")
+    away.util.single_instance("parcellite")
+    away.util.single_instance("nm-applet")
+    away.util.single_instance("/usr/bin/redshift-gtk", nil, "python3 /usr/bin/redshift-gtk")
     away.util.single_instance("fcitx-autostart", nil, "fcitx")
     away.util.single_instance("picom", "-f -o 0.38 -O 200 -I 200 -t 0 -l 0 -r 3 -D2")
     away.util.single_instance("volnoti", "-t 2 -a 0.8 -r 50")
@@ -103,36 +97,24 @@ local old_updates_menu = theme.updates_menu
 -- overwite
 function theme.updates_menu()
     local menu = old_updates_menu()
-    table.insert(menu, {
-        "autostart", theme.restart_programs
-    })
-    table.insert(menu, {
-        "conky", function()
+    away.util.table_merge(menu, {
+        {"conky", function()
             theme.kill_focused_videowall() -- kill videowallpaper
-            local cmd = "conky -c " .. os.getenv("HOME") .. "/.config/awesome/conky.lua"
-            local check_cmd = "pgrep -f -u $USER -x '".. cmd .. "'"
-            awful.spawn.easy_async_with_shell(check_cmd, function(o, e, r, c)
-                if c == 0 then
-                    -- kill old
-                    away.util.print_info('kill conky PID ' .. o .. '!')
-                    awful.spawn.easy_async('kill ' .. o, function(out, e, r, code)
-                        if code == 0 then
-                            awful.spawn.with_shell(cmd) -- run new
-                            theme.update_focused_videowall() -- start new videowallpaper
-                        else
-                            away.util.print_info('kill -9 conky PID ' .. o .. '!')
-                            awful.spawn.easy_async('kill -9 ' .. o, function(o, e, r, c)
-                                awful.spawn.with_shell(cmd) -- run new
-                                theme.update_focused_videowall() -- start new videowallpaper
-                            end)
-                        end
-                    end)
-                else
-                    awful.spawn.with_shell(cmd) -- run new
+            away.util.single_instance(
+                "conky", "-c " .. os.getenv("HOME") .. "/.config/awesome/conky.lua",
+                nil, 'restart', function(o, e, r, c)
                     theme.update_focused_videowall() -- start new videowallpaper
-                end
-            end)
-        end
+                end)
+        end},
+        {"parcellite", function()
+             away.util.single_instance("parcellite", nil, nil, 'restart')
+        end},
+        {"nm-applet", function()
+            away.util.single_instance("nm-applet", nil, nil, 'restart')
+        end},
+        {"picom", function()
+            away.util.single_instance("picom", "-f -o 0.38 -O 200 -I 200 -t 0 -l 0 -r 3 -D2", nil, 'restart')
+        end},
     })
     return menu
 end
