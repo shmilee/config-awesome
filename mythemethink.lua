@@ -26,11 +26,11 @@ function theme.get_videowall(s, i)
             after_prg = 'conky\\s+-c\\s+.*/awesome/conky.lua',
         })
     elseif i == 2 then
-        --http://fy4.nsmc.org.cn/portal/cn/theme/FY4A.html
+        --http://fy4.nsmc.org.cn/nsmc/cn/theme/FY4B.html
         return away.wallpaper.get_videowallpaper(s, {
             -- 3h, 6h, 12h, 24h, 48h, 72h
-            path = 'http://img.nsmc.org.cn/CLOUDIMAGE/FY4A/MTCC/VIDEO/FY4A.disk.24h.mp4',
-            --path = 'http://img.nsmc.org.cn/CLOUDIMAGE/FY4A/MTCC/VIDEO/FY4A.china.24h.mp4',
+            path = 'http://img.nsmc.org.cn/CLOUDIMAGE/FY4B/AGRI/GCLR/VIDEO/FY4B.disk.gclr.24h.mp4',
+            --path = 'http://img.nsmc.org.cn/CLOUDIMAGE/FY4B/AGRI/GCLR/VIDEO/FY4B.china.24h.mp4',
             ---path = 'http://img.nsmc.org.cn/CLOUDIMAGE/GEOS/MOS/IRX/VIDEO/GEOS.MOS.IRX.GBAL.24h.mp4',
             xargs = {'-b -ov -ni -nf -un -s -st -sp -o 0.98'},
             pargs = {
