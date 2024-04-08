@@ -106,8 +106,11 @@ function theme.updates_menu()
                     theme.update_focused_videowall() -- start new videowallpaper
                 end)
         end},
+        {"kill-9-conky", function()
+            awful.spawn.with_shell('killall -s 9 conky')
+        end},
         {"parcellite", function()
-             away.util.single_instance("parcellite", nil, nil, 'restart')
+            away.util.single_instance("parcellite", nil, nil, 'restart')
         end},
         {"nm-applet", function()
             away.util.single_instance("nm-applet", nil, nil, 'restart')
