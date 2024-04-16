@@ -12,7 +12,7 @@ end
 -- setting tools
 local xrandr = "arandr"
 local searchtool = "synapse"
-local screenlock = "XSECURELOCK_NO_COMPOSITE=1 xsecurelock"
+local screenlock = beautiful.XSECURELOCK_ENV .. " xsecurelock"
 local screenshot = "scrot"
 
 local altkey = "Mod1"

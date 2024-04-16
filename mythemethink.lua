@@ -16,6 +16,8 @@ local theme = dofile(away.util.curdir .. "themes/think/theme.lua")
 theme.thefont = "LXGW Neo XiHei Screen"
 theme.font = "LXGW Neo XiHei Screen 12"
 
+theme.XSECURELOCK_ENV = [[ XSECURELOCK_FONT="LXGW Neo XiHei Screen" XSECURELOCK_SHOW_DATETIME=1 XSECURELOCK_DATETIME_FORMAT="%c" XSECURELOCK_PASSWORD_PROMPT=time_hex XSECURELOCK_NO_COMPOSITE=1 ]]
+
 -- overwite
 theme.enable_videowall = false
 function theme.get_videowall(s, i)
@@ -125,8 +127,8 @@ end
 function theme.more_awesomemenu()
     return {
         { string.rep('-', 10), function () end }, -- sep
-        { "lock screen", function()
-            awful.spawn.with_shell('XSECURELOCK_NO_COMPOSITE=1 xsecurelock')
+        { "Xlock (&X)", function()
+            awful.spawn.with_shell(theme.XSECURELOCK_ENV .. 'xsecurelock')
         end },
         -- systemctl
         { "suspend", function() awful.spawn("systemctl suspend") end },
@@ -143,15 +145,7 @@ function theme.custommenu()
         { "文件管理 (&F)", "thunar", find_icon('Thunar') },
         { "监视器 (&M)", theme.terminal .. " -e htop", find_icon('htop') },
         { "火狐 (&B)", "firefox", find_icon('firefox') },
-        -- ${JABREF_OPTIONS} in:
-        -- https://aur.archlinux.org/cgit/aur.git/commit/?h=jabref&id=7490271d44f20135cefe11b3e134a98cd5ef69f7
-        { "JabRef (&R)", function()
-            local dpi = awful.screen.focused().dpi or 96
-            local Options = '-Dglass.gtk.uiScale=' .. dpi .. 'dpi'
-            Options = Options .. ' -Djdk.gtk.version=2'
-            --away.util.print_info("JABREF_EXT_Options='" .. Options .. "' jabref")
-            awful.spawn.with_shell("JABREF_OPTIONS='" .. Options .. "' jabref")
-        end, find_icon('jabref') },
+        { "Zotero (&R)", 'zotero', find_icon('zotero') },
         { "BT下载 (&D)", "transmission-gtk", find_icon('transmission') },
         { "辞典 (&G)", function()
             -- https://doc.qt.io/qt-5/highdpi.html#high-dpi-support-in-qt

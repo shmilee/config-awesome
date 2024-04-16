@@ -49,7 +49,7 @@ volnoti
 [$] grep ^local mykeys.lua |grep -v -E "=.*require|key.*=" |awk -F\" '{print $2}'
 arandr
 synapse
-XSECURELOCK_NO_COMPOSITE=1 xsecurelock
+ xsecurelock
 scrot
 ```
 
@@ -85,10 +85,10 @@ Inherit **away think** theme, then change
         { "文件管理 (&F)", "thunar", find_icon('Thunar') },
         { "监视器 (&M)", theme.terminal .. " -e htop", find_icon('htop') },
         { "火狐 (&B)", "firefox", find_icon('firefox') },
-        { "JabRef (&R)", "jabref", find_icon('jabref') },
+        { "Zotero (&R)", 'zotero', find_icon('zotero') },
         { "BT下载 (&D)", "transmission-gtk", find_icon('transmission') },
         { "辞典 (&G)", "goldendict", find_icon('goldendict') },
-        { "Win7 (&W)", "VBoxSDL --startvm Win7", find_icon('virtualbox') },
+        { "Win7 (&7)", "VBoxManage startvm Win7", find_icon('virtualbox') },
     }
 ```
 
