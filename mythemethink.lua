@@ -8,6 +8,10 @@ local awful = require("awful")
 local dpi   = require("beautiful").xresources.apply_dpi
 local os    = { getenv = os.getenv }
 local table = { insert = table.insert }
+local secretloaded, secret = pcall(require, "secret")
+if not secretloaded then
+    secret = {}
+end
 
 -- inherit away think theme
 local theme = dofile(away.util.curdir .. "themes/think/theme.lua")
@@ -156,6 +160,45 @@ function theme.custommenu()
         end, find_icon('goldendict') },
         { "Win7 (&7)", "VBoxManage startvm Win7", find_icon('virtualbox') },
     }
+end
+
+if secret.CHATANYWHERE_KEY then
+    local chatokens = away.widget.apiusage({
+        api = "https://api.chatanywhere.org/v1/query/day_usage_details",
+        header = {
+            ['Content-Type']  = "application/json",
+            ['Authorization'] = secret.CHATANYWHERE_KEY,
+        },
+        postdata = '{"days":7,"model":"gpt-%"}',
+        get_info = function(self, data)
+            self.now.icon = secret.CHATANYWHERE_ICON
+            self.now.notification_icon = self.now.icon
+            self.now.text = 'N/A'
+            self.now.notification_text = ''
+            for i = #data,1,-1 do  -- reversed
+                local day = data[i]['time']:sub(1,10)
+                local count = data[i]['count']
+                local tokens = data[i]['totalTokens']
+                -- local cost = data[i]['cost']
+                if i == #data then
+                    self.now.text = string.format("<b>%d</b> ", count)
+                end
+                local s = string.format("%s:  Tokens <b>%d</b>,  Count <b>%d</b>", day, tokens, count)
+                if i ~= 1 then
+                    s = s .. '\n'
+                end
+                self.now.notification_text = self.now.notification_text .. s
+            end
+        end,
+        font = 'Ubuntu Mono 14',
+    })
+    chatokens:attach(chatokens.wicon)
+    chatokens:attach(chatokens.wtext)
+    theme.widgets.chatokens = chatokens
+    local i = #theme.groupwidgets - 1
+    theme.groupwidgets[i] = away.util.table_merge(theme.groupwidgets[i], {
+        chatokens.wicon, chatokens.wtext,
+    })
 end
 
 local meiriyiwen = away.widget.meiriyiwen({
