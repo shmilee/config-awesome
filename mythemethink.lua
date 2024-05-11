@@ -7,7 +7,7 @@ local away  = require("away")
 local awful = require("awful")
 local dpi   = require("beautiful").xresources.apply_dpi
 local os    = { getenv = os.getenv }
-local table = { insert = table.insert }
+local table = { insert = table.insert, concat = table.concat }
 local secretloaded, secret = pcall(require, "secret")
 if not secretloaded then
     secret = {}
@@ -162,6 +162,7 @@ function theme.custommenu()
     }
 end
 
+-- chatanywhere usage
 if secret.CHATANYWHERE_KEY then
     local chatokens = away.widget.apiusage({
         api = "https://api.chatanywhere.org/v1/query/day_usage_details",
@@ -174,21 +175,25 @@ if secret.CHATANYWHERE_KEY then
             self.now.icon = secret.CHATANYWHERE_ICON
             self.now.notification_icon = self.now.icon
             self.now.text = 'N/A'
-            self.now.notification_text = ''
+            local noti_text = {
+                ' Day   Tokens\tCount',  -- \t=8
+                '-----  ------\t-----',
+            }
             for i = #data,1,-1 do  -- reversed
-                local day = data[i]['time']:sub(1,10)
-                local count = data[i]['count']
+                local day = data[i]['time']:sub(6,10)  -- 5
                 local tokens = data[i]['totalTokens']
+                local count = data[i]['count']
+                if tokens > 10000 then
+                    tokens = string.format("%.1fw", tokens/10000)
+                end
                 -- local cost = data[i]['cost']
                 if i == #data then
                     self.now.text = string.format("<b>%d</b> ", count)
                 end
-                local s = string.format("%s:  Tokens <b>%d</b>,  Count <b>%d</b>", day, tokens, count)
-                if i ~= 1 then
-                    s = s .. '\n'
-                end
-                self.now.notification_text = self.now.notification_text .. s
+                table.insert(noti_text, string.format(
+                    "%s\t<b>%s</b>\t <b>%d</b>", day, tokens, count))
             end
+            self.now.notification_text = table.concat(noti_text, '\n')
         end,
         font = 'Ubuntu Mono 14',
     })
@@ -201,6 +206,7 @@ if secret.CHATANYWHERE_KEY then
     })
 end
 
+-- article
 local meiriyiwen = away.widget.meiriyiwen({
     font = 'WenQuanYi Micro Hei',
     font_size =  dpi(15),
