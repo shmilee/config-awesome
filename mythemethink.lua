@@ -7,6 +7,7 @@ local away  = require("away")
 local awful = require("awful")
 local dpi   = require("beautiful").xresources.apply_dpi
 local os    = { getenv = os.getenv }
+local string= { format = string.format, rep = string.rep }
 local table = { insert = table.insert, concat = table.concat }
 local secretloaded, secret = pcall(require, "secret")
 if not secretloaded then
@@ -164,21 +165,22 @@ end
 
 -- chatanywhere usage
 if secret.CHATANYWHERE_KEY then
-    local chatokens = away.widget.apiusage({
-        api = "https://api.chatanywhere.org/v1/query/day_usage_details",
-        header = {
-            ['Content-Type']  = "application/json",
-            ['Authorization'] = secret.CHATANYWHERE_KEY,
-        },
-        postdata = '{"days":7,"model":"gpt-%"}',
-        get_info = function(self, data)
+    -- @para plus char for text: +N, default ''
+    local apiusage_args = function(model, timeout, boldon, plus)
+        local get_info = function(self, data)
             self.now.icon = secret.CHATANYWHERE_ICON
             self.now.notification_icon = self.now.icon
-            self.now.text = 'N/A'
+            self.now.text = string.format('%sN/A', plus or '')
             local noti_text = {
-                ' Day   Tokens\tCount',  -- \t=8
-                '-----  ------\t-----',
+                ' Day   Tokens\tCount\tCost',  -- \t=8
+                '-----  ------\t-----\t----',
             }
+            local tmpl0 = string.format("%s%%d ", plus or '')
+            local tmpl1 = "%s\t%s\t %d\t%.2f"
+            if boldon then
+                tmpl0 = string.format("<b>%s%%d</b> ", plus or '')
+                tmpl1 = "%s\t<b>%s</b>\t <b>%d</b>\t<b>%.2f</b>"
+            end
             for i = #data,1,-1 do  -- reversed
                 local day = data[i]['time']:sub(6,10)  -- 5
                 local tokens = data[i]['totalTokens']
@@ -186,24 +188,43 @@ if secret.CHATANYWHERE_KEY then
                 if tokens > 10000 then
                     tokens = string.format("%.1fw", tokens/10000)
                 end
-                -- local cost = data[i]['cost']
+                local cost = data[i]['cost']
                 if i == #data then
-                    self.now.text = string.format("<b>%d</b> ", count)
+                    self.now.text = string.format(tmpl0, count)
                 end
-                table.insert(noti_text, string.format(
-                    "%s\t<b>%s</b>\t <b>%d</b>", day, tokens, count))
+                table.insert(noti_text, string.format(tmpl1, day, tokens, count, cost))
             end
-            self.now.notification_text = table.concat(noti_text, '\n')
-        end,
-        font = 'Ubuntu Mono 14',
-    })
-    chatokens:attach(chatokens.wicon)
-    chatokens:attach(chatokens.wtext)
-    theme.widgets.chatokens = chatokens
+            local indent = string.rep(' ', (28-7-model:len())//2)
+            local title = string.format('%s<b>Model: %s</b>', indent, model)
+            local noti_text = table.concat(noti_text, '\n')
+            self.now.notification_text = string.format('%s\n%s', title, noti_text)
+        end
+        return {
+            api = "https://api.chatanywhere.org/v1/query/day_usage_details",
+            header = {
+                ['Content-Type']  = "application/json",
+                ['Authorization'] = secret.CHATANYWHERE_KEY,
+            },
+            postdata = string.format('{"days":5,"model":"%s"}', model),
+            get_info = get_info,
+            timeout = timeout or 3600,
+            font = 'Ubuntu Mono 14',
+        }
+    end
+
+    local gpttokens = away.widget.apiusage(apiusage_args('gpt-%', 3599, true, nil))
+    local embetokens = away.widget.apiusage(apiusage_args('text-embedding-%', 3601, true, '+'))
+    local CAtokens = away.widget.apiusage.group(
+        { gpttokens, embetokens },  -- 1. workers
+        { gpttokens.wicon, gpttokens.wtext, embetokens.wtext,
+          layout = 'horizontal' }  -- 2. wibox.widget args
+    )
+    CAtokens:attach(CAtokens.wlayout)
+    CAtokens.wlayout:buttons(CAtokens.updatebuttons)
+    theme.widgets.CAtokens = CAtokens
     local i = #theme.groupwidgets - 1
     theme.groupwidgets[i] = away.util.table_merge(theme.groupwidgets[i], {
-        chatokens.wicon, chatokens.wtext,
-    })
+        CAtokens.wlayout, })
 end
 
 -- article
