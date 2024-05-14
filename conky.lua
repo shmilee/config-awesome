@@ -97,8 +97,8 @@ local the_Date = {
     {year = today.year, month = 10, day =  1, name = '国庆'},
     {year = today.year, month = 12, day = 21, name = '冬至'},
     {year = today.year, month = 12, day = 31, name = '学生节'},
---    {y = today.year, m =  1, d = 26, name = '寒假'},
---    {y = today.year, m =  6, d =  27, name = '暑假'},
+--  {year = today.year, month =  1, day = 26, name = '寒假'},
+--  {year = today.year, month =  6, day = 27, name = '暑假'},
     {year = today.year, month =  2, day = 10, name = '春节'},
     {year = today.year, month =  4, day =  4, name = '清明'},
     {year = today.year, month =  6, day = 10, name = '端午'},
@@ -114,23 +114,18 @@ end
 table.sort(the_Date, compare_date)
 -- print
 local n     = 2 -- 2,1,0
-local space = '      '
-local space = space .. space -- 2
+local space = string.rep(' ', 6)
+local indent = string.rep(space, n)
 for i = 1,#the_Date,1 do
     local spr = delta_date(today, the_Date[i])
     if spr > 0 then
         spr = (string.format("%.0f", spr / 86400))
         conky.text = conky.text .. 
             string.format([[%s${font Bold:size=16}%s${font}天${alignr}${font Bold:size=12}%s${font}
-]], space, spr, the_Date[i].name)
+]], indent, spr, the_Date[i].name)
         n = n - 1
         if n == -1 then break end 
-        space = string.gsub(space,'      ','',1)
+        indent = string.gsub(indent, space, '', 1)
     end
 end
-
-for i = 1,2,1 do -- 2
-    conky.text = conky.text .. [[
-
-]]
-end
+conky.text = conky.text .. string.rep('\n', 2)
