@@ -6,7 +6,7 @@
 local away  = require("away")
 local awful = require("awful")
 local dpi   = require("beautiful").xresources.apply_dpi
-local os    = { getenv = os.getenv }
+local os    = { getenv = os.getenv, date = os.date }
 local string= { format = string.format, rep = string.rep }
 local table = { insert = table.insert, concat = table.concat }
 local secretloaded, secret = pcall(require, "secret")
@@ -189,8 +189,18 @@ if secret.CHATANYWHERE_KEY then
                     tokens = string.format("%.1fw", tokens/10000)
                 end
                 local cost = data[i]['cost']
-                if i == #data then
-                    self.now.text = string.format(tmpl0, count)
+                if i == #data then  -- last, latest
+                    local todaycount = 0
+                    if day == os.date('%m-%d') then  -- today
+                        todaycount = count
+                    end
+                    local text = string.format(tmpl0, todaycount)
+                    if todaycount > 80 then
+                        text = away.util.markup_span(text, '#FF6600')
+                    elseif todaycount > 50 then
+                        text = away.util.markup_span(text, '#E0DA37')
+                    end
+                    self.now.text = text
                 end
                 table.insert(noti_text, string.format(tmpl1, day, tokens, count, cost))
             end
