@@ -9,9 +9,9 @@ local dpi   = require("beautiful").xresources.apply_dpi
 local os    = { getenv = os.getenv, date = os.date }
 local string= { format = string.format, rep = string.rep }
 local table = { insert = table.insert, concat = table.concat }
-local secretloaded, secret = pcall(require, "secret")
-if not secretloaded then
-    secret = {}
+local CIloaded, ChatInfo = pcall(require, "chatgpt-info")
+if not CIloaded then
+    ChatInfo = {}
 end
 
 -- inherit away think theme
@@ -163,79 +163,122 @@ function theme.custommenu()
     }
 end
 
--- chatanywhere usage
-if secret.CHATANYWHERE_KEY then
-    -- @para plus char for text: +N, default ''
-    local apiusage_args = function(model, timeout, boldon, plus)
-        local get_info = function(self, data)
-            self.now.icon = secret.CHATANYWHERE_ICON
-            self.now.notification_icon = self.now.icon
-            self.now.text = string.format('%sN/A', plus or '')
-            local noti_text = {
-                ' Day   Tokens\tCount\tCost',  -- \t=8
-                '-----  ------\t-----\t----',
-            }
-            local tmpl0 = string.format("%s%%d ", plus or '')
-            local tmpl1 = "%s\t%s\t %d\t%.2f"
-            if boldon then
-                tmpl0 = string.format("<b>%s%%d</b> ", plus or '')
-                tmpl1 = "%s\t<b>%s</b>\t <b>%d</b>\t<b>%.2f</b>"
-            end
-            for i = #data,1,-1 do  -- reversed
-                local day = data[i]['time']:sub(6,10)  -- 5
-                local tokens = data[i]['totalTokens']
-                local count = data[i]['count']
-                if tokens > 10000 then
-                    tokens = string.format("%.1fw", tokens/10000)
-                end
-                local cost = data[i]['cost']
-                if i == #data then  -- last, latest
-                    local todaycount = 0
-                    if day == os.date('%m-%d') then  -- today
-                        todaycount = count
-                    end
-                    local text = string.format(tmpl0, todaycount)
-                    if todaycount > 80 then
-                        text = away.util.markup_span(text, '#FF6600')
-                    elseif todaycount > 50 then
-                        text = away.util.markup_span(text, '#E0DA37')
-                    end
-                    self.now.text = text
-                end
-                table.insert(noti_text, string.format(tmpl1, day, tokens, count, cost))
-            end
-            local indent = string.rep(' ', (28-7-model:len())//2)
-            local title = string.format('%s<b>Model: %s</b>', indent, model)
-            local noti_text = table.concat(noti_text, '\n')
-            self.now.notification_text = string.format('%s\n%s', title, noti_text)
-        end
-        return {
-            api = "https://api.chatanywhere.org/v1/query/day_usage_details",
-            header = {
-                ['Content-Type']  = "application/json",
-                ['Authorization'] = secret.CHATANYWHERE_KEY,
-            },
-            postdata = string.format('{"days":5,"model":"%s"}', model),
-            get_info = get_info,
-            timeout = timeout or 3600,
-            font = 'Ubuntu Mono 14',
+-- ChatAnywhere usage
+local causage_api1 = function(KEY, model)
+    local get_info = function(self, data)
+        -- get self.today {.tokens, .count, .cost} and self.detail
+        local today = { tokens=0, count=0, cost=0 }
+        local detail = {
+            ' Day   Tokens\tCount\tCost',  -- \t=8
+            '-----  ------\t-----\t----',
         }
+        local row = "%s\t<b>%s</b>\t <b>%d</b>\t<b>%.2f</b>"
+        for i = #data,1,-1 do  -- reversed
+            local day = data[i]['time']:sub(6,10)  -- 5
+            local tokens = data[i]['totalTokens']
+            local count = data[i]['count']
+            local cost = data[i]['cost']
+            if tokens > 10000 then
+                tokens = string.format("%.1fw", tokens/10000)
+            end
+            if i == #data then  -- last, latest
+                if day == os.date('%m-%d') then  -- today
+                    today.tokens = tokens
+                    today.count = count
+                    today.cost = cost
+                end
+            end
+            table.insert(detail, string.format(row, day, tokens, count, cost))
+        end
+        self.today = today
+        self.detail = table.concat(detail, '\n')
     end
-
-    local gpttokens = away.widget.apiusage(apiusage_args('gpt-%', 3599, true, nil))
-    local embetokens = away.widget.apiusage(apiusage_args('text-embedding-%', 3601, true, '+'))
-    local CAtokens = away.widget.apiusage.group(
-        { gpttokens, embetokens },  -- 1. workers
-        { gpttokens.wicon, gpttokens.wtext, embetokens.wtext,
-          layout = 'horizontal' }  -- 2. wibox.widget args
-    )
-    CAtokens:attach(CAtokens.wlayout)
-    CAtokens.wlayout:buttons(CAtokens.updatebuttons)
-    theme.widgets.CAtokens = CAtokens
-    local i = #theme.groupwidgets - 1
-    theme.groupwidgets[i] = away.util.table_merge(theme.groupwidgets[i], {
-        CAtokens.wlayout, })
+    return {
+        url = "https://api.chatanywhere.org/v1/query/day_usage_details",
+        header = { ['Content-Type']  = "application/json",
+                   ['Authorization'] = KEY, },
+        postdata = string.format('{"days":5,"model":"%s"}', model),
+        get_info = get_info,
+    }
 end
+local causages = {}
+if ChatInfo.CA_KEY1 then
+    table.insert(causages, away.widget.apiusage({
+        id = 'FreeCA', timeout= 3601, font = 'Ubuntu Mono 14',
+        apis = { causage_api1(ChatInfo.CA_KEY1, 'gpt-%') },
+        setting = function(self)
+            self.now.icon = ChatInfo.ICON_CA1
+            self.now.notification_icon = ChatInfo.ICON_CA2
+            local today =  self.today or { tokens=-1, count=-1, cost=-1 }
+            local text = string.format("<b>%d</b>", today.count)
+            if today.count > 70 then
+                text = away.util.markup_span(text, '#FF6600')
+            elseif today.count > 40 then
+                text = away.util.markup_span(text, '#E0DA37')
+            end
+            self.now.text = text
+            local title = 'FreeModel: gpt-%'
+            local indent = string.rep(' ', (28-title:len())//2)
+            title = string.format('%s<b>%s</b>\n', indent, title)
+            self.now.notification_text = title .. (self.detail or '')
+        end
+        })
+    )
+end
+if ChatInfo.CA_KEY2 then
+    table.insert(causages, away.widget.apiusage({
+        id = 'BuyCA', timeout= 3599, font = 'Ubuntu Mono 14',
+        apis = {
+            causage_api1(ChatInfo.CA_KEY2, '%'),
+            { url = "https://api.chatanywhere.org/v1/query/balance",
+              header = { ['Content-Type']  = "application/json",
+                         ['Authorization'] = ChatInfo.CA_KEY2, },
+              postdata = '',
+              get_info = function(self, data)
+                -- get self.balance {.used, .total, .perc}
+                local used = data['balanceUsed']
+                local total = data['balanceTotal']
+                local perc = used/total*100
+                self.balance = { used=used, total=total, perc=perc }
+              end
+            },
+        },
+        setting = function(self)
+            self.now.icon = ChatInfo.ICON_OA2
+            self.now.notification_icon = ChatInfo.ICON_OA1
+            local balance = self.balance or { used=-1, total=-1, perc=-1 }
+            local text = string.format("<b>+%.0f%%</b>", balance.perc)
+            if balance.perc > 80 then
+                text = away.util.markup_span(text, '#FF6600')
+            elseif balance.perc > 50 then
+                text = away.util.markup_span(text, '#E0DA37')
+            end
+            self.now.text = text
+            local title = string.format('BuyModel: %.1f/%.1f',
+                                        balance.used, balance.total)
+            local indent = string.rep(' ', (28-title:len())//2)
+            title = string.format('%s<b>%s</b>\n', indent, title)
+            self.now.notification_text = title .. (self.detail or '')
+
+        end
+        })
+    )
+end
+
+local groupwidgets = { causages[1].wicon, causages[1].wtext}
+if #causages == 2 then
+    groupwidgets = { causages[2].wicon, causages[1].wtext, causages[2].wtext}
+end
+--away.util.print_info(away.third_party.inspect(causages))
+-- group( 1.workers, 2.wibox.widget args )
+local CAwidget = away.widget.apiusage.group(causages, groupwidgets)
+CAwidget:attach(CAwidget.wlayout)
+CAwidget.wlayout:buttons(CAwidget.updatebuttons)
+-- Add to theme
+theme.widgets.CAwidget = CAwidget
+local i = #theme.groupwidgets - 1
+theme.groupwidgets[i] = away.util.table_merge(
+    theme.groupwidgets[i], { CAwidget.wlayout })
 
 -- article
 local meiriyiwen = away.widget.meiriyiwen({
