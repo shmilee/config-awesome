@@ -244,7 +244,7 @@ if ChatInfo.CA_KEY2 then
             },
         },
         setting = function(self)
-            self.now.icon = ChatInfo.ICON_OA2
+            self.now.icon = ChatInfo.ICON_OA4
             self.now.notification_icon = ChatInfo.ICON_OA1
             local balance = self.balance or { used=-1, total=-1, perc=-1 }
             local text = string.format("<b>+%.0f%%</b>", balance.perc)
