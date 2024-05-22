@@ -92,6 +92,5 @@ Inherit **away think** theme, then change
     }
 ```
 
-4. add apiusage.group
-5. add yiwen = meiriyiwen.update
-6. add micky
+4. add yiwen = meiriyiwen.update
+5. add micky
