@@ -16,6 +16,8 @@ mv ~/.config/awesome ~/.config/awesome.old
 git clone --recursive https://github.com/shmilee/config-awesome.git ~/.config/awesome
 ```
 
+Edit `~/.config/awesome/away/secret.lua`.
+
 Update:
 -------
 
