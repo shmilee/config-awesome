@@ -14,6 +14,7 @@ local xrandr = "arandr"
 local searchtool = "synapse"
 local screenlock = beautiful.XSECURELOCK_ENV .. " xsecurelock"
 local screenshot = "scrot"
+local screenshot_select = "scrot -s --line mode=edge"
 
 local altkey = "Mod1"
 
@@ -143,8 +144,10 @@ local otherkeys = gears.table.join(
     awful.key({ modkey, "Control" }, "x", function () awful.spawn.with_shell(screenlock) end,
         { description = "lock screen", group = "screen" }),
     -- 截屏
-    awful.key({ }, "Print", function() awful.spawn(screenshot) end,
+    awful.key({ modkey }, "Print", function() awful.spawn(screenshot) end,
         { description = "print screen", group = "screen" }),
+    awful.key({ }, "Print", function() awful.spawn(screenshot_select) end,
+        { description = "capture selected area on screen", group = "screen" }),
     -- next miscwallpaper
     awful.key({ modkey, "Control" }, "w",
         function ()

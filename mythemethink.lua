@@ -156,6 +156,7 @@ function theme.custommenu()
             awful.spawn.with_shell(qt_env .. " goldendict")
         end, find_icon('goldendict') },
         { "Win7 (&7)", "VBoxManage startvm Win7", find_icon('virtualbox') },
+        { "Scrot-s (&S)", "scrot -s --line mode=edge", find_icon('gnome-screenshot') },
     }
 end
 
