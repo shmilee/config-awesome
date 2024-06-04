@@ -53,6 +53,7 @@ arandr
 synapse
  xsecurelock
 scrot
+scrot -s --line mode=edge
 ```
 
 * conky and fonts
@@ -72,7 +73,7 @@ Inherit **away think** theme, then change
 1. font [LxgwNeoXiHei-Screen](https://github.com/lxgw/LxgwNeoXiHei-Screen)
 
 2. disable videowall; function `theme.get_videowall(s, i)`
-    + local or online(like FY-4A, bili-sapce) video wallpaper
+    + local or online(like FY-4B, bili-sapce) video wallpaper
 
 3. autostart and menu applications:
 
@@ -91,8 +92,8 @@ Inherit **away think** theme, then change
         { "BT下载 (&D)", "transmission-gtk", find_icon('transmission') },
         { "辞典 (&G)", "goldendict", find_icon('goldendict') },
         { "Win7 (&7)", "VBoxManage startvm Win7", find_icon('virtualbox') },
+        { "Scrot-s (&S)", "scrot -s --line mode=edge", find_icon('gnome-screenshot') },
     }
 ```
 
-4. add yiwen = meiriyiwen.update
-5. add micky
+4. add micky

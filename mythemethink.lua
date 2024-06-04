@@ -161,15 +161,15 @@ function theme.custommenu()
 end
 
 -- article
-local meiriyiwen = away.widget.meiriyiwen({
-    font = 'WenQuanYi Micro Hei',
-    font_size =  dpi(15),
-    ratio = 0,
-    height = 0.9,
-})
+--local meiriyiwen = away.widget.meiriyiwen({
+--    font = 'WenQuanYi Micro Hei',
+--    font_size =  dpi(15),
+--    ratio = 0,
+--    height = 0.9,
+--})
 
 -- globals
-yiwen = meiriyiwen.update
+--yiwen = meiriyiwen.update
 micky = require("away.third_party.micky").move_to_client
 
 return theme
