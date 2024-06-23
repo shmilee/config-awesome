@@ -187,7 +187,7 @@ local mickykeys = nil
 if mickyloaded then
     mickykeys = gears.table.join(
         awful.key({ modkey, "Control" }, "c", micky.toggle,
-            { description = "cursor follow client", group = "client" })
+            { description = "toggle cursor follows client", group = "client" })
     )
 end
 
