@@ -18,6 +18,7 @@ local myrules = {
             "Gdpy3-gui", "gdpy3-gui",
             "mathpix-snipping-tool", "Mathpix Snipping Tool",
             "wemeetapp", -- tencent meeting
+            "Weston Compositor",
         },
       }, properties = { floating = true }},
     -- QQ
