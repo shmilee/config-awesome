@@ -46,9 +46,17 @@ function theme.get_videowall(s, i)
             timeout = 3600*12,
         })
     elseif i == 3 then
-        return away.wallpaper.get_bilivideowallpaper(s, {
+        return away.wallpaper.get_videowallpaper(s, {
             path='https://live.bilibili.com/9196015',
-            --choices = {'flv'},
+            pargs = {
+                '-wid WID --stop-screensaver=no',
+                '--hwdec=auto --hwdec-codecs=all',
+                '--no-audio --no-osc --no-osd-bar --no-input-default-bindings',
+                '--loop-file',
+                '--script-opts=danmuku-enable=no',
+                '--ytdl-raw-options-append=cookies=' .. os.getenv("HOME") .. '/.config/mpv/cookies/www.bilibili.com.txt',
+                '--ytdl-raw-options-append=format-sort=res:720',
+            },
             after_prg = 'conky\\s+-c\\s+.*/awesome/conky.lua',
         })
     else
