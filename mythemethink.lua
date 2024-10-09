@@ -41,6 +41,8 @@ function theme.get_videowall(s, i)
                 '--hwdec=auto --hwdec-codecs=all',
                 '--no-audio --no-osc --no-osd-bar --no-input-default-bindings',
                 '--loop-file --speed=0.2',
+                --- zoom, position: https://github.com/mpv-player/mpv/issues/3177
+                '--video-zoom=-0.06 --video-pan-y=0.02',
             },
             after_prg = 'conky\\s+-c\\s+.*/awesome/conky.lua',
             timeout = 3600*12,
