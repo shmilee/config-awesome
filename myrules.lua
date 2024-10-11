@@ -19,8 +19,10 @@ local myrules = {
             "mathpix-snipping-tool", "Mathpix Snipping Tool",
             "wemeetapp", -- tencent meeting
             "Weston Compositor",
+            "albert",
         },
-      }, properties = { floating = true }},
+      }, properties = { floating = true,
+                        border_width = 0 }},
     -- QQ
     { rule_any = {
         instance = { 'TM.exe', 'QQ.exe' },
