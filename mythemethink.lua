@@ -76,7 +76,7 @@ function theme.autostart_programs()
     away.util.single_instance("nm-applet")
     away.util.single_instance("/usr/bin/redshift-gtk", nil, "python3 /usr/bin/redshift-gtk")
     away.util.single_instance("fcitx-autostart", nil, "fcitx")
-    away.util.single_instance("picom", "-f -o 0.38 -O 200 -I 200 -t 0 -l 0 -r 3 -D2")
+    away.util.single_instance("picom", "--config " .. os.getenv("HOME") .. "/.config/awesome/picom.conf")
     away.util.single_instance("volnoti", "-t 2 -a 0.8 -r 50")
 end
 
@@ -129,7 +129,7 @@ function theme.updates_menu()
             away.util.single_instance("nm-applet", nil, nil, 'restart')
         end},
         {"picom", function()
-            away.util.single_instance("picom", "-f -o 0.38 -O 200 -I 200 -t 0 -l 0 -r 3 -D2", nil, 'restart')
+            away.util.single_instance("picom", "--config " .. os.getenv("HOME") .. "/.config/awesome/picom.conf", nil, 'restart')
         end},
     })
     return menu
