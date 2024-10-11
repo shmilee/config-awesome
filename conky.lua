@@ -43,7 +43,7 @@
     own_window = true,
     own_window_class = 'conky-semi',
     own_window_argb_visual = true,
-    own_window_argb_value = 10,
+    own_window_argb_value = 2,
     own_window_transparent = false,
     -- override #desktop #normel #panel #dock #
     own_window_type = 'override',
