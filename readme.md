@@ -37,7 +37,7 @@ Default applications
 ```
 [$] grep single_instance mythemethink.lua | awk -F\" '{print $2}' | sort | uniq
 conky
-fcitx-autostart
+fcitx5
 nm-applet
 parcellite
 picom
