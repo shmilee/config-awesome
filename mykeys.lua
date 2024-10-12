@@ -11,7 +11,7 @@ end
 
 -- setting tools
 local xrandr = "arandr"
-local searchtool = "synapse"
+local searchtool = 'rofi -show combi -modes combi -combi-modes "drun,window,run,emoji"  -dpi 192'
 local screenlock = beautiful.XSECURELOCK_ENV .. " xsecurelock"
 local screenshot = "scrot"
 local screenshot_select = "scrot -s --line mode=edge"
