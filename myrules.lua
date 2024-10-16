@@ -23,6 +23,14 @@ local myrules = {
         },
       }, properties = { floating = true,
                         border_width = 0 }},
+    -- zotero 7.0 alert
+    { rule = {
+        class = "Zotero",
+        instance = "Alert",
+        role = "alert",
+      },
+      properties = { floating = true },
+    },
     -- QQ
     { rule_any = {
         instance = { 'TM.exe', 'QQ.exe' },
