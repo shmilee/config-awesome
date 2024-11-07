@@ -5,7 +5,7 @@
 
 local away  = require("away")
 local awful = require("awful")
-local dpi   = require("beautiful").xresources.apply_dpi
+local apply_dpi = require("beautiful").xresources.apply_dpi
 local os    = { getenv = os.getenv, date = os.date }
 local string= { format = string.format, rep = string.rep }
 local table = { insert = table.insert, concat = table.concat }
@@ -16,6 +16,7 @@ local theme = dofile(away.util.curdir .. "themes/think/theme.lua")
 -- https://github.com/lxgw/LxgwNeoXiHei-Screen
 theme.thefont = "LXGW Neo XiHei Screen"
 theme.font = "LXGW Neo XiHei Screen 12"
+theme.apply_dpi = apply_dpi
 
 theme.XSECURELOCK_ENV = [[ XSECURELOCK_FONT="LXGW Neo XiHei Screen" XSECURELOCK_SHOW_DATETIME=1 XSECURELOCK_DATETIME_FORMAT="%c" XSECURELOCK_PASSWORD_PROMPT=time_hex XSECURELOCK_NO_COMPOSITE=1 ]]
 
@@ -174,7 +175,7 @@ end
 local meiriyiwen = away.widget.meiriyiwen({
     api = theme.secret.mryw_api or nil,
     font = 'WenQuanYi Micro Hei',
-    font_size =  dpi(15),
+    font_size =  apply_dpi(15),
     ratio = 0,
     height = 0.9,
 })

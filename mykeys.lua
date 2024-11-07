@@ -11,7 +11,7 @@ end
 
 -- setting tools
 local xrandr = "arandr"
-local searchtool = 'rofi -show combi -modes combi -combi-modes "drun,window,run,emoji"  -dpi 192'
+local search = "rofi -show combi -modes combi -combi-modes 'drun,window,run,emoji'"
 local screenlock = beautiful.XSECURELOCK_ENV .. " xsecurelock"
 local screenshot = "scrot"
 local screenshot_select = "scrot -s --line mode=edge"
@@ -50,7 +50,12 @@ local laptopkeys = gears.table.join(
     awful.key({ }, "XF86Search",
         function ()
             --naughty.notify({ title = "Oops, Key XF86Search not set" })
-            awful.spawn(searchtool)
+            if search:sub(1,4) == 'rofi' then
+                local dpi = math.max(awful.screen.focused().dpi or 144, 120)
+                awful.spawn(string.format("%s -dpi %d", search, dpi))
+            else
+                awful.spawn(search)
+            end
         end,
         { description = "open search tool", group = "launcher" }),
 

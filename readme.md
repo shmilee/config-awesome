@@ -50,7 +50,7 @@ volnoti
 ```
 [$] grep ^local mykeys.lua |grep -v -E "=.*require|key.*=" |awk -F\" '{print $2}'
 arandr
-synapse
+rofi -show combi -modes combi -combi-modes 'drun,window,run,emoji'
  xsecurelock
 scrot
 scrot -s --line mode=edge
