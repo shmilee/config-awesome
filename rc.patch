@@ -1,5 +1,5 @@
---- /etc/xdg/awesome/rc.lua	2021-09-15 03:42:54.000000000 +0800
-+++ rc.lua	2023-03-28 17:46:45.000000000 +0800
+--- /etc/xdg/awesome/rc.lua	2024-12-22 03:29:42.000000000 +0800
++++ rc.lua	2025-09-05 12:48:34.458281293 +0800
 @@ -45,12 +45,10 @@
  
  -- {{{ Variable definitions
@@ -237,8 +237,15 @@
  end)
  
  -- Add a titlebar if titlebars_enabled is set to true in the rules.
-@@ -559,6 +459,9 @@
-     c:emit_signal("request::activate", "mouse_enter", {raise = false})
+@@ -556,9 +456,15 @@
+ 
+ -- Enable sloppy focus, so that focus follows mouse.
+ client.connect_signal("mouse::enter", function(c)
+-    c:emit_signal("request::activate", "mouse_enter", {raise = false})
++    -- Skip activation for wechat windows (flicker)
++    if c.class ~= "wechat" then
++        c:emit_signal("request::activate", "mouse_enter", {raise = false})
++    end
  end)
  
 -client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
@@ -246,7 +253,7 @@
 --- }}}
 \ 文件末尾没有换行符
 +client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus c.opacity = 1 end)
-+client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal c.opacity = 0.9 end)
++client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal c.opacity = 0.95 end)
 +-- }}}
 +
 +-- autostart programs

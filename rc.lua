@@ -456,7 +456,10 @@ end)
 
 -- Enable sloppy focus, so that focus follows mouse.
 client.connect_signal("mouse::enter", function(c)
-    c:emit_signal("request::activate", "mouse_enter", {raise = false})
+    -- Skip activation for wechat windows (flicker)
+    if c.class ~= "wechat" then
+        c:emit_signal("request::activate", "mouse_enter", {raise = false})
+    end
 end)
 
 client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus c.opacity = 1 end)
