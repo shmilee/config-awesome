@@ -78,7 +78,7 @@ function theme.autostart_programs()
     away.util.single_instance("/usr/bin/redshift-gtk", nil, "python3 /usr/bin/redshift-gtk")
     away.util.single_instance("fcitx5")
     away.util.single_instance("picom", "--config " .. os.getenv("HOME") .. "/.config/awesome/picom.conf")
-    away.util.single_instance("volnoti", "-t 2 -a 0.8 -r 50")
+    away.util.single_instance("volnoti", "-n -t 2 -a 0.8 -r 50")
 end
 
 -- overwite
