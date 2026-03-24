@@ -88,13 +88,13 @@ function theme.xrandr_menu()
             { key='eDP1-310x170-1366x768', scale=2.0 },  -- laptop T450
             { key='DELL-U2723QX-600x340-3840x2160', scale=1.0 }    -- DELL U2723QX
         } },
-        { name="HS-ZJ308", dpi=192, complete=true, monitors={
-            { key='eDP1-310x170-1366x768', scale=2.0 },  -- laptop T450
-            { key='PC-Monitor-600x340-3840x2160', scale=1.0 }    -- MAXHUB
+        { name="HS-M27Q", dpi=120, complete=true, monitors={
+            { key='eDP1-310x170-1366x768', scale=1.25 },  -- laptop T450
+            { key='M2727Q-R-600x330-2560x1440', scale=1.0 }    -- Lecoo M2727Q-R
         } },
-        { name="HS-ZJ402", dpi=192, complete=true, monitors={
-            { key='eDP1-310x170-1366x768', scale=2.0 },  -- laptop T450
-            { key='PC-Monitor-1220x680-3840x2160', scale=1.0 }    -- MAXHUB
+        { name="HS-KX7P", dpi=120, complete=true, monitors={
+            { key='eDP1-310x170-1366x768', scale=1.25 },  -- laptop T450
+            { key='X7Pro-600x330-2560x1440', scale=1.0 }    -- KOORUI X7Pro
         } },
         { name="HS-MiTV", dpi=144, complete=true, monitors={
             { key='eDP1-310x170-1366x768', scale=1.5 },  -- laptop T450
