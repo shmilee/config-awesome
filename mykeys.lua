@@ -72,7 +72,7 @@ local laptopkeys = gears.table.join(
     -- Brightness
     awful.key({ }, "XF86MonBrightnessDown",
         function ()
-            local check_cmd = "xbacklight -dec 5; xbacklight"
+            local check_cmd = [[brightnessctl set 5%- | sed -En 's/.*\(([0-9]+)%\).*/\1/p']]
             local bri_img = "/usr/share/pixmaps/volnoti/display-brightness-symbolic.svg"
             awful.spawn.easy_async_with_shell(check_cmd, function (o, e, r, c)
                 awful.spawn(string.format("volnoti-show -s %s %s", bri_img, o))
@@ -81,7 +81,7 @@ local laptopkeys = gears.table.join(
         { description = "brightness down", group = "screen" }),
     awful.key({ }, "XF86MonBrightnessUp",
         function ()
-            local check_cmd = "xbacklight -inc 5; xbacklight"
+            local check_cmd = [[brightnessctl set +5% | sed -En 's/.*\(([0-9]+)%\).*/\1/p']]
             local bri_img = "/usr/share/pixmaps/volnoti/display-brightness-symbolic.svg"
             awful.spawn.easy_async_with_shell(check_cmd, function (o, e, r, c)
                 awful.spawn(string.format("volnoti-show -s %s %s", bri_img, o))
