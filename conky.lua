@@ -54,11 +54,11 @@ conky.text = [[
 ${font openlogos:size=20}${color #0090FF}B${color}${font} ${font Blod:size=20}$alignc$uptime${font}${alignr}
 ]]
 
-local disk_devices = {'sda', 'sdb', 'sdc', 'sdd', 'sr0'}
-local disk_text = [[${if_existing /dev/%s}
-${color green}@%s: ${combine ${head /sys/block/%s/device/model 1 10} ${hr 1}}${color}${diskiograph_write %s 20,90 0000ff 0000ff} ${alignr}${diskiograph_read %s 20,90 0000ff 00ffff -t}
+local disk_devices = {'nvme0n1', 'sda', 'sdb', 'sdc', 'sdd', 'sr0'}
+local disk_text = [==[${if_existing /dev/%s}
+${color green}@%s: ${combine ${texeci 3600 awk 'NR==1{gsub(/^[[:space:]]+|[[:space:]]+$/, "", $0); L=length($0); print (L>12 ? substr($0,1,4)" ... "substr($0,L-3,4) : $0)}' /sys/block/%s/device/model} ${hr 1}}${color}${diskiograph_write %s 20,90 0000ff 0000ff} ${alignr}${diskiograph_read %s 20,90 0000ff 00ffff -t}
 ${font Wingdings 3}i${font} ${diskio_write %s} ${alignr}${diskio_read %s} ${font Wingdings 3}h${font}
-${endif}]]
+${endif}]==]
 for i,n in pairs(disk_devices) do
     conky.text = conky.text .. string.format(disk_text, n,n,n,n,n,n,n)
 end
