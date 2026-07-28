@@ -20,8 +20,13 @@ theme.apply_dpi = apply_dpi
 
 theme.XSECURELOCK_ENV = [[ XSECURELOCK_FONT="LXGW Neo XiHei Screen:size=24" XSECURELOCK_SHOW_DATETIME=1 XSECURELOCK_DATETIME_FORMAT="%c" XSECURELOCK_PASSWORD_PROMPT=time_hex XSECURELOCK_NO_COMPOSITE=1 ]]
 
+-- hostname
+theme.hostname = away.util.get_hostname()
+
 -- overwite
-theme.enable_videowall = false
+if theme.hostname == 'arch-T450' then
+    theme.enable_videowall = false
+end
 function theme.get_videowall(s, i)
     if i == 1 then
         return away.wallpaper.get_videowallpaper(s, {
@@ -83,27 +88,53 @@ end
 
 -- overwite
 function theme.xrandr_menu()
-    return away.xrandr_menu({
-        { name="HS-U27QX", dpi=192, complete=true, monitors={
-            { key='eDP1-310x170-1366x768', scale=2.0 },  -- laptop T450
-            { key='DELL-U2723QX-600x340-3840x2160', scale=1.0 }    -- DELL U2723QX
-        } },
-        { name="HS-M27Q", dpi=120, complete=true, monitors={
-            { key='eDP1-310x170-1366x768', scale=1.25 },  -- laptop T450
-            { key='M2727Q-R-600x330-2560x1440', scale=1.0 }    -- Lecoo M2727Q-R
-        } },
-        { name="HS-KX7P", dpi=120, complete=true, monitors={
-            { key='eDP1-310x170-1366x768', scale=1.25 },  -- laptop T450
-            { key='X7Pro-600x330-2560x1440', scale=1.0 }    -- KOORUI X7Pro
-        } },
-        { name="HS-MiTV", dpi=144, complete=true, monitors={
-            { key='eDP1-310x170-1366x768', scale=1.5 },  -- laptop T450
-            { key='Mi-TV-1220x690-3840x2160', scale=1.0 } -- Mi TV
-        } },
-        { name='Reset', complete=true, monitors={
-            'eDP1-310x170-1366x768',  -- laptop T450, dpi=96, scale=1.0
-        } },
-    })
+    local monitors = away.xrandr.debug_monitors_data()
+    local primary = monitors.Primary
+    if theme.hostname == 'arch-T450' then
+        -- laptop T450 -- primary == 'eDP1-310x170-1366x768'
+        away.util.print_info("Generating T450 xrandr_menu")
+        return away.xrandr_menu({
+            { name="Dell-U27X", dpi=192, complete=true, monitors={
+                { key=primary, scale=2.0 },
+                { key='DELL-U2723QX-600x340-3840x2160', scale=1.0 }  -- DELL U2723QX
+            } },
+            { name="Lecoo-M27R", dpi=120, complete=true, monitors={
+                { key=primary, scale=1.25 },
+                { key='M2727Q-R-600x330-2560x1440', scale=1.0 }  -- Lecoo M2727Q-R
+            } },
+            { name="Mi-TV", dpi=144, complete=true, monitors={
+                { key=primary, scale=1.5 },
+                { key='Mi-TV-1220x690-3840x2160', scale=1.0 }  -- Mi TV
+            } },
+            -- dpi=96, scale=1.0
+            { name='Reset', complete=true, monitors={ primary } },
+        })
+    elseif theme.hostname == 'arch-T14p' then
+        -- laptop T14p -- primary == 'eDP-1-312x195-2560x1600'
+        away.util.print_info("Generating T14p xrandr_menu")
+        -- https://askubuntu.com/questions/450655/mouse-flickering-on-one-of-my-two-screens
+        local primary_scale = 0.9999
+        return away.xrandr_menu({
+            { name="Dell-U27X", dpi=192, complete=true, monitors={
+                { key=primary, scale=primary_scale },
+                { key='DELL-U2723QX-600x340-3840x2160', scale=1.0 }  -- DELL U2723QX
+            } },
+            { name="Lecoo-M27R", dpi=192, complete=true, monitors={
+                { key=primary, scale=primary_scale },
+                { key='M2727Q-R-600x330-2560x1440', scale=1.5 }  -- Lecoo M2727Q-R
+            } },
+            { name="Mi-TV", dpi=192, complete=true, monitors={
+                { key=primary, scale=primary_scale },
+                { key='Mi-TV-1220x690-3840x2160', scale=1.5 }  -- Mi TV
+            } },
+            { name='Reset', dpi=192, complete=true, monitors={ primary } },
+        })
+    else
+        away.util.print_info("Generating default xrandr_menu")
+        return away.xrandr_menu({
+            { name='Reset', complete=true, monitors={ primary } },
+        })
+    end
 end
 
 -- save old
