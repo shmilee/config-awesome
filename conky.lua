@@ -89,20 +89,20 @@ end
 
 local the_Date = {
     {year = today.year, month =  1, day =  1, name = '元旦'},
-    {year = today.year, month =  3, day = 20, name = '春分'},
+    {year = today.year, month =  3, day = 21, name = '春分'},
     {year = today.year, month =  5, day =  1, name = '劳动节'},
     {year = today.year, month =  5, day = 21, name = '校庆'},
     {year = today.year, month =  6, day = 21, name = '夏至'},
-    {year = today.year, month =  9, day = 22, name = '秋分'},
+    {year = today.year, month =  9, day = 23, name = '秋分'},
     {year = today.year, month = 10, day =  1, name = '国庆'},
-    {year = today.year, month = 12, day = 21, name = '冬至'},
-    {year = today.year, month = 12, day = 31, name = '学生节'},
+    {year = today.year, month = 12, day = 22, name = '冬至'},
+--  {year = today.year, month = 12, day = 31, name = '学生节'},
 --  {year = today.year, month =  1, day = 26, name = '寒假'},
 --  {year = today.year, month =  6, day = 27, name = '暑假'},
     {year = today.year, month =  2, day = 10, name = '春节'},
-    {year = today.year, month =  4, day =  4, name = '清明'},
-    {year = today.year, month =  6, day = 10, name = '端午'},
-    {year = today.year, month =  9, day = 17, name = '中秋'},
+    {year = today.year, month =  4, day =  5, name = '清明'},
+    {year = today.year, month =  6, day =  9, name = '端午'},
+    {year = today.year, month =  9, day = 25, name = '中秋'},
 }
 -- update year
 for i = 1,#the_Date,1 do
