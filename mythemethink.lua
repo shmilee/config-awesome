@@ -24,14 +24,20 @@ theme.XSECURELOCK_ENV = [[ XSECURELOCK_FONT="LXGW Neo XiHei Screen:size=24" XSEC
 theme.hostname = away.util.get_hostname()
 
 -- overwite
-if theme.hostname == 'arch-T450' then
-    theme.enable_videowall = false
-end
+theme.enable_videowall = false
 function theme.get_videowall(s, i)
     if i == 1 then
         return away.wallpaper.get_videowallpaper(s, {
             path = os.getenv("HOME") ..'/视频/Futari.Dake.No.Hanabi.mp4',
             xargs = {'-b -ov -ni -nf -un -s -st -sp -o 0.816'},
+            pargs = {
+                '-wid WID --stop-screensaver=no',
+                '--hwdec=auto --hwdec-codecs=all',
+                '--no-audio --no-osc --no-osd-bar --no-input-default-bindings',
+                '--loop-file',
+                --'--no-keepaspect',
+                '--log-file=/tmp/mpv-wallpaper-1.log',
+            },
             after_prg = 'conky\\s+-c\\s+.*/awesome/conky.lua',
         })
     elseif i == 2 then
@@ -44,9 +50,9 @@ function theme.get_videowall(s, i)
             xargs = {'-b -ov -ni -nf -un -s -st -sp -o 0.98'},
             pargs = {
                 '-wid WID --stop-screensaver=no',
-                '--hwdec=auto --hwdec-codecs=all',
+                '--vo gpu --hwdec=auto --hwdec-codecs=all',
                 '--no-audio --no-osc --no-osd-bar --no-input-default-bindings',
-                '--loop-file --speed=0.2',
+                '--loop-file --speed=0.2 --log-file=/tmp/mpv-wallpaper-2.log',
                 --- zoom, position: https://github.com/mpv-player/mpv/issues/3177
                 '--video-zoom=-0.06 --video-pan-y=0.02',
             },
@@ -88,6 +94,7 @@ end
 
 -- overwite
 function theme.xrandr_menu()
+    away.xrandr.change_key_style('size')
     local monitors = away.xrandr.debug_monitors_data()
     local primary = monitors.Primary
     if theme.hostname == 'arch-T450' then
@@ -125,7 +132,7 @@ function theme.xrandr_menu()
             } },
             { name="Mi-TV", dpi=192, complete=true, monitors={
                 { key=primary, scale=primary_scale },
-                { key='Mi-TV-1220x690-3840x2160', scale=1.5 }  -- Mi TV
+                { key='Mi-TV-1220x690-3840x2160', scale=1.5, w_tol=600, h_tol=300 }  -- Mi TV
             } },
             { name='Reset', dpi=192, complete=true, monitors={ primary } },
         })
